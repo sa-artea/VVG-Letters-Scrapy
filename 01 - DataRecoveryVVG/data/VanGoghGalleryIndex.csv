@@ -1,5 +1,5 @@
-,ID,NAME,ELEMENT_URL,DOWNLOAD_URL,HAS_ID,HAS_NAME,HAS_DESCRIPTION,HAS_DOWNLOAD,HAS_TAGS,HAS_DATA,HAS_RELATEDW,ERR_ID,ERR_NAME,ERR_DESCRIPTION,ERR_DOWNLOAD,ERR_TAGS,ERR_DATA,ERR_RELATEDW,DESCRIPTION
-0,s0005V1962,"The Potato Eaters, 1885",https://vangoghmuseum.nl/en/collection/s0005V1962,https://vangoghmuseum.nl/download/8bc21467-2e7c-4f1a-b073-81acdb081be2.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+ID,NAME,ELEMENT_URL,DOWNLOAD_URL,HAS_ID,HAS_NAME,HAS_DESCRIPTION,HAS_DOWNLOAD,HAS_TAGS,HAS_DATA,HAS_RELATEDW,ERR_ID,ERR_NAME,ERR_DESCRIPTION,ERR_DOWNLOAD,ERR_TAGS,ERR_DATA,ERR_RELATEDW,DESCRIPTION,TAGS,DATA,RELATEDW
+s0005V1962,"The Potato Eaters, 1885",https://vangoghmuseum.nl/en/collection/s0005V1962,https://vangoghmuseum.nl/download/8bc21467-2e7c-4f1a-b073-81acdb081be2.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""The Potato Eaters"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -23,8 +23,55 @@
             }
         ]
     }
-}"
-1,s0019V1962,"Garden with Courting Couples: Square Saint-Pierre, 1887",https://vangoghmuseum.nl/en/collection/s0019V1962,https://vangoghmuseum.nl/download/12bd07b2-3c26-45c9-99d2-5958cf101d3a.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1885"",
+                ""link"": ""/en/search/collection?date=1885""
+            },
+            {
+                ""text"": ""Nuenen"",
+                ""link"": ""/en/search/collection?place=Nuenen""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""figure (representation)"",
+                ""link"": ""/en/search/collection?genre=figure (representation)""
+            },
+            {
+                ""text"": ""interior"",
+                ""link"": ""/en/search/collection?genre=interior""
+            },
+            {
+                ""text"": ""peasant life"",
+                ""link"": ""/en/search/collection?genre=peasant life""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0082"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0005V1962"",
+    ""dimensions"": {
+        ""canvas"": ""82 cm x 114 cm"",
+        ""frame"": "" 100 cm x 133 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0019V1962,"Garden with Courting Couples: Square Saint-Pierre, 1887",https://vangoghmuseum.nl/en/collection/s0019V1962,https://vangoghmuseum.nl/download/12bd07b2-3c26-45c9-99d2-5958cf101d3a.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Garden with Courting Couples: Square Saint-Pierre"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -43,8 +90,51 @@
         ""text"": ""Van Gogh called this sunny park scene 'the painting of the garden with lovers'. Couples in love are strolling under the young chestnut trees and sitting along the winding paths. He used a free variation on the technique of the Pointillists. They built up their compositions from dots of paint. Van Gogh instead applied small brushstrokes of varying length in different directions. This helped him to create the effect of a radiant spring day, which fit the sense of intimacy and togetherness he wished to express. He too longed for a wife and a family, but he had 'the most impossible love affairs'. He eventually resigned himself to the situation; he was devoted to his art."",
         ""references"": []
     }
-}"
-2,s0027V1962,"The Langlois Bridge, 1888",https://vangoghmuseum.nl/en/collection/s0027V1962,https://vangoghmuseum.nl/download/c82c2fcd-90e8-4de6-b23d-f28c2af907d6.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1887"",
+                ""link"": ""/en/search/collection?date=1887""
+            },
+            {
+                ""text"": ""Paris"",
+                ""link"": ""/en/search/collection?place=Paris""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""cityscape"",
+                ""link"": ""/en/search/collection?genre=cityscape""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0314"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0019V1962"",
+    ""dimensions"": {
+        ""canvas"": ""75.0 cm x 113.0 cm"",
+        ""frame"": "" 95.0 cm x 132.4 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0027V1962,"The Langlois Bridge, 1888",https://vangoghmuseum.nl/en/collection/s0027V1962,https://vangoghmuseum.nl/download/c82c2fcd-90e8-4de6-b23d-f28c2af907d6.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""The Langlois Bridge"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -63,8 +153,51 @@
         ""text"": ""The sky was grey when Van Gogh painted this bridge. He worked in the open air more than once in this spot in the southern French city of Arles. Laundry was done in this canal, and linens have been laid out to bleach on the far bank. All that is missing are the washerwomen – who were included in an earlier version. Van Gogh carefully organised his composition. He chose a place for his easel where he could paint the patch of land with the road in the foreground as a large diagonal leading into the left background. He had seen diagonals of this kind used in Japanese prints. Vincent and his brother Theo had accumulated a joint collection of these prints in Paris."",
         ""references"": []
     }
-}"
-3,s0029V1962,"The Sower, 1888",https://vangoghmuseum.nl/en/collection/s0029V1962,https://vangoghmuseum.nl/download/61fbedad-1d68-4b96-8f08-2c6ec01eb911.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1888"",
+                ""link"": ""/en/search/collection?date=1888""
+            },
+            {
+                ""text"": ""Arles"",
+                ""link"": ""/en/search/collection?place=Arles""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""cityscape"",
+                ""link"": ""/en/search/collection?genre=cityscape""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0400"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0027V1962"",
+    ""dimensions"": {
+        ""canvas"": ""59.6 cm x 73.6 cm"",
+        ""frame"": "" 77.1 cm x 91.0 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0029V1962,"The Sower, 1888",https://vangoghmuseum.nl/en/collection/s0029V1962,https://vangoghmuseum.nl/download/61fbedad-1d68-4b96-8f08-2c6ec01eb911.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""The Sower"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -83,8 +216,55 @@
         ""text"": ""Van Gogh had a special interest in sowers throughout his artistic career. All in all, he made more than 30 drawings and paintings on this theme. He painted this sower in the autumn of 1888. At the time, Van Gogh was working together with Paul Gauguin (1848-1903). Gauguin believed that in his work Van Gogh should draw less on reality and more on his imagination. Here, Van Gogh used colours meant to express emotion and passion. He assigned the leading roles to the greenish-yellow of the sky and the purple of the field. The bright yellow sun looks like a halo, turning the sower into a saint."",
         ""references"": []
     }
-}"
-4,s0031V1962,"Sunflowers, 1889",https://vangoghmuseum.nl/en/collection/s0031V1962,https://vangoghmuseum.nl/download/597e7189-79d5-4ce2-ae15-6d1f0aa641d7.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1888"",
+                ""link"": ""/en/search/collection?date=1888""
+            },
+            {
+                ""text"": ""Arles"",
+                ""link"": ""/en/search/collection?place=Arles""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""figure (representation)"",
+                ""link"": ""/en/search/collection?genre=figure (representation)""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""peasant life"",
+                ""link"": ""/en/search/collection?genre=peasant life""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0451"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0029V1962"",
+    ""dimensions"": {
+        ""canvas"": ""32.5 cm x 40.3 cm"",
+        ""frame"": "" 58.5 cm x 56.5 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0031V1962,"Sunflowers, 1889",https://vangoghmuseum.nl/en/collection/s0031V1962,https://vangoghmuseum.nl/download/597e7189-79d5-4ce2-ae15-6d1f0aa641d7.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Sunflowers"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -108,8 +288,51 @@
             }
         ]
     }
-}"
-5,s0032V1962,"The Yellow House (The Street), 1888",https://vangoghmuseum.nl/en/collection/s0032V1962,https://vangoghmuseum.nl/download/e9388d8a-4140-4cc5-a4cd-f126ad58b012.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1889"",
+                ""link"": ""/en/search/collection?date=1889""
+            },
+            {
+                ""text"": ""Arles"",
+                ""link"": ""/en/search/collection?place=Arles""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""still life"",
+                ""link"": ""/en/search/collection?genre=still life""
+            },
+            {
+                ""text"": ""flowers"",
+                ""link"": ""/en/search/collection?genre=flowers""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0458"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0031V1962"",
+    ""dimensions"": {
+        ""canvas"": ""95 cm x 73 cm"",
+        ""frame"": "" 123.6 cm x 101.2 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0032V1962,"The Yellow House (The Street), 1888",https://vangoghmuseum.nl/en/collection/s0032V1962,https://vangoghmuseum.nl/download/e9388d8a-4140-4cc5-a4cd-f126ad58b012.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""The Yellow House (The Street)"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -133,8 +356,47 @@
             }
         ]
     }
-}"
-6,s0047V1962,"The Bedroom, 1888",https://vangoghmuseum.nl/en/collection/s0047V1962,https://vangoghmuseum.nl/download/1e5adb8b-7630-4ef4-a190-59ac712fc2d3.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1888"",
+                ""link"": ""/en/search/collection?date=1888""
+            },
+            {
+                ""text"": ""Arles"",
+                ""link"": ""/en/search/collection?place=Arles""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""cityscape"",
+                ""link"": ""/en/search/collection?genre=cityscape""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0464"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0032V1962"",
+    ""dimensions"": {
+        ""canvas"": ""72 cm x 91.5 cm"",
+        ""frame"": "" 89.8 cm x 109.2 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0047V1962,"The Bedroom, 1888",https://vangoghmuseum.nl/en/collection/s0047V1962,https://vangoghmuseum.nl/download/1e5adb8b-7630-4ef4-a190-59ac712fc2d3.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""The Bedroom"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -158,8 +420,47 @@
             }
         ]
     }
-}"
-7,s0022V1962,"Self-Portrait as a Painter, 1887 - 1888",https://vangoghmuseum.nl/en/collection/s0022V1962,https://vangoghmuseum.nl/download/1a27b313-634a-49f9-a776-8b0419ab0211.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1888"",
+                ""link"": ""/en/search/collection?date=1888""
+            },
+            {
+                ""text"": ""Arles"",
+                ""link"": ""/en/search/collection?place=Arles""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""interior"",
+                ""link"": ""/en/search/collection?genre=interior""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0482"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0047V1962"",
+    ""dimensions"": {
+        ""canvas"": ""72.4 cm x 91.3 cm"",
+        ""frame"": "" 92.2 cm x 111 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0022V1962,"Self-Portrait as a Painter, 1887 - 1888",https://vangoghmuseum.nl/en/collection/s0022V1962,https://vangoghmuseum.nl/download/1a27b313-634a-49f9-a776-8b0419ab0211.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Self-Portrait as a Painter"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -183,8 +484,51 @@
             }
         ]
     }
-}"
-8,s0049V1962,"Wheatfield with a Reaper, 1889",https://vangoghmuseum.nl/en/collection/s0049V1962,https://vangoghmuseum.nl/download/0ab17854-2260-43fb-ae8a-c65842e7fbe9.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1887"",
+                ""link"": ""/en/search/collection?date=1887""
+            },
+            {
+                ""text"": ""1888"",
+                ""link"": ""/en/search/collection?date=1888""
+            },
+            {
+                ""text"": ""Paris"",
+                ""link"": ""/en/search/collection?place=Paris""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""self-portrait"",
+                ""link"": ""/en/search/collection?genre=self-portrait""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0522"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0022V1962"",
+    ""dimensions"": {
+        ""canvas"": ""65.1 cm x 50 cm"",
+        ""frame"": "" 86 cm x 71 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0049V1962,"Wheatfield with a Reaper, 1889",https://vangoghmuseum.nl/en/collection/s0049V1962,https://vangoghmuseum.nl/download/0ab17854-2260-43fb-ae8a-c65842e7fbe9.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Wheatfield with a Reaper"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -208,8 +552,55 @@
             }
         ]
     }
-}"
-9,s0176V1962,"Almond Blossom, 1890",https://vangoghmuseum.nl/en/collection/s0176V1962,https://vangoghmuseum.nl/download/6dde53a4-9da7-4d69-9111-2d53faab98aa.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1889"",
+                ""link"": ""/en/search/collection?date=1889""
+            },
+            {
+                ""text"": ""Saint-Rémy-de-Provence"",
+                ""link"": ""/en/search/collection?place=Saint-Rémy-de-Provence""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""peasant life"",
+                ""link"": ""/en/search/collection?genre=peasant life""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0618"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0049V1962"",
+    ""dimensions"": {
+        ""canvas"": ""73.2 cm x 92.7 cm"",
+        ""frame"": "" 97.0 cm x 116.7 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0176V1962,"Almond Blossom, 1890",https://vangoghmuseum.nl/en/collection/s0176V1962,https://vangoghmuseum.nl/download/6dde53a4-9da7-4d69-9111-2d53faab98aa.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Almond Blossom"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -233,8 +624,51 @@
             }
         ]
     }
-}"
-10,s0050V1962,"Irises, 1890",https://vangoghmuseum.nl/en/collection/s0050V1962,https://vangoghmuseum.nl/download/f56ef8b4-a4ff-459c-a79b-98b510f56a13.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1890"",
+                ""link"": ""/en/search/collection?date=1890""
+            },
+            {
+                ""text"": ""Saint-Rémy-de-Provence"",
+                ""link"": ""/en/search/collection?place=Saint-Rémy-de-Provence""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""blossom"",
+                ""link"": ""/en/search/collection?genre=blossom""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0671"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0176V1962"",
+    ""dimensions"": {
+        ""canvas"": ""73.3 cm x 92.4 cm"",
+        ""frame"": "" 94.0 cm x 112.9 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0050V1962,"Irises, 1890",https://vangoghmuseum.nl/en/collection/s0050V1962,https://vangoghmuseum.nl/download/f56ef8b4-a4ff-459c-a79b-98b510f56a13.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Irises"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -258,8 +692,51 @@
             }
         ]
     }
-}"
-11,s0106V1962,"Wheatfield under Thunderclouds, 1890",https://vangoghmuseum.nl/en/collection/s0106V1962,https://vangoghmuseum.nl/download/59a37e6e-4388-46dd-acd3-5c64832c5d71.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1890"",
+                ""link"": ""/en/search/collection?date=1890""
+            },
+            {
+                ""text"": ""Saint-Rémy-de-Provence"",
+                ""link"": ""/en/search/collection?place=Saint-Rémy-de-Provence""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""still life"",
+                ""link"": ""/en/search/collection?genre=still life""
+            },
+            {
+                ""text"": ""flowers"",
+                ""link"": ""/en/search/collection?genre=flowers""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0678"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0050V1962"",
+    ""dimensions"": {
+        ""canvas"": ""92.7 cm x 73.9 cm"",
+        ""frame"": "" 111.5 cm x 92.9 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0106V1962,"Wheatfield under Thunderclouds, 1890",https://vangoghmuseum.nl/en/collection/s0106V1962,https://vangoghmuseum.nl/download/59a37e6e-4388-46dd-acd3-5c64832c5d71.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Wheatfield under Thunderclouds"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -278,8 +755,51 @@
         ""text"": ""In the last weeks of his life, Van Gogh completed a number of impressive paintings of the wheatfields around Auvers. This outspread field under a dark sky is one of them. In these landscapes he tried to express 'sadness, extreme loneliness'. But the overwhelming emotions that Van Gogh experienced in nature were also positive. He wrote to his brother Theo, 'I'd almost believe that these canvases will tell you what I can't say in words, what I consider healthy and fortifying about the countryside. 'The elongated format of Wheatfields under Thunderclouds is unusual. It emphasizes the grandeur of the landscape, as does the simple composition: two horizontal planes."",
         ""references"": []
     }
-}"
-12,s0149V1962,"Wheatfield with Crows, 1890",https://vangoghmuseum.nl/en/collection/s0149V1962,https://vangoghmuseum.nl/download/5b7d2746-f71a-478b-aaeb-ea7750b06113.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1890"",
+                ""link"": ""/en/search/collection?date=1890""
+            },
+            {
+                ""text"": ""Auvers-sur-Oise"",
+                ""link"": ""/en/search/collection?place=Auvers-sur-Oise""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0778"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0106V1962"",
+    ""dimensions"": {
+        ""canvas"": ""50.4 cm x 101.3 cm"",
+        ""frame"": "" 70.0 cm x 121.0 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0149V1962,"Wheatfield with Crows, 1890",https://vangoghmuseum.nl/en/collection/s0149V1962,https://vangoghmuseum.nl/download/5b7d2746-f71a-478b-aaeb-ea7750b06113.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Wheatfield with Crows"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -303,8 +823,55 @@
             }
         ]
     }
-}"
-13,s0195V1962,"Tree Roots, 1890",https://vangoghmuseum.nl/en/collection/s0195V1962,https://vangoghmuseum.nl/download/895e7066-99d7-43b9-b9b8-b0c8cc18319f.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1890"",
+                ""link"": ""/en/search/collection?date=1890""
+            },
+            {
+                ""text"": ""Auvers-sur-Oise"",
+                ""link"": ""/en/search/collection?place=Auvers-sur-Oise""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""animals"",
+                ""link"": ""/en/search/collection?genre=animals""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0779"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0149V1962"",
+    ""dimensions"": {
+        ""canvas"": ""50.5 cm x 103 cm"",
+        ""frame"": "" 69.8 cm x 122.7 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+s0195V1962,"Tree Roots, 1890",https://vangoghmuseum.nl/en/collection/s0195V1962,https://vangoghmuseum.nl/download/895e7066-99d7-43b9-b9b8-b0c8cc18319f.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Tree Roots"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -323,8 +890,47 @@
         ""text"": ""This painting seems at first sight to consist of a jumble of bright colours and fanciful abstract forms. Only after that do you realise that it shows a slope with tree trunks and roots. These are trees used for timber, growing in a marl quarry. Such quarries could be found around Auvers (FR). The work was not entirely completed. That explains its unfinished appearance. It is probably Van Gogh's very last painting. Andries Bonger, the brother-in-law of Vincent's brother Theo, described it in a letter: 'The morning before his death, he had painted a sous-bois [forest scene], full of sun and life. '"",
         ""references"": []
     }
-}"
-14,d0378V1962,"Worn Out, 1882",https://vangoghmuseum.nl/en/collection/d0378V1962,https://vangoghmuseum.nl/download/11539587-0cd3-4624-a797-c7896575905a.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1890"",
+                ""link"": ""/en/search/collection?date=1890""
+            },
+            {
+                ""text"": ""Auvers-sur-Oise"",
+                ""link"": ""/en/search/collection?place=Auvers-sur-Oise""
+            },
+            {
+                ""text"": ""painting"",
+                ""link"": ""/en/search/collection?type=painting""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0816"",
+    ""JH_number"": """",
+    ""obj_number"": ""s0195V1962"",
+    ""dimensions"": {
+        ""canvas"": ""50.3 cm x 100.1 cm"",
+        ""frame"": "" 69.8 cm x 119.7 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+d0378V1962,"Worn Out, 1882",https://vangoghmuseum.nl/en/collection/d0378V1962,https://vangoghmuseum.nl/download/11539587-0cd3-4624-a797-c7896575905a.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Worn Out"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -348,8 +954,47 @@
             }
         ]
     }
-}"
-15,d0386M1977,"Landscape with a Stack of Peat and Farmhouses, 1883",https://vangoghmuseum.nl/en/collection/d0386M1977,https://vangoghmuseum.nl/download/2a949a9d-63ae-4201-a635-aaf6b850ad2d.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1882"",
+                ""link"": ""/en/search/collection?date=1882""
+            },
+            {
+                ""text"": ""The Hague"",
+                ""link"": ""/en/search/collection?place=The Hague""
+            },
+            {
+                ""text"": ""drawing"",
+                ""link"": ""/en/search/collection?type=drawing""
+            },
+            {
+                ""text"": ""figure (representation)"",
+                ""link"": ""/en/search/collection?genre=figure (representation)""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F0997"",
+    ""JH_number"": """",
+    ""obj_number"": ""d0378V1962"",
+    ""dimensions"": {
+        ""canvas"": ""50.4 cm x 31.6 cm"",
+        ""frame"": ""50.4 cm x 31.6 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+d0386M1977,"Landscape with a Stack of Peat and Farmhouses, 1883",https://vangoghmuseum.nl/en/collection/d0386M1977,https://vangoghmuseum.nl/download/2a949a9d-63ae-4201-a635-aaf6b850ad2d.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Landscape with a Stack of Peat and Farmhouses"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -373,8 +1018,55 @@
             }
         ]
     }
-}"
-16,d0423V1962,"Weaver, 1884",https://vangoghmuseum.nl/en/collection/d0423V1962,https://vangoghmuseum.nl/download/291d0ce2-4541-4d72-b0bd-95fb3123dc97.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1883"",
+                ""link"": ""/en/search/collection?date=1883""
+            },
+            {
+                ""text"": ""Drenthe"",
+                ""link"": ""/en/search/collection?place=Drenthe""
+            },
+            {
+                ""text"": ""drawing"",
+                ""link"": ""/en/search/collection?type=drawing""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""peasant life"",
+                ""link"": ""/en/search/collection?genre=peasant life""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F1099"",
+    ""JH_number"": """",
+    ""obj_number"": ""d0386M1977"",
+    ""dimensions"": {
+        ""canvas"": ""41.7 cm x 54.1 cm"",
+        ""frame"": ""41.7 cm x 54.1 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+d0423V1962,"Weaver, 1884",https://vangoghmuseum.nl/en/collection/d0423V1962,https://vangoghmuseum.nl/download/291d0ce2-4541-4d72-b0bd-95fb3123dc97.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Weaver"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -398,8 +1090,55 @@
             }
         ]
     }
-}"
-17,d0364V1968,"Pollard Birches, 1884",https://vangoghmuseum.nl/en/collection/d0364V1968,https://vangoghmuseum.nl/download/27d1a0c5-d3a0-4746-a9f5-ae25f99ae11c.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1884"",
+                ""link"": ""/en/search/collection?date=1884""
+            },
+            {
+                ""text"": ""Nuenen"",
+                ""link"": ""/en/search/collection?place=Nuenen""
+            },
+            {
+                ""text"": ""drawing"",
+                ""link"": ""/en/search/collection?type=drawing""
+            },
+            {
+                ""text"": ""figure (representation)"",
+                ""link"": ""/en/search/collection?genre=figure (representation)""
+            },
+            {
+                ""text"": ""interior"",
+                ""link"": ""/en/search/collection?genre=interior""
+            },
+            {
+                ""text"": ""peasant life"",
+                ""link"": ""/en/search/collection?genre=peasant life""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F1115"",
+    ""JH_number"": """",
+    ""obj_number"": ""d0423V1962"",
+    ""dimensions"": {
+        ""canvas"": ""35.5 cm x 44.6 cm"",
+        ""frame"": ""35.5 cm x 44.6 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+d0364V1968,"Pollard Birches, 1884",https://vangoghmuseum.nl/en/collection/d0364V1968,https://vangoghmuseum.nl/download/27d1a0c5-d3a0-4746-a9f5-ae25f99ae11c.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Pollard Birches"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -423,8 +1162,51 @@
             }
         ]
     }
-}"
-18,d0171V1962,"Peasant Woman Digging, 1885",https://vangoghmuseum.nl/en/collection/d0171V1962,https://vangoghmuseum.nl/download/9a9ebd5e-0f38-4c9c-9f63-ce273092e799.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1884"",
+                ""link"": ""/en/search/collection?date=1884""
+            },
+            {
+                ""text"": ""Nuenen"",
+                ""link"": ""/en/search/collection?place=Nuenen""
+            },
+            {
+                ""text"": ""drawing"",
+                ""link"": ""/en/search/collection?type=drawing""
+            },
+            {
+                ""text"": ""landscape"",
+                ""link"": ""/en/search/collection?genre=landscape""
+            },
+            {
+                ""text"": ""nature"",
+                ""link"": ""/en/search/collection?genre=nature""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F1240"",
+    ""JH_number"": """",
+    ""obj_number"": ""d0364V1968"",
+    ""dimensions"": {
+        ""canvas"": ""39.5 cm x 54.2 cm"",
+        ""frame"": ""39.5 cm x 54.2 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+d0171V1962,"Peasant Woman Digging, 1885",https://vangoghmuseum.nl/en/collection/d0171V1962,https://vangoghmuseum.nl/download/9a9ebd5e-0f38-4c9c-9f63-ce273092e799.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Peasant Woman Digging"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -443,8 +1225,51 @@
         ""text"": ""Van Gogh struggled for a long time to represent figures convincingly: they tended to look too flat. He realised in 1885 that he needed to build them up from large round forms rather than contours. This burly peasant woman is a successful example. The proportions may not be accurate, but this was deliberate: Van Gogh wanted to make the drawing more expressive. In a letter to his brother Theo, Vincent described his drawings of farm workers as 'the start of a whole series about all kinds of work in the fields'. He hoped that scenes of this kind would establish his reputation as an artist of peasant life."",
         ""references"": []
     }
-}"
-19,d0420V1962,"Gate in the Paris Ramparts, 1887",https://vangoghmuseum.nl/en/collection/d0420V1962,https://vangoghmuseum.nl/download/2dc95aa8-24b6-48f9-83ee-79bcbbfc29f8.jpg,True,True,True,True,N.A.,N.A.,N.A.,,,,,N.A.,N.A.,N.A.,"{
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1885"",
+                ""link"": ""/en/search/collection?date=1885""
+            },
+            {
+                ""text"": ""Nuenen"",
+                ""link"": ""/en/search/collection?place=Nuenen""
+            },
+            {
+                ""text"": ""drawing"",
+                ""link"": ""/en/search/collection?type=drawing""
+            },
+            {
+                ""text"": ""figure (representation)"",
+                ""link"": ""/en/search/collection?genre=figure (representation)""
+            },
+            {
+                ""text"": ""peasant life"",
+                ""link"": ""/en/search/collection?genre=peasant life""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F1255"",
+    ""JH_number"": """",
+    ""obj_number"": ""d0171V1962"",
+    ""dimensions"": {
+        ""canvas"": ""55.7 cm x 41.0 cm"",
+        ""frame"": ""55.7 cm x 41.0 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
+d0420V1962,"Gate in the Paris Ramparts, 1887",https://vangoghmuseum.nl/en/collection/d0420V1962,https://vangoghmuseum.nl/download/2dc95aa8-24b6-48f9-83ee-79bcbbfc29f8.jpg,True,True,True,True,True,True,N.A.,,,,,,,N.A.,"{
     ""tittle"": ""Gate in the Paris Ramparts"",
     ""authorship"": {
         ""name"": ""Vincent van Gogh (1853 - 1890)"",
@@ -463,4 +1288,43 @@
         ""text"": ""In the summer of 1887, Van Gogh made four watercolour drawings of the city walls around Paris. This is most likely the Porte de Clichy – one of 25 gates leading into the French capital. The lively cityscape is filled with little figures and details like the horse-drawn tram. Van Gogh drew inspiration for this drawing from the crowded street scenes in Japanese prints. The bright colours of those prints also stimulated his creativity. This cityscape is one of the few drawings he made in Paris. He mostly worked in oil paint on canvas during his time there and developed a brighter, more modern colour palette. Colour and brightness also play a central role in this watercolour drawing."",
         ""references"": []
     }
-}"
+}","{
+    ""tags"": {
+        ""references"": [
+            {
+                ""text"": ""1887"",
+                ""link"": ""/en/search/collection?date=1887""
+            },
+            {
+                ""text"": ""Paris"",
+                ""link"": ""/en/search/collection?place=Paris""
+            },
+            {
+                ""text"": ""drawing"",
+                ""link"": ""/en/search/collection?type=drawing""
+            },
+            {
+                ""text"": ""cityscape"",
+                ""link"": ""/en/search/collection?genre=cityscape""
+            },
+            {
+                ""text"": ""Vincent van Gogh"",
+                ""link"": ""/en/search/collection?artist=Vincent van Gogh""
+            }
+        ]
+    }
+}","{
+    ""F_number"": ""F1401"",
+    ""JH_number"": """",
+    ""obj_number"": ""d0420V1962"",
+    ""dimensions"": {
+        ""canvas"": ""24.1 cm x 31.6 cm"",
+        ""frame"": ""24.1 cm x 31.6 cm"",
+        ""holder"": ""Van Gogh Museum"",
+        ""place"": "" Amsterdam (Vincent van Gogh Foundation)""
+    },
+    ""credits"": {
+        ""holder"": """",
+        ""place"": """"
+    }
+}",
