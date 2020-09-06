@@ -44,65 +44,122 @@ from Lib.Utils import error as error
 assert config
 assert error
 
-"""
-this module make a request of an URL and helps translate its 
-data into readable information for the dataframe
-"""
 class page(object):
-    """[summary]
 
-    Args:
-        object ([type]): [description]
-
-    Returns:
-        [type]: [description]
     """
-    url = str()
+    this module make a request of an URL and helps translate its 
+    data into readable information for the dataframe
+    """
+
+    #___________________________________________
+    # class parameters
+    #___________________________________________
+    url = ""
     request = None
     shead = None
     sbody = None
     dialect = "html.parser"
 
-
-    def __init__(self, url = str(), dialect = None):
-        """[summary]
+    def __init__(self, *args, **kwargs):
+        """
+        creator of the class page()
 
         Args:
-            url ([str], optional): url of the page I want to recover. Defaults to str().
-            dialect ([str], optional): parse dialect I use, the same as beautiful soup. Defaults to None.
+            url (str, optional): url of the page I want to recover. Defaults to str().
+            dialect (str, optional): parse dialect I use, the same as beautiful soup. Defaults to None.
         """
-        self.url = url
-        self.request = None
-        self.shead = None
-        self.sbody = None
-
-        if dialect != None:
-            self.dialect = dialect
-
-        self.dialect = "html.parser"
-
-    def getPage(self, url):
-
         try:
+
+            # not passing parameters in the creator
+            if len(args) == 0 and len(kwargs) == 0:
+
+                self.url = ""
+                # setting default dialect
+                self.dialect = "html.parser"
+                self.request = None
+                self.shead = None
+                self.sbody = None
             
-            self.request = requests.get(self.url)
-            return self.request.status_code
+            # url passed as creator parameter
+            elif len(args) == 1 and len(kwargs) == 0:
+
+                self.url = str(args[0])
+                # setting default dialect
+                self.dialect = "html.parser"
+                self.request = None
+                self.shead = None
+                self.sbody = None
+
+            # costume url and dialect in parameters
+            elif len(args) == 1 and len(kwargs) > 0:
+
+                self.url = str(args[0])
+                self.request = None
+                self.shead = None
+                self.sbody = None
+
+                # setting costume dialect
+                if kwargs.get("dialect"):
+
+                    self.dialect = kwargs["dialect"]
+
+        except Exception as exp:
+            error.reraise(exp, 'page->getPage: ')
+    
+    
+    def getPage(self, *args):
+        """ 
+        the method makes a request with the URL. if succesfull retunrs the REST status code of the page and updates the self.request attribute of page().
+
+        Args:
+            url (str, optional): url of the page I want to recover. Defaults to str().
+
+        Returns:
+            int: the status code of the recovered page in the request status_code
+        """
+        try:
+
+            # requesting the page with the existing url
+            if len(args) == 0:
+
+                self.request = requests.get(self.url)
+                ans = self.request.status_code
+                self.request.close()
+                return ans
+
+            # requesting the page with the url parameter
+            elif len(args) == 1:
+
+                self.url = args[0]
+                self.request = requests.get(self.url)
+                ans = self.request.status_code
+                self.request.close()
+                return ans
 
         except Exception as exp:
             error.reraise(exp, 'page->getPage: ')
 
-    def setSoup(self, dialect = "html.parser"):
+    def setSoup(self, **kwargs):
 
         try:
 
-            if self.request.status_code == 200:
-
-                if dialect != "html.parser":
-                    
-                    self.dialect = dialect
+            if len(kwargs) == 0:
 
                 self.shead = BeautifulSoup(self.request.content, self.dialect).head
                 self.sbody = BeautifulSoup(self.request.content, self.dialect).body
+                return True
+
+            elif len(kwargs) > 0:
+
+                if kwargs.get("dialect") == True:
+
+                    self.dialect = kwargs["dialect"]
+
+                    self.shead = BeautifulSoup(
+                        self.request.content, self.dialect).head
+                    self.sbody = BeautifulSoup(
+                        self.request.content, self.dialect).body
+                    return True
 
         except Exception as exp:
             error.reraise(exp, 'page->setSoup: ')
