@@ -40,7 +40,7 @@ from bs4 import BeautifulSoup
 # developed python libraries
 # ___________________________________________________
 import config
-from Lib.Utils import error as error
+from .Utils import error as error
 assert config
 assert error
 

@@ -19,10 +19,11 @@
 """
 
 import sys
-import configfrom DISClib.ADT import list as lt
-from DISClib.DataStructures import listiterator as it
-from App import controller
-assert config
+# import configfrom DISClib.ADT import list as lt
+# from .Lib.Recovery.Pages import page as page
+from . import controller
+
+
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -50,3 +51,10 @@ operación seleccionada.
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+
+
+# ___________________________________________________
+#  Menu exec
+# ___________________________________________________
+def run():
+    pass
