@@ -44,17 +44,33 @@ framwork pytest.
 def data():
     """
     url->str: fixture test url for the pytest assertions
-    altUrl->str: fixture test url for the pytest assertions
+    altUrl->str: alternative fixture test url for the pytest assertions
     dialect->str: fixture test parse dialect for the pytest assertions
     """
     pytest.url = "https://www.google.com/"
-    pytest.altUrl = "https://www.microsoft.com/"
+    pytest.altUrl = "https://www.bing.com/"
     pytest.dialect = "html.parser"
+
+@pytest.fixture
+def soup():
+    """
+    division->str: fixture test HTML division for the pytest assertions
+    attributes->dict: fixture test dictionary with test HTML decorations of the element for the pytest assertions
+    altDivision->str: alternative fixture test HTML division for the pytest assertions
+    altAttributes->dict: alternative fixture test dictionary with test HTML decorations of the element for the pytest assertions
+    """
+    pytest.division = "img"
+    pytest.attributes = {"alt":"Google", "id":"hplogo"}
+    pytest.altDivision = "svg"
+    pytest.altAttributes = {"id":"b_logo"}
 
 
 def test_newPage(data):
     """
-    test for the __init__/creator of a new page object
+    test for the __init__/creator of a new page object.
+
+    Args:
+        data: fixture data to test page()
     """
     # creator without parameters
     newPage = page()
@@ -95,7 +111,7 @@ def test_getPage(data):
     this test want to assert the URL web request of the page() class with the url set in the creator and updating its value as a parameter in the function
 
     Args:
-        data: fixture data for tests of page()
+        data: fixture data to test page()
     """
 
     # invocing creation method
@@ -110,6 +126,7 @@ def test_getPage(data):
 
     # requesting  webpage with existing URL
     status = testPage.getPage()
+    assert testPage.url == url
     assert status == 200
 
     # requesting  webpage updating the URL
@@ -119,34 +136,87 @@ def test_getPage(data):
     assert status == 200
 
 
-def test_setSoup():
-    pass
+def test_setSoup(data):
+    """
+    this test asserts the soup creation with beautifulsoup library in the page() class
 
-def test_findInBody():
-    pass
+    Args:
+        data: fixture data to test page()
+    """
+
+    # invocing creation method
+    url = pytest.url
+    dialect = pytest.dialect
+    testPage = page(pytest.url, dialect=dialect)
+    
+    # requesting page
+    status = testPage.getPage()
+
+    # asserting request behavour and inalteration of the body soup/head
+    assert testPage.request != None
+    assert testPage.sbody == None
+    assert testPage.shead == None
+
+    # setting soup with known parsing dialect
+    testPage.setSoup()
+
+    # checking the soup exists al least
+    assert testPage.sbody != None
+    assert testPage.shead != None
+
+    # using other url
+    altUrl = pytest.altUrl
+
+    # invocing creation method
+    testPage = page(pytest.altUrl)
+
+    # requesting page
+    status = testPage.getPage()
+
+    # asserting request behavour and inalteration of the body soup/head
+    assert testPage.request != None
+    assert testPage.sbody == None
+    assert testPage.shead == None
+
+    # setting soup updating parsing dialect
+    testPage.setSoup(dialect = dialect)
+
+    assert testPage.sbody != None
+    assert testPage.shead != None
 
 
-# @pytest.fixture
-# def booktagsfile():
-#     booktagsfile = 'GoodReads/book_tags-small.csv'
-#     return booktagsfile
+def test_findInBody(data, soup):
+    """
+    this test asserts the soup creation with beautifulsoup library in the page() class
 
+    Args:
+        data: fixture data to test page()
+        soup: fixture soup element dictionary to test page()
+    """
 
-# @pytest.fixture
-# def catalog():
-#     """
-#     Llama la funcion de inicializacion del catalogo del modelo.
-#     """
-#     # catalog es utilizado para interactuar con el modelo
-#     catalog = control.initCatalog()
-#     assert catalog is not None
-#     return catalog
+    # invocing creation method
+    url = pytest.url
+    dialect = pytest.dialect
+    testPage = page(pytest.url, dialect=dialect)
+    # test soup data signation and prep
+    div = pytest.division
+    attrs = pytest.attributes
+    answer = None
 
+    # requesting page
+    status = testPage.getPage()
 
-# def test_load_movies(catalog, booksfile, tagsfile, booktagsfile):
-#     control.loadData(catalog, booksfile, tagsfile, booktagsfile)
-#     assert control is not None
-#     assert control.booksSize(catalog) == 149
-#     assert control.tagsSize(catalog) == 34252
-#     books = control.getBooksYear(catalog, 2008)
-#     assert lt.size(books) == 4
+    # setting soup with known parsing dialect
+    testPage.setSoup()
+
+    # finding only one element in ne URL
+    answer = testPage.findInBody(div, attributes=attrs, multiple=False)
+
+    # asserting behaviour
+    assert answer != -1
+
+    # finding only one element in ne URL
+    answer = testPage.findInBody(div, attributes={}, multiple=True)
+    # # asserting behaviour
+    assert answer != -1
+    assert len(answer) > 0

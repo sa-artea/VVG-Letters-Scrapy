@@ -66,7 +66,7 @@ class page(object):
 
         Args:
             url (str, optional): url of the page I want to recover. Defaults to str().
-            dialect (str, optional): parse dialect I use, the same as beautiful soup. Defaults to None.
+            dialect (str, optional): parse dialect I use, the same as beautiful soup. Defaults to "html.parser".
         """
         try:
 
@@ -123,31 +123,35 @@ class page(object):
             if len(args) == 0:
 
                 self.request = requests.get(self.url)
-                ans = self.request.status_code
+                answer = self.request.status_code
                 self.request.close()
-                return ans
+                return answer
 
             # requesting the page with the url parameter
             elif len(args) == 1:
 
                 self.url = args[0]
                 self.request = requests.get(self.url)
-                ans = self.request.status_code
+                answer = self.request.status_code
                 self.request.close()
-                return ans
+                return answer
 
         except Exception as exp:
             error.reraise(exp, 'page->getPage: ')
 
     def setSoup(self, **kwargs):
-
+        """
+        this void method creates the soup of the request with the beautifulsoup (bs4) library, it automaticaly sets body and head soup.
+        
+        Args:
+            dialect (str, optional): parse dialect I use, the same as beautiful soup. Defaults to "html.parser".        
+        """
         try:
 
             if len(kwargs) == 0:
 
                 self.shead = BeautifulSoup(self.request.content, self.dialect).head
                 self.sbody = BeautifulSoup(self.request.content, self.dialect).body
-                return True
 
             elif len(kwargs) > 0:
 
@@ -155,18 +159,24 @@ class page(object):
 
                     self.dialect = kwargs["dialect"]
 
-                    self.shead = BeautifulSoup(
-                        self.request.content, self.dialect).head
-                    self.sbody = BeautifulSoup(
-                        self.request.content, self.dialect).body
-                    return True
+                self.shead = BeautifulSoup(self.request.content, self.dialect).head
+                self.sbody = BeautifulSoup(self.request.content, self.dialect).body
 
         except Exception as exp:
             error.reraise(exp, 'page->setSoup: ')
 
     def findInBody(self, division, attributes = None, multiple = True):
+        """[summary]
 
-        answer = None
+        Args:
+            division (str): the html division to find in the soup ie.: "div", "li"
+            attributes ([type], optional): decorators to reduce the divs options. Defaults to None.
+            multiple (bool, optional): if the method finds multiple or just one occurrence of the HTML divs. Defaults to True.
+
+        Returns:
+            answer: return the element or the list of elements of the soup, -1 if nothing something goes wrong
+        """
+        answer = -1
 
         try:
 
@@ -174,10 +184,10 @@ class page(object):
 
                 answer = self.sbody.findAll(division, attrs = attributes)
 
-            else:
+            elif multiple == False:
 
-                answer = self.shead.find(division, attrs = attributes)
-
+                answer = self.sbody.find(division, attrs=attributes)
+            
             return answer
 
         except Exception as exp:
