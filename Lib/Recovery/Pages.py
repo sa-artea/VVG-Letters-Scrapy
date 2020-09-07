@@ -21,13 +21,9 @@
 # ___________________________________________________
 # native python libraries
 # ___________________________________________________
-import re
 import os
-import copy
-import json
-import urllib
-import datetime
-from urllib.parse import urlparse
+import sys
+import re
 
 # ___________________________________________________
 # extension python libraries
@@ -39,9 +35,7 @@ from bs4 import BeautifulSoup
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
-import config
-from .Utils import error as error
-assert config
+from ..Utils import error as error
 assert error
 
 class page(object):
@@ -104,7 +98,7 @@ class page(object):
                     self.dialect = kwargs["dialect"]
 
         except Exception as exp:
-            error.reraise(exp, 'page->getPage: ')
+            error.reraise(exp, 'page->page(): ')
     
     
     def getPage(self, *args):
