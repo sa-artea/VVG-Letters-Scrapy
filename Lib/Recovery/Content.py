@@ -19,26 +19,27 @@
 """
 
 # ___________________________________________________
-# native python libraries
+# Standard library imports
 # ___________________________________________________
 import os
 import sys
 import re
 
 # ___________________________________________________
-# extension python libraries
+# Third party imports
 # ___________________________________________________
 import requests
 import validators
 from bs4 import BeautifulSoup
 
 # ___________________________________________________
-# developed python libraries
+# Local application imports
 # ___________________________________________________
-from ..Utils import error as error
-assert error
+# from ..Utils import error as error
+# assert error
+from .Utils import error as error
 
-class page(object):
+class Page(object):
 
     """
     this module make a request of an URL and helps translate its 

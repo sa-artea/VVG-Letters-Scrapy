@@ -139,7 +139,7 @@ paintsRoot = "https://vangoghmuseum.nl"
 # por defecto pruebo 50 elementos de la coleccion
 paintsPage = paintsSearch + str(defaultPaints)
 
-# si el numero de enlaces a buscar esta en el rango a propiado
+# si el numero de enlaces a buscar esta en el rango a , **ropiado
 if paints <= maxPaints and paints > 0:
     paintsPage = paintsSearch + str(paints)
 

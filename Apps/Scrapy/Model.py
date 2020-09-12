@@ -42,10 +42,10 @@ import pandas as pd
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
-from ..Lib.Recovery.Pages import page as page
-from ..Lib.Utils import error as error
-assert page
-assert error
+# from .Lib.Recovery.Content import Page as page
+# from Lib.Utils import error as error
+# assert page
+# assert error
 
 soupCol = [
     "ID",  # identificador unico de la galeria, tambien es el nombre del folder dentro del directorio local
@@ -90,7 +90,7 @@ DEFAULT_DATA_TEMPLATE = {
 # -----------------------------------------------------
 # API for the scrapping the gallery of paintings
 # -----------------------------------------------------
-class gallery(object):
+class Gallery(object):
     """
     this class implement the gallery of the model, containing all its elements (ie.: painintgs)
     contains all gallery data in memory and helps create the dataFrame for it.
@@ -268,5 +268,5 @@ class gallery(object):
 # -----------------------------------------------------
 # API for the scrapping element (paintings) in the WEB
 # -----------------------------------------------------
-class paint(object):
+class Paint(object):
     pass
