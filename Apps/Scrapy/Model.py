@@ -43,9 +43,12 @@ import pandas as pd
 # developed python libraries
 # ___________________________________________________
 # from .Lib.Recovery.Content import Page as page
-# from Lib.Utils import error as error
-# assert page
-# assert error
+import config
+assert config
+from Lib.Utils import error as error
+from Lib.Recovery.Content import Page
+assert Page
+assert error
 
 soupCol = [
     "ID",  # identificador unico de la galeria, tambien es el nombre del folder dentro del directorio local

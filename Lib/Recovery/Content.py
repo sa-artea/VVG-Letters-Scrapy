@@ -28,6 +28,7 @@ import re
 # ___________________________________________________
 # Third party imports
 # ___________________________________________________
+import config
 import requests
 import validators
 from bs4 import BeautifulSoup
@@ -35,9 +36,10 @@ from bs4 import BeautifulSoup
 # ___________________________________________________
 # Local application imports
 # ___________________________________________________
-# from ..Utils import error as error
-# assert error
-from .Utils import error as error
+import config
+assert config
+from Lib.Utils import error as error
+assert error
 
 class Page(object):
 

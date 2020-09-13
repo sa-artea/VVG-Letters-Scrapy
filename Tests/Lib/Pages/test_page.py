@@ -27,7 +27,9 @@ import pytest
 #___________________________________________
 # importing costume scrapping module
 #___________________________________________
-from Lib.Recovery.Pages import page as page
+import config
+assert config
+from Lib.Recovery.Content import Page as Page
 
 #___________________________________________
 # asserting imports in the module
@@ -73,7 +75,7 @@ def test_newPage(data):
         data: fixture data to test page()
     """
     # creator without parameters
-    newPage = page()
+    newPage = Page()
     
     # asserting equal URL, dialect, request, head soup and body soup
     assert newPage.url == ""
@@ -86,7 +88,7 @@ def test_newPage(data):
     dialect = "pytest.dialect"
 
     # creator with 1 parameter
-    newPage = page(url)
+    newPage = Page(url)
 
     # asserting equal URL, dialect, request, head soup and body soup
     assert newPage.url == pytest.url
@@ -96,7 +98,7 @@ def test_newPage(data):
     assert newPage.sbody == None
 
     # cretor with 2 parameters
-    newPage = page(url, dialect = dialect)
+    newPage = Page(url, dialect = dialect)
 
     # asserting equal URL, dialect, request, head soup and body soup
     assert newPage.url == pytest.url
@@ -108,16 +110,16 @@ def test_newPage(data):
 
 def test_getPage(data):
     """
-    this test want to assert the URL web request of the page() class with the url set in the creator and updating its value as a parameter in the function
+    this test want to assert the URL web request of the Page() class with the url set in the creator and updating its value as a parameter in the function
 
     Args:
-        data: fixture data to test page()
+        data: fixture data to test Page()
     """
 
     # invocing creation method
     url = pytest.url
     dialect = pytest.dialect
-    testPage = page(pytest.url, dialect = pytest.dialect)
+    testPage = Page(pytest.url, dialect = pytest.dialect)
 
     # asserting equal URL, dialect, request, head soup and body soup
     assert testPage.url == url
@@ -138,16 +140,16 @@ def test_getPage(data):
 
 def test_setSoup(data):
     """
-    this test asserts the soup creation with beautifulsoup library in the page() class
+    this test asserts the soup creation with beautifulsoup library in the Page() class
 
     Args:
-        data: fixture data to test page()
+        data: fixture data to test Page()
     """
 
     # invocing creation method
     url = pytest.url
     dialect = pytest.dialect
-    testPage = page(pytest.url, dialect=dialect)
+    testPage = Page(pytest.url, dialect=dialect)
     
     # requesting page
     status = testPage.getPage()
@@ -168,7 +170,7 @@ def test_setSoup(data):
     altUrl = pytest.altUrl
 
     # invocing creation method
-    testPage = page(pytest.altUrl)
+    testPage = Page(pytest.altUrl)
 
     # requesting page
     status = testPage.getPage()
@@ -187,17 +189,17 @@ def test_setSoup(data):
 
 def test_findInBody(data, soup):
     """
-    this test asserts the soup creation with beautifulsoup library in the page() class
+    this test asserts the soup creation with beautifulsoup library in the Page() class
 
     Args:
-        data: fixture data to test page()
-        soup: fixture soup element dictionary to test page()
+        data: fixture data to test Page()
+        soup: fixture soup element dictionary to test Page()
     """
 
     # invocing creation method
     url = pytest.url
     dialect = pytest.dialect
-    testPage = page(pytest.url, dialect=dialect)
+    testPage = Page(pytest.url, dialect=dialect)
     # test soup data signation and prep
     div = pytest.division
     attrs = pytest.attributes

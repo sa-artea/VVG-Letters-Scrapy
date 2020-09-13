@@ -40,8 +40,14 @@ import pandas as pd
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
-from .Model import Gallery
-from .Model import Paint
+import config
+assert config
+from Apps.Scrapy.Model import Gallery
+from Apps.Scrapy.Model import Paint
+from Lib.Utils.error import error as error
+assert Gallery
+assert Paint
+assert error
 
 """
 The controller mediates between the view and the model, there are
@@ -61,29 +67,127 @@ DEFAULT_PANDAS_FRAME = {
 }
 
 # default number of paintings in the gallery
-DEFAULT_NUM_PAINTS = 50
+DEFAULT_MAX_PAINTS = 10
 
 class Controller (object):
     """[summary]
 
     Args:
         object ([type]): [description]
+
+    Raises:
+        Exception: [description]
+
+    Returns:
+        [type]: [description]
     """
 
+    galleryHome = str()
+    localGallery = str()
+    gallery = list()
+    paintStruct = None
+    galleryFrame = None
+    maxPaints = None
+
     def __init__(self, *args, **kwargs):
+        """[summary]
 
-        self.galleryHome = ""
+        Args:
+            galleryHome ([type]): [description]
+            localGallery ([type]): [description]
+            gallery ([type]): [description]
+            paintStruct ([type]): [description]
+            galleryFrame ([type]): [description]
+            maxPaints ([type]): [description]
+        """
+
+        # Controller default values
+        self.galleryHome = str()
+        self.localGallery = str()
         self.gallery = list()
+        self.paintStruct = copy.deepcopy(DEFAULT_PANDAS_FRAME)
         self.galleryFrame = pd.DataFrame(columns = DEFAULT_PANDAS_FRAME)
-        self.maxPaints = DEFAULT_NUM_PAINTS
+        self.maxPaints = DEFAULT_MAX_PAINTS
 
-    def gallerySetUp(self, parameter_list):
+        # when arguments are pass as parameters
+        if len(args) > 0:
+            
+            for i in range(int(len(args))):
+
+                # URL of the remote gallery to scrap
+                if i == 0:
+                    self.galleryHome = args[i]
+
+                # local dirpath to save the gallery CSV
+                if i == 1:
+                    self.localGallery = args[i]
+                
+                # list of paintings containing the in memory data of the gallery
+                if i == 2:
+                    self.gallery = args[i]
+
+        # if there are dict decrators in the creator
+        if len(kwargs) > 0:
+
+            for key in list(kwargs.keys()):
+
+                # updating schema in the controller
+                if key == "schema":
+                    self.paintStruct = copy.deepcopy(kwargs[key])
+                    self.galleryFrame = pd.DataFrame(columns = kwargs[key])
+                
+                # setting the max size of the gallery
+                if key == "size":
+                    self.maxPaints = kwargs[key] 
+
+    def SetUpLocal(self, galleryFolder, *args):
+        """[summary]
+
+        Args:
+            galleryFolder ([type]): [description]
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        
+        # Make sure the local gallery path exists and is correct
+        if not os.path.exists(galleryFolder):
+
+            raise Exception
+        
+        # the local path exists and is correct
+        elif os.path.exists(galleryFolder):
+
+            # integratnig subfoders in the realpath
+            workPath = galleryFolder
+
+            if len(args) > 0:
+
+                for i in range(int(len(args))):
+                    workPath = os.path.join(workPath, args[i])
+            
+            # creating appropiate subfoders
+            if not os.path.exists(workPath):
+
+                os.makedirs(workPath)
+            
+            self.galleryFolder = workPath
+        
+        return workPath
+    
+    def setUpIndex(self, galleryIndex, *args):
+        
+        
+
+        return False
+
+    def loadGallery(self, galleryFilePath, **kwargs):
         pass
 
-    def loadGallery(self, filepath, **kwargs):
-        pass
-
-    def saveGallery(self, filepath, **kwargs):
+    def saveGallery(self, galleryFilePath, **kwargs):
         pass
 
     def addPaint(self, parameter_list):
@@ -93,30 +197,3 @@ class Controller (object):
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-
-
-# class Controller:
-#     def __init__(self, root):
-#         self.model = Model()
-#         self.model.myMoney.addCallback(self.MoneyChanged)
-#         self.view1 = View(root)
-#         self.view2 = ChangerWidget(self.view1)
-#         self.view2.addButton.config(command=self.AddMoney)
-#         self.view2.removeButton.config(command=self.RemoveMoney)
-#         self.MoneyChanged(self.model.myMoney.get())
-
-#     def AddMoney(self):
-#         self.model.addMoney(10)
-
-#     def RemoveMoney(self):
-#         self.model.removeMoney(10)
-
-#     def MoneyChanged(self, money):
-#         self.view1.SetMoney(money)
-
-
-# if __name__ == '__main__':
-#     root = tk.Tk()
-#     root.withdraw()
-#     app = Controller(root)
-#     root.mainloop()

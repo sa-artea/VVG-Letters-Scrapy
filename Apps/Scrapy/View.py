@@ -43,7 +43,9 @@ from bs4 import BeautifulSoup
 # ___________________________________________________
 # from Lib.Recovery.Pages import page as page
 # from Lib.Utils import error as error
-from .Controller import Controller
+import config
+assert config
+from Apps.Scrapy.Controller import Controller
 
 """
 The view is in charge of the interaction with the user
@@ -59,21 +61,32 @@ into the CSV files.
 galleryPage = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh"
 
 # local root dirpath where the data will be save
-localGallery = "C:\\Users\\Felipe\\Universidad de los andes\\CoIArt - General\\04 - Data\\01 - Vincent\\01 - Raw"
+localWorkFolder = "C:\\Users\\Felipe\\Universidad de los andes\\CoIArt - General\\04 - Data\\01 - Vincent\\Source"
 
 # real rootpath to work with
-workPath = localGallery
-workPath = os.path.dirname(workPath)
+galleryFolder = localWorkFolder
+galleryFolder = os.path.dirname(galleryFolder)
 
 # subdirs in the local root path needed to process data
-paintsFolder = "01 - Paints"
-lettersFolder = "02 - Letters"
+paintsFolder = "Paints"
+lettersFolder = "Letters"
 # scrapped subfolder
-rawFolder = "01 - Raw"
+sourceFolder = "Source"
+# app subfoder
+dataFolder = "Data"
 
+# default template for the element/paint dict in gallery
+VINCENT_DATA_STRUCT = {
+    # unique ID for an element in the gallery, its also its folder name in the localdir
+    "ID": str(),
+    "NAME": str(),              # name of the element inside the gallery
+    "PAINT_URL": str(),         # element (paint) URL/link recovered with ScrapyWEB
+    "HAS_ID": bool(),           # boolean indicating if the paint has a folder on the localdir
+    "HAS_NAME": bool(),         # boolean indicating if the paint has a name in the gallery
+}
 
-#La ruta se obtiene con el dirpath y el filename y el dirpath.split(os.path.sep)[-1] agrega la clase
-
+# default number of paintings in the gallery
+VINCENT_MAX_PAINTS = 25
 # ___________________________________________________
 #  Functions to print webpage recovered data
 # ___________________________________________________
@@ -97,7 +110,8 @@ class View(object):
         """
         menu options
         """
-        print("===== WELCOME =====")
+
+        print("========================= WELCOME =========================")
         print("1- Start gallery")
         print("2- Load paintings in gallery")
         print("3- Update paintings basic data")
@@ -111,21 +125,24 @@ class View(object):
 
 
     def run(self):
-        """menu excution
         """
+        menu excution
+        """
+
         while True:
             self.printMenu()
             inputs = input('Select an option to continue\n')
 
+            # starting gallery object to scrap data
             if int(inputs[0]) == 1:
                 print("Starting gallery...")
-                galleryControl = Controller(galleryPage, 
-                                                localGallery,
-                                                paintsFolder,
-                                                rawFolder)
-                # # cont es el controlador que se usará de acá en adelante
-                # cont = controller.initCatalog()
-                galleryControl.gallerySetUp()
+                # creating gallery controller
+                self.galleryControl = Controller(galleryPage, schema = VINCENT_DATA_STRUCT, size = VINCENT_MAX_PAINTS)
+                # setting up local dir for saving data
+                ans = self.galleryControl.SetUpLocal(galleryFolder, paintsFolder, sourceFolder)
+                # print(ans)
+                self.galleryControl.setUpIndex()
+
 
             elif int(inputs[0]) == 2:
                 print("loading new paintings into gallery...")

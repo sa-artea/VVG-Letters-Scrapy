@@ -19,7 +19,7 @@
 """
 
 """
-Estructura utilizada para el manejo de los errores durante la manipulación de datos
+generic function used to reraise errors in different parts of the app
 """
 def reraise(excp, *args):
     excp.args = args + excp.args

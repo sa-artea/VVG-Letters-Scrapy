@@ -1,7 +1,10 @@
 # ___________________________________________________
 # Local application imports
 # ___________________________________________________
-from Scrapy.View import View
+from Apps.Scrapy.View import View
 
+"""
+creating the View() object and running it
+"""
 scrapy = View()
 scrapy.run()
