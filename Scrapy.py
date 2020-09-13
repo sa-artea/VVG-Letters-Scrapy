@@ -1,7 +1,7 @@
 # ___________________________________________________
 # Local application imports
 # ___________________________________________________
-from Apps.Scrapy.View import View
+from Apps.Scrapy.view import View
 
 """
 creating the View() object and running it

@@ -46,7 +46,7 @@ import pandas as pd
 import config
 assert config
 from Lib.Utils import error as error
-from Lib.Recovery.Content import Page
+from Lib.Recovery.content import Page
 assert Page
 assert error
 

@@ -42,9 +42,9 @@ import pandas as pd
 # ___________________________________________________
 import config
 assert config
-from Apps.Scrapy.Model import Gallery
-from Apps.Scrapy.Model import Paint
-from Lib.Utils.error import error as error
+from Apps.Scrapy.model import Gallery
+from Apps.Scrapy.model import Paint
+from Lib.Utils import error as error
 assert Gallery
 assert Paint
 assert error

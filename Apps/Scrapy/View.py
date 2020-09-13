@@ -45,7 +45,7 @@ from bs4 import BeautifulSoup
 # from Lib.Utils import error as error
 import config
 assert config
-from Apps.Scrapy.Controller import Controller
+from Apps.Scrapy.controller import Controller
 
 """
 The view is in charge of the interaction with the user
