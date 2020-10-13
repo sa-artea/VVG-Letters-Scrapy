@@ -21,6 +21,7 @@
 # ___________________________________________________
 # native python libraries
 # ___________________________________________________
+# from Apps.Scrapy.controller import DEFAULT_FRAME_SCHEMA
 import re
 import os
 import sys
@@ -44,51 +45,28 @@ import pandas as pd
 # ___________________________________________________
 # from .Lib.Recovery.Content import Page as page
 import config
-assert config
 from Lib.Utils import error as error
 from Lib.Recovery.content import Page
 assert Page
 assert error
-
-soupCol = [
-    "ID",  # identificador unico de la galeria, tambien es el nombre del folder dentro del directorio local
-    "NAME",  # nombre del elemento en la galeria
-    "ELEMENT_URL",  # enlace del elemento recuperado del ScrapyWEB
-    "DOWNLOAD_URL",  # enlace de la imagen dentro del elemento de la galeria
-
-    "HAS_ID",  # booleano que identifica si se tiene un folder local del elemento
-    "HAS_NAME",  # booleano que identifica si se tiene el nombre del elemento
-
-    # booleano que identifica si se tiene la seccion de descripcion en el HTML del elemento
-    "HAS_DESCRIPTION",
-    "HAS_DOWNLOAD",  # booleano que identifica si se tiene la seccion de enlace de descarga en el HTML del elemento
-    "HAS_TAGS",  # booleano que identifica si se tiene la seccion de tags de busqueda en el HTML del elemento
-    "HAS_DATA",  # booleano que identifica si se tiene la seccion de datos de archivo en el HTML del elemento
-    "HAS_RELATEDW",  # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
-
-    "ERR_ID",  # si no se puede crear la carpeta con el ID se guarda el error aca
-    "ERR_NAME",  # si no se obtiene el nombre se guarda el error aca
-
-    "ERR_DESCRIPTION",  # si no se obtiene la descripcion se guarda el error aca
-    "ERR_DOWNLOAD",  # si no se obtiene el enlace de descarga se guarda el error aca
-    "ERR_TAGS",  # si no se obtiene los tags de busqueda se guarda el error aca
-    "ERR_DATA",  # si no se obtiene los datos de archivo se guarda el error aca
-    "ERR_RELATEDW",  # si no se obtiene el trabajo relacionado se guarda el error aca
-
-    "DESCRIPTION",  # aqui guardo el JSON con la informacion de la descripcion
-    "TAGS",  # aqui guardo el JSON con la informacion de los tags de busqueda
-    "DATA",  # aqui guardo el JSON con la informacion de los datos de coleccion
-    "RELATEDW",  # aqui guardo el JSON con la informacion del trabajo relacionado con cada una de las obras
-]
+assert config
 
 # default template for the element/paint dict in gallery
-DEFAULT_DATA_TEMPLATE = {
-    "ID": str(),                # unique ID for an element in the gallery, its also its folder name in the localdir
-    "NAME": str(),              # name of the element inside the gallery
-    "PAINT_URL": str(),         # element (paint) URL/link recovered with ScrapyWEB
-    "HAS_ID": bool(),           # boolean indicating if the paint has a folder on the localdir
-    "HAS_NAME": bool(),         # boolean indicating if the paint has a name in the gallery
-    }
+DEFAULT_FRAME_SCHEMA = [
+    "ID",                   # unique ID for an element in the gallery, its also its folder name in the localdir
+    "TITLE",                # tittle of the element inside the gallery
+    "PAINT_URL",            # element (paint) URL/link recovered with ScrapyWEB
+    "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
+    "DESCRIPTION",          # JSON cell with the description of the element in the gallery
+    "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
+    "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
+    "RELATED_WORKS",        # JSON cell with the related work text and URLs of the element in the gallery
+    "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
+    "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
+]
+
+# default number of paintings in the gallery
+DEFAULT_MAX_PAINTS = 10
 
 # -----------------------------------------------------
 # API for the scrapping the gallery of paintings
@@ -102,11 +80,12 @@ class Gallery(object):
     #___________________________________________
     # class parameters
     #___________________________________________
-    galleryUrl = str()
-    dataTemplate = copy.deepcopy(DEFAULT_DATA_TEMPLATE)
-    gallerySize = 10
+    galleryWEB = str()
+    localGallery = list()
+    modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
+    gallerySize = DEFAULT_MAX_PAINTS
     currentPaint = 0
-    galleryList = list()
+    GallerydataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
 
     # =========================================
     # functions to create a new gallery
@@ -117,79 +96,70 @@ class Gallery(object):
         creator of the class gallery()
 
         Args:
-            galleryUrl (str, optional): url of the page I want to recover. Defaults to str().
-            dataTemplate (dic, optional): dictionary for the data template of the elements in the gallery.
+            galleryWEB (str, optional): url of the page I want to recover. Defaults to str().
+            localGallery ([type]): [description]
+            modelStruct (list, optional): dictionary for the data template of the elements in the gallery.
             gallerySize (int, optional): size of the gallery, len of the galleryList. Default to 10.
             currentPaint (int, optional): index of the working element in gallery, usefull when a gallery is created with elements. Default to 0.
-            galleryList (list, optional): list of elements (ie.: paintings) in the gallery, you can pass an existing list to the creator. Default to list()
+            GallerydataFrame (dataFrame, optional): element dataframe (ie.: paintings) in the gallery, you can pass an existing df to the creator. Default is empty
         """
         try:
             
             # default creator
             # not passing parameters in the creator
-            self.galleryUrl = str()
-            self.dataTemplate = copy.deepcopy(DEFAULT_DATA_TEMPLATE)
-            self.gallerySize = 10
+            self.galleryWEB = str()
+            self.localGallery = str()
+            self.modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
+            self.gallerySize = DEFAULT_MAX_PAINTS
             self.currentPaint = 0
-            self.galleryList = list()
+            self.GallerydataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
 
-            # if parameters are passed
+            # when arguments are pass as parameters
             if len(args) > 0:
 
-                # url passed as creator parameter
-                if len(args) == 1:
+                for i in range(int(len(args))-1):
 
-                    self.galleryUrl = args[0]
-                    self.dataTemplate = copy.deepcopy(DEFAULT_DATA_TEMPLATE)
-                    self.gallerySize = 10
-                    self.currentPaint = 0
-                    self.galleryList = list()
+                    # URL of the remote gallery to scrap
+                    if i == 0:
+                        self.galleryWEB = args[i]
 
-                # url and size passed as creator parameter
-                elif len(args) == 2:
+                    # local dirpath to save the gallery CSV
+                    if i == 1:
+                        self.localGallery = args[i]
 
-                    self.galleryUrl = args[0]
-                    self.dataTemplate = copy.deepcopy(DEFAULT_DATA_TEMPLATE)
-                    self.gallerySize = args[1]
-                    self.currentPaint = 0
-                    self.galleryList = list()
+                    # paintings dataframes containing the in memory data of the gallery
+                    if i == 2:
+                        self.GallerydataFrame = args[i]
 
-                # url, size and an existing gallery passed as creator parameter
-                elif len(args) == 4:
+                    # the current painting in the dataframe to process
+                    if i == 3:
+                        self.currentPaint = args[i]
 
-                    self.galleryUrl = args[0]
-                    self.dataTemplate = copy.deepcopy(DEFAULT_DATA_TEMPLATE)
-                    self.gallerySize = args[1]
-                    self.currentPaint = args[2]
-                    self.galleryList = args[3]
-
-            # if there is more than 4 parameters or 3 we raise error
-            elif len(args) > 4 or len(args) == 3:
-
-                raise Exception
-            
-            # if decorators are passed
+            # if there are dict decrators in the creator
             if len(kwargs) > 0:
 
-                # setting costume template
-                if kwargs.get("data_template"):
+                for key in list(kwargs.keys()):
 
-                    self.dialect = kwargs["data_template"]
+                    # updating schema in the model
+                    if key == "schema":
+                        self.modelStruct = copy.deepcopy(kwargs[key])
 
-                # no other decorator is available
-                else:
-                    raise Exception
+                    # setting the max size of the gallery
+                    if key == "size":
+                        self.maxPaints = kwargs[key]
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->gallery(): ')
+            raise exp
 
     def openGallery(self, *args, **kwargs):
 
         try:
             pass
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->openGallery: ')
+            raise exp
 
 
     # =========================================
@@ -204,8 +174,9 @@ class Gallery(object):
             answer = copy.deepcopy(answer)
             return answer
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->getPaint: ')
+            raise exp
 
     def lastPaint(self):
 
@@ -215,8 +186,9 @@ class Gallery(object):
             answer = copy.deepcopy(answer)
             return answer
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->lastPaint: ')
+            raise exp
 
     def firstPaint(self):
         try:
@@ -225,8 +197,9 @@ class Gallery(object):
             answer = copy.deepcopy(answer)
             return answer
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->firstPaint: ')
+            raise exp
 
     # =========================================
     # update functions
@@ -236,8 +209,9 @@ class Gallery(object):
         try:
             pass
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->updatePaint: ')
+            raise exp
 
     def appendPaint(self, paint):
 
@@ -247,8 +221,9 @@ class Gallery(object):
             self.gallerySize = len(self.galleryList)
             self.currentPaint = self.gallerySize-1
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->appendPaint: ')
+            raise exp
 
     # =========================================
     # compare functions
@@ -258,15 +233,17 @@ class Gallery(object):
         try:
             pass
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->findPaints: ')
+            raise exp
 
     def cmpPaints(self, parameter_list):
         try:
             pass
 
+        # exception handling
         except Exception as exp:
-            error.reraise(exp, 'gallery->cmpPaints: ')
+            raise exp
 
 # -----------------------------------------------------
 # API for the scrapping element (paintings) in the WEB
