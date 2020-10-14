@@ -64,7 +64,7 @@ elements in the models or various models.
 DEFAULT_FRAME_SCHEMA = [
     "ID",                   # unique ID for an element in the gallery, its also its folder name in the localdir
     "TITLE",                # tittle of the element inside the gallery
-    "PAINT_URL",            # element (paint) URL/link recovered with ScrapyWEB
+    "COLLECTION_URL",       # element (paint) URL/link recovered with ScrapyWEB
     "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
     "DESCRIPTION",          # JSON cell with the description of the element in the gallery
     "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
@@ -119,8 +119,8 @@ class Controller (object):
 
             # when arguments are pass as parameters
             if len(args) > 0:
-
-                for i in range(int(len(args))-1):
+                i = 0
+                for i in range(int(len(args))):
 
                     # URL of the remote gallery to scrap
                     if i == 0:
@@ -141,7 +141,7 @@ class Controller (object):
 
                     # updating schema in the controller
                     if key == "schema":
-                        self.paintStruct = copy.deepcopy(kwargs[key])
+                        self.schema = copy.deepcopy(kwargs[key])
 
                     # setting the max size of the gallery
                     if key == "size":
@@ -323,18 +323,76 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def saveGallery(self, galleryFilePath, **kwargs):
+    def updateDataFrame(self, columns, data):
+        """[summary]
+
+        Args:
+            columns ([type]): [description]
+            data ([type]): [description]
+
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
         try:
-            pass
+            
+            answer = self.galleryModel.createNewIndex(columns, data)
+            return answer
+            
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def saveGallery(self, fileName, dataFolder):
+        """[summary]
+
+        Args:
+            fileName ([type]): [description]
+            dataFolder ([type]): [description]
+
+        Raises:
+            exp: [description]
+        """
+        try:
+            
+            self.galleryModel.saveGallery(fileName, dataFolder)
 
             # exception handling
         except Exception as exp:
             raise exp
 
-    def loadGallery(self, galleryFilePath, **kwargs):
+    def loadGallery(self, fileName, dataFolder):
+        """[summary]
+
+        Args:
+            fileName ([type]): [description]
+            dataFolder ([type]): [description]
+
+        Raises:
+            exp: [description]
+        """
         try:
-            pass
+            self.galleryModel.loadGallery(fileName, dataFolder)
 
             # exception handling
         except Exception as exp:
             raise exp
+
+    def checkGallery(self):
+        """[summary]
+
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            return self.galleryModel.checkGallery()
+
+            # exception handling
+        except Exception as exp:
+            raise exp
+    

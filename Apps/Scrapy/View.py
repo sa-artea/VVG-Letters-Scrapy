@@ -82,6 +82,8 @@ lettersFolder = "Letters"
 sourceFolder = "Source"
 # app subfoder
 dataFolder = "Data"
+# idex csv file
+indexFile = "VanGoghGallery.csv"
 
 # default template for the element/paint dict in gallery
 VINCENT_DF_COLUMNS = [
@@ -96,25 +98,25 @@ VINCENT_DF_COLUMNS = [
     "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
     "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
 
-    "HAS_ID",               # boolean indicating if the paint has a folder on the localdir
-    "HAS_TITLE",            # boolean indicating if the paint has a tittle in the gallery
-    "HAS_DESCRIPTION",      # booleano que identifica si se tiene la seccion de descripcion en el HTML del elemento
-    "HAS_DOWNLOAD",         # booleano que identifica si se tiene la seccion de enlace de descarga en el HTML del elemento
-    "HAS_TAGS",             # booleano que identifica si se tiene la seccion de tags de busqueda en el HTML del elemento
-    "HAS_DATA",             # booleano que identifica si se tiene la seccion de datos de archivo en el HTML del elemento
-    "HAS_RELATEDW",         # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
-    "HAS_EXHIBIT",          # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
-    "HAS_LIT",              # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
+    # "HAS_ID",               # boolean indicating if the paint has a folder on the localdir
+    # "HAS_TITLE",            # boolean indicating if the paint has a tittle in the gallery
+    # "HAS_DESCRIPTION",      # booleano que identifica si se tiene la seccion de descripcion en el HTML del elemento
+    # "HAS_DOWNLOAD",         # booleano que identifica si se tiene la seccion de enlace de descarga en el HTML del elemento
+    # "HAS_TAGS",             # booleano que identifica si se tiene la seccion de tags de busqueda en el HTML del elemento
+    # "HAS_DATA",             # booleano que identifica si se tiene la seccion de datos de archivo en el HTML del elemento
+    # "HAS_RELATEDW",         # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
+    # "HAS_EXHIBIT",          # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
+    # "HAS_LIT",              # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
 
-    "ERR_ID",               # error string for the ID
-    "ERR_TITLE",            # error string for the tittle
-    "ERR_DESCRIPTION",      # error string for the description
-    "ERR_DOWNLOAD",         # error string for the direct download URL
-    "ERR_TAGS",             # error string for the collection search tags
-    "ERR_DATA",             # error string for the museum object data
-    "ERR_RELATEDW",         # error string for the related work
-    "ERR_EXHIBIT",          # error string for the exhibition list
-    "ERR_LIT",              # error string for the literature reference list
+    # "ERR_ID",               # error string for the ID
+    # "ERR_TITLE",            # error string for the tittle
+    # "ERR_DESCRIPTION",      # error string for the description
+    # "ERR_DOWNLOAD",         # error string for the direct download URL
+    # "ERR_TAGS",             # error string for the collection search tags
+    # "ERR_DATA",             # error string for the museum object data
+    # "ERR_RELATEDW",         # error string for the related work
+    # "ERR_EXHIBIT",          # error string for the exhibition list
+    # "ERR_LIT",              # error string for the literature reference list
 ]
 
 # default number of paintings in the gallery
@@ -145,19 +147,21 @@ title_attrs = {
     "title": re.compile(".")
 }
 
+#  html tags for the url of the element
+url_div = "a"
+url_element = "href"
+url_attrs = {
+    "class": "collection-art-object-wrapper",
+}
 
-html_tags = (index_div,
-             title_div,
-             id_div,
-             )
+# list for starting a new gallery from scratch
+search_divs = (id_div, title_div, url_div)
+search_elements = (id_element, title_element, url_element)
+search_attrs = (id_attrs, title_attrs, url_attrs)
 
-search_attrs = (index_attrs,
-                title_attrs,
-                id_attrs,
-                )
-
-basicColumns = copy.deepcopy(VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("ID"):VINCENT_DF_COLUMNS.index("COLLECTION_URL")+1])
-print(basicColumns)
+start_index_columns = copy.deepcopy(VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("ID"):VINCENT_DF_COLUMNS.index("COLLECTION_URL")+1])
+print(start_index_columns)
+# ['ID', 'TITLE', 'COLLECTION_URL']
 
 vincent_collectionAttrs = {"class": "collection-art-object-list-item"}
 vincent_downloadAttrs = {"class": "collection-art-object-list-item"}
@@ -201,41 +205,50 @@ class View(object):
         """
 
         print("========================= WELCOME =========================")
-        print("1) Start gallery index") # create a new index based in the root url
-        print("2) Save gallery index") #save in files all the scrapped data
-        print("3) Load gallery index") # load preavious scraped data into model
+        print("1) Start gallery index (scraping webpage)") # create a new index based in the root url
+        print("2) Save gallery index (saving data in CSV)") #save in files all the scrapped data
+        print("3) Load gallery index (load existing data)") # load preavious scraped data into model
+        print("4) Check gallery index (read existing data)") # load preavious scraped data into model
 
         # persists in the model/dataframe the data recovered in option 1)
-        print("4) Compose for basic data of the gallery elements (ID, TITLE, COLLECTION_URL)")
+        print("5) Compose for basic data of the gallery elements (ID, TITLE, COLLECTION_URL)")
 
         # complement the basic data created from option 1) and 4)
-        print("5) Compose for the description and image of the gallery elements (DESCRIPTION, DOWNLOAD_URL)")
-        print("6) Compose for the search tags of the gallery elements (SEARCH_TAGS)")
-        print("7) Compose for the collection data of the gallery elements (OBJ_DATA)")
-        print("8) Compose for the related works of the gallery elements (RELATED_WORKS)")
-        print("9) Compose for the exhibition history of the gallery elements EXHIBITIONS)")
-        print("10) Compose for the literature references of the gallery elements  (LITERATURE)")
-        print("0- EXIT") # finish program
+        print("6) Compose for the description and image of the gallery elements (DESCRIPTION, DOWNLOAD_URL)")
+        print("7) Compose for the search tags of the gallery elements (SEARCH_TAGS)")
+        print("8) Compose for the collection data of the gallery elements (OBJ_DATA)")
+        print("9) Compose for the related works of the gallery elements (RELATED_WORKS)")
+        print("10) Compose for the exhibition history of the gallery elements EXHIBITIONS)")
+        print("11) Compose for the literature references of the gallery elements  (LITERATURE)")
+        print("12- EXIT") # finish program
 
     def run(self):
         """
         menu excution
         """
-
         # setting gallery base webpage
         self.galleryWEB = vincent_page
-        
+
         # setting up local dir for saving data
         self.localGallery = self.galleryControl.SetUpLocal(vincent_localpath, sourceFolder, paintsFolder)
-        print("\n== == == == == == == \n" + "Setting local working folders in:\n" + str(self.localGallery) + "\n== == == == == == == \n")
+        print("== == == == == == == Configuring the gallery View == == == == == == ==")
+        print("View localdir: " + str(self.localGallery))
+        print("View remote gallery URL: " + str(self.galleryWEB))
+        print("\n")
 
         # creating the gallery model
-        self.galleryModel = Gallery(self.galleryWEB, self.localGallery, schema = VINCENT_DF_COLUMNS, size = VINCENT_MAX_PAINTS)
+        self.galleryModel = Gallery(self.galleryWEB, self.localGallery, schema = VINCENT_DF_COLUMNS)
         print("== == == == == == == Crating the gallery model == == == == == == ==")
+        print("Model localdir: " + str(self.galleryModel.localGallery))
+        print("Model remote gallery URL: " + str(self.galleryModel.galleryWEB))
+        print("\n")
 
         # creating the gallery controller
-        self.galleryControl = Controller(self.galleryWEB, self.localGallery, self.galleryModel, schema = VINCENT_DF_COLUMNS, size = VINCENT_MAX_PAINTS)
+        self.galleryControl = Controller(self.galleryWEB, self.localGallery, self.galleryModel, schema = VINCENT_DF_COLUMNS)
         print("== == == == == == == Crating the gallery controller == == == == == == ==")
+        print("Controller localdir: " + str(self.galleryControl.localGallery))
+        print("Controller remote gallery URL: " + str(self.galleryControl.galleryWEB))
+        print("\n")
 
         while True:
             self.menu()
@@ -243,9 +256,8 @@ class View(object):
 
             # starting gallery object to scrap data
             if int(inputs[0]) == 1:
-                print("Starting new gallery index...")
-                
-                # starting the gallery index
+                print("Starting new gallery index (scraping URL!!!)...")
+                # starting the gallery index from scratch
                 galleryIndex = self.galleryControl.scrapIndex(self.galleryWEB, 5, id_div, id_attrs)
                 id_data = self.galleryControl.getID(galleryIndex, id_element)
                 galleryIndex = self.galleryControl.scrapAgain(title_div, title_attrs)
@@ -253,34 +265,25 @@ class View(object):
                 galleryIndex = self.galleryControl.scrapAgain(id_div, id_attrs)
                 link_data = self.galleryControl.getURL(galleryIndex, vincent_root, id_element)
 
-                print(len(id_data), len(title_data), len(link_data))
-                for idt, title, link in zip(id_data, title_data, link_data):
-                    print("================================================")
-                    print(idt)
-                    print(title)
-                    print(link)
+                index_data = (id_data, title_data, link_data)
 
+                answer = self.galleryControl.updateDataFrame(start_index_columns, index_data)
+                print("================================================")
+                print(answer)
 
             elif int(inputs[0]) == 2:
-                print("loading new paintings into gallery...")
-                # print("Cargando información de los archivos ....")
-                # controller.loadData(cont, booksfile, tagsfile, booktagsfile)
-                # print('Libros cargados: ' + str(controller.booksSize(cont)))
-                # print('Autores cargados: ' + str(controller.authorsSize(cont)))
-                # print('Géneros cargados: ' + str(controller.tagsSize(cont)))
+                print("Saving gallery dataframe model into CSV file...")
+                self.galleryControl.saveGallery(indexFile, dataFolder)
 
             elif int(inputs[0]) == 3:
-                print("Updating paintings...")
-
-                # number = input("Buscando libros del año?: ")
-                # books = controller.getBooksYear(cont, int(number))
-                # printBooksbyYear(books)
+                print("Loading gallery from CSV file into dataframe model...")
+                self.galleryControl.loadGallery(indexFile, dataFolder)
 
             elif int(inputs[0]) == 4:
-                print("function not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+                print("Checking gallery status in the model (dataframe from CSV)...")
+                answer = self.galleryControl.checkGallery()
+                print("================================================")
+                print(answer)
 
             elif int(inputs[0]) == 5:
                 print("function not yet implemented!!!")
@@ -289,13 +292,13 @@ class View(object):
                 # printAuthorData(authorinfo)
 
             elif int(inputs[0]) == 6:
-                print("gitfunction not yet implemented!!!")
+                print("function not yet implemented!!!")
                 # authorname = input("Nombre del autor a buscar: ")
                 # authorinfo = controller.getBooksByAuthor(cont, authorname)
                 # printAuthorData(authorinfo)
 
             elif int(inputs[0]) == 7:
-                print("function not yet implemented!!!")
+                print("gitfunction not yet implemented!!!")
                 # authorname = input("Nombre del autor a buscar: ")
                 # authorinfo = controller.getBooksByAuthor(cont, authorname)
                 # printAuthorData(authorinfo)
@@ -307,7 +310,19 @@ class View(object):
                 # printAuthorData(authorinfo)
 
             elif int(inputs[0]) == 9:
-                print("Saving new painting information into gallery files...")
+                print("function not yet implemented!!!")
+                # authorname = input("Nombre del autor a buscar: ")
+                # authorinfo = controller.getBooksByAuthor(cont, authorname)
+                # printAuthorData(authorinfo)
+
+            elif int(inputs[0]) == 10:
+                print("function not yet implemented!!!")
+                # authorname = input("Nombre del autor a buscar: ")
+                # authorinfo = controller.getBooksByAuthor(cont, authorname)
+                # printAuthorData(authorinfo)
+
+            elif int(inputs[0]) == 11:
+                print("function not yet implemented!!!")
                 # authorname = input("Nombre del autor a buscar: ")
                 # authorinfo = controller.getBooksByAuthor(cont, authorname)
                 # printAuthorData(authorinfo)
@@ -323,24 +338,3 @@ if __name__ == "__main__":
     """
     scrapy = View()
     scrapy.run()
-
-
-#     def __init__(self, master):
-#         tk.Toplevel.__init__(self, master)
-#         self.protocol('WM_DELETE_WINDOW', self.master.destroy)
-#         tk.Label(self, text='My Money').pack(side='left')
-#         self.moneyCtrl = tk.Entry(self, width=8)
-#         self.moneyCtrl.pack(side='left')
-
-#     def SetMoney(self, money):
-#         self.moneyCtrl.delete(0, 'end')
-#         self.moneyCtrl.insert('end', str(money))
-
-
-# class ChangerWidget(tk.Toplevel):
-#     def __init__(self, master):
-#         tk.Toplevel.__init__(self, master)
-#         self.addButton = tk.Button(self, text='Add', width=8)
-#         self.addButton.pack(side='left')
-#         self.removeButton = tk.Button(self, text='Remove', width=8)
-#         self.removeButton.pack(side='left')

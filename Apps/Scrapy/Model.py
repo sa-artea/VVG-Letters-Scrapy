@@ -55,7 +55,7 @@ assert config
 DEFAULT_FRAME_SCHEMA = [
     "ID",                   # unique ID for an element in the gallery, its also its folder name in the localdir
     "TITLE",                # tittle of the element inside the gallery
-    "PAINT_URL",            # element (paint) URL/link recovered with ScrapyWEB
+    "COLLECTION_URL",       # element (paint) URL/link recovered with ScrapyWEB
     "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
     "DESCRIPTION",          # JSON cell with the description of the element in the gallery
     "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
@@ -81,11 +81,11 @@ class Gallery(object):
     # class parameters
     #___________________________________________
     galleryWEB = str()
-    localGallery = list()
+    localGallery = str()
     modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
     gallerySize = DEFAULT_MAX_PAINTS
     currentPaint = 0
-    GallerydataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
+    dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
 
     # =========================================
     # functions to create a new gallery
@@ -101,7 +101,7 @@ class Gallery(object):
             modelStruct (list, optional): dictionary for the data template of the elements in the gallery.
             gallerySize (int, optional): size of the gallery, len of the galleryList. Default to 10.
             currentPaint (int, optional): index of the working element in gallery, usefull when a gallery is created with elements. Default to 0.
-            GallerydataFrame (dataFrame, optional): element dataframe (ie.: paintings) in the gallery, you can pass an existing df to the creator. Default is empty
+            dataFrame (dataFrame, optional): element dataframe (ie.: paintings) in the gallery, you can pass an existing df to the creator. Default is empty
         """
         try:
             
@@ -110,15 +110,14 @@ class Gallery(object):
             self.galleryWEB = str()
             self.localGallery = str()
             self.modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-            self.gallerySize = DEFAULT_MAX_PAINTS
             self.currentPaint = 0
-            self.GallerydataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
+            self.gallerySize = DEFAULT_MAX_PAINTS
+            self.dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
 
             # when arguments are pass as parameters
             if len(args) > 0:
-
-                for i in range(int(len(args))-1):
-
+                i = 0
+                for i in range(int(len(args))):
                     # URL of the remote gallery to scrap
                     if i == 0:
                         self.galleryWEB = args[i]
@@ -129,7 +128,7 @@ class Gallery(object):
 
                     # paintings dataframes containing the in memory data of the gallery
                     if i == 2:
-                        self.GallerydataFrame = args[i]
+                        self.dataFrame = args[i]
 
                     # the current painting in the dataframe to process
                     if i == 3:
@@ -152,101 +151,122 @@ class Gallery(object):
         except Exception as exp:
             raise exp
 
-    def openGallery(self, *args, **kwargs):
+    def createNewIndex(self, columns, data):
+        """[summary]
 
+        Args:
+            columns ([type]): [description]
+            data ([type]): [description]
+
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
         try:
-            pass
+            self.dataFrame = pd.DataFrame(columns=self.modelStruct)
+
+            for col, td in zip(columns, data):
+
+                self.dataFrame[col] = td
+            
+            answer = self.dataFrame.info()
+            return answer
 
         # exception handling
         except Exception as exp:
             raise exp
-
 
     # =========================================
     # consult functions
     # =========================================
 
-    def getPaint(self, index):
+    def checkGallery(self):
+        """[summary]
 
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
         try:
-
-            answer = self.galleryList[index]
-            answer = copy.deepcopy(answer)
+            answer = self.dataFrame.info()
             return answer
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def lastPaint(self):
-
-        try:
-
-            answer = self.galleryList[len(self.galleryList)-1]
-            answer = copy.deepcopy(answer)
-            return answer
-
-        # exception handling
-        except Exception as exp:
-            raise exp
-
-    def firstPaint(self):
-        try:
-
-            answer = self.galleryList[0]
-            answer = copy.deepcopy(answer)
-            return answer
-
-        # exception handling
-        except Exception as exp:
-            raise exp
 
     # =========================================
     # update functions
     # =========================================
 
-    def updatePaint(self, parameter_list):
+    def updateIndex(self, column, data):
+        """[summary]
+
+        Args:
+            column ([type]): [description]
+            data ([type]): [description]
+
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
         try:
-            pass
 
-        # exception handling
-        except Exception as exp:
-            raise exp
-
-    def appendPaint(self, paint):
-
-        try:
-
-            self.galleryList.append(paint)
-            self.gallerySize = len(self.galleryList)
-            self.currentPaint = self.gallerySize-1
+            self.dataFrame[column] = data
+            answer = self.dataFrame.info()
+            return answer
 
         # exception handling
         except Exception as exp:
             raise exp
 
     # =========================================
-    # compare functions
+    # I/O functions
     # =========================================
 
-    def findPaints(self, parameter_list):
+    def saveGallery(self, fileName, dataFolder):
+        """[summary]
+
+        Args:
+            fileName ([type]): [description]
+            dataFolder ([type]): [description]
+
+        Raises:
+            exp: [description]
+        """
         try:
-            pass
+            # pandas function to save dataframe in CSV file
+            galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
+            self.dataFrame.to_csv(galleryFilePath, sep=",",
+                                  index=False, encoding="utf-8", mode="w")
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def cmpPaints(self, parameter_list):
+    def loadGallery(self, fileName, dataFolder):
+        """[summary]
+
+        Args:
+            fileName ([type]): [description]
+            dataFolder ([type]): [description]
+
+        Raises:
+            exp: [description]
+        """
         try:
-            pass
+            # read an existing CSV fileto update the dataframe
+            galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
+            self.dataFrame = pd.read_csv(
+                galleryFilePath, sep=",", encoding="utf-8", engine="python")
 
         # exception handling
         except Exception as exp:
             raise exp
-
-# -----------------------------------------------------
-# API for the scrapping element (paintings) in the WEB
-# -----------------------------------------------------
-class Paint(object):
-    pass
