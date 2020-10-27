@@ -57,6 +57,7 @@ DEFAULT_FRAME_SCHEMA = [
     "TITLE",                # tittle of the element inside the gallery
     "COLLECTION_URL",       # element (paint) URL/link recovered with ScrapyWEB
     "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
+    "HAS_PICTURE",          # boolean data to identify if there is a picture file in the local folder, based on DOWNLOAD_URL
     "DESCRIPTION",          # JSON cell with the description of the element in the gallery
     "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
     "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
@@ -178,9 +179,52 @@ class Gallery(object):
         except Exception as exp:
             raise exp
 
+    def updateData(self, column, data):
+        """[summary]
+
+        Args:
+            column ([type]): [description]
+            data ([type]): [description]
+
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            self.dataFrame[column] = data
+            answer = self.dataFrame.info()
+            return answer
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
     # =========================================
-    # consult functions
+    # consult functions 
     # =========================================
+    def getData(self, column, *args, **kwargs):
+        """[summary]
+
+        Args:
+            column ([type]): [description]
+
+        Raises:
+            exp: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+
+            answer = copy.deepcopy(self.dataFrame[column])
+            answer = list(answer)
+            return answer
+
+        # exception handling
+        except Exception as exp:
+            raise exp
 
     def checkGallery(self):
         """[summary]
@@ -199,6 +243,15 @@ class Gallery(object):
         except Exception as exp:
             raise exp
 
+    def getColData(self, column):
+
+        try:
+
+            answer = list(self.dataFrame[column])
+            return answer
+
+        except Exception as exp:
+            raise exp
 
     # =========================================
     # update functions

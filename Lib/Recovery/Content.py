@@ -169,7 +169,7 @@ class Page(object):
         except Exception as exp:
             raise exp
     
-    def findInBody(self, division, attributes=None, multiple=True):
+    def findInReq(self, division, attributes=None, multiple=True):
         """[summary]
 
         Args:
@@ -212,17 +212,52 @@ class Page(object):
             if len(args) == 0:
 
                 self.request = requests.get(self.url)
-                self.rsoup = BeautifulSoup(self.request, self.dialect)
+                self.rsoup = BeautifulSoup(self.request.content, self.dialect)
                 answer = self.request.status_code
                 self.request.close()
                 return answer
 
             # requesting the page with the url parameter
-            elif len(args) == 1:
+            elif len(args) > 0:
 
                 self.url = args[0]
                 self.request = requests.get(self.url)
-                self.rsoup = BeautifulSoup(self.request, self.dialect)
+                self.rsoup = BeautifulSoup(self.request.content, self.dialect)
+                answer = self.request.status_code
+                self.request.close()
+                return answer
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getHeader(self, *args):
+        """ 
+        the method makes a request with the URL. if succesfull retunrs the REST status code of the page and updates the self.request attribute of page().
+
+        Args:
+            url (str, optional): url of the page I want to recover. Defaults to str().
+
+        Returns:
+            int: the status code of the recovered page in the request status_code
+        """
+        try:
+
+            # requesting the page with the existing url
+            if len(args) == 0:
+
+                self.request = requests.get(self.url)
+                self.rsoup = BeautifulSoup(self.request.headers, self.dialect)
+                answer = self.request.status_code
+                self.request.close()
+                return answer
+
+            # requesting the page with the url parameter
+            elif len(args) > 0:
+
+                self.url = args[0]
+                self.request = requests.get(self.url)
+                self.rsoup = BeautifulSoup(self.request.headers, self.dialect)
                 answer = self.request.status_code
                 self.request.close()
                 return answer

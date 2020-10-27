@@ -62,18 +62,17 @@ into the CSV files.
 # ___________________________________________________
 
 # URL for the webpage to recover the paintings
-# galleryPage = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh"
-# vincent_page = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=trial+proof%2Cstudy%2Cprint%2Csketch%2Cdrawing%2Cpainting"
 # url query excluding the written part of the letters
-# galleryPage = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=painting%2Cprint%2Csketch%2Cdrawing%2Cletter+sketch%2Cstudy%2Ctrial+proof"
-vincent_page = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=study"
+vincent_page = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
+# url with small quey for fast tests
+# vincent_page = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=study"
 vincent_root = "https://vangoghmuseum.nl"
 
 # local root dirpath where the data will be save
-vincent_localpath = "C:\\Users\\Felipe\\Universidad de los andes\\CoIArt - General\\04 - Data\\01 - Vincent\\Source"
+vincent_localpath = "C:\\Users\\Felipe\\Universidad de los andes\\CoIArt - General\\04 - Data\\01 - Vincent\\Source\\"
 
 # real rootpath to work with
-galleryFolder = os.path.dirname(vincent_localpath)
+galleryFolder = os.path.normpath(vincent_localpath)
 
 # subdirs in the local root path needed to process data
 paintsFolder = "Paints"
@@ -91,80 +90,128 @@ VINCENT_DF_COLUMNS = [
     "TITLE",                # tittle of the element inside the gallery
     "COLLECTION_URL",       # element (paint) URL/link recovered with ScrapyWEB
     "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
+    "HAS_PICTURE",          # boolean data to identify if there is a picture file in the local folder, based on DOWNLOAD_URL
     "DESCRIPTION",          # JSON cell with the description of the element in the gallery
     "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
     "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
     "RELATED_WORKS",        # JSON cell with the related work text and URLs of the element in the gallery
-    "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
-    "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
-
-    # "HAS_ID",               # boolean indicating if the paint has a folder on the localdir
-    # "HAS_TITLE",            # boolean indicating if the paint has a tittle in the gallery
-    # "HAS_DESCRIPTION",      # booleano que identifica si se tiene la seccion de descripcion en el HTML del elemento
-    # "HAS_DOWNLOAD",         # booleano que identifica si se tiene la seccion de enlace de descarga en el HTML del elemento
-    # "HAS_TAGS",             # booleano que identifica si se tiene la seccion de tags de busqueda en el HTML del elemento
-    # "HAS_DATA",             # booleano que identifica si se tiene la seccion de datos de archivo en el HTML del elemento
-    # "HAS_RELATEDW",         # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
-    # "HAS_EXHIBIT",          # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
-    # "HAS_LIT",              # booleano que identifica si se tiene la seccion de trabajo relacionado en el HTML del elemento
-
-    # "ERR_ID",               # error string for the ID
-    # "ERR_TITLE",            # error string for the tittle
-    # "ERR_DESCRIPTION",      # error string for the description
-    # "ERR_DOWNLOAD",         # error string for the direct download URL
-    # "ERR_TAGS",             # error string for the collection search tags
-    # "ERR_DATA",             # error string for the museum object data
-    # "ERR_RELATEDW",         # error string for the related work
-    # "ERR_EXHIBIT",          # error string for the exhibition list
-    # "ERR_LIT",              # error string for the literature reference list
+    # "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
+    # "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
 ]
 
 # default number of paintings in the gallery
 VINCENT_MAX_PAINTS = 25
 
-# ___________________________________________________
-#  data input for scrapping the html and creating index
-# ___________________________________________________
+# ______________________________________________________
+#  data input for scraping the html and creating index
+# ______________________________________________________
 # html tags for the general object
 index_div = "a"
 index_attrs = {
     "class": "collection-art-object-wrapper"
-}
+    }
+
+colurl_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("COLLECTION_URL")]
 
 # html tags for the unique ID in the collection
 id_div = "a"
 id_element = "href"
 id_attrs = {
     "class": "collection-art-object-wrapper",
-    "href": re.compile("^/en/collection/")
-}
+    "href": re.compile("^/en/collection/"),
+    }
 
-#  html tags for the tittle of the element
+id_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("ID")]
+
+#  html tags for the title of the element
 title_div = "a"
 title_element = "title"
 title_attrs = {
     "class": "collection-art-object-wrapper",
-    "title": re.compile(".")
-}
+    # "title": re.compile("."),
+    }
 
 #  html tags for the url of the element
 url_div = "a"
 url_element = "href"
 url_attrs = {
     "class": "collection-art-object-wrapper",
-}
+    }
 
-# list for starting a new gallery from scratch
-search_divs = (id_div, title_div, url_div)
-search_elements = (id_element, title_element, url_element)
-search_attrs = (id_attrs, title_attrs, url_attrs)
-
+# column names for creating a new index and model in the program
 start_index_columns = copy.deepcopy(VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("ID"):VINCENT_DF_COLUMNS.index("COLLECTION_URL")+1])
 print(start_index_columns)
 # ['ID', 'TITLE', 'COLLECTION_URL']
 
-vincent_collectionAttrs = {"class": "collection-art-object-list-item"}
-vincent_downloadAttrs = {"class": "collection-art-object-list-item"}
+# ______________________________________________________
+#  data input for scraping the html of each element
+# ______________________________________________________
+
+# html tags for scrapping gallery element description
+desc_div = "section"
+desc_attrs ={
+    "class": re.compile("art-object-page-content-"),
+    }
+desc_element = ["h1", "p"]
+
+descrip_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("DESCRIPTION")]
+
+# html tags for scrapping and downloding the image 
+pic_div = "a"
+pic_attrs = {
+    "class":"btn-icon art-object-header-bar-button",
+    "href": re.compile("^/asset/download/"),
+    }
+pic_elements = "href"
+
+# html tags for search annotations in the gallery elements.
+search_div = "section"
+search_attrs = {
+    "class": "artobject-page-collection-links",
+    }
+search_elements = "a"#["li", "a"] # ["ul", "li"]
+
+# html tags for object data in the gallery elements.
+object_div = "dl"
+object_attrs = {
+    "class": "definition-list",
+    # "string": "Object data",
+    }
+object_elements = ["dt", "dd"]
+
+# html tags for related work in the gallery elements.
+relatedw_div = "div"
+relatedw_attrs = {
+    "class": "teaser-row content-row grid-row",
+    }
+relatedw_elements = "article"
+
+# # html tags for the exhibition data in the gallery elements.
+# exhibits_div = "div"
+# exhibits_attrs = {
+#     "class": "accordion-item expanded",
+#     "string": re.compile("Exhibitions")
+#     }
+# exhibits_elements = "markdown"
+
+# # html tags for the literature reference data in the gallery elements.
+# lit_div = ""
+# lit_attrs = {
+#     }
+# lit_elements = ""
+
+# dummy var for the index of the dataframe
+donwload_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("DOWNLOAD_URL")]
+haspic_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("HAS_PICTURE")]
+search_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("SEARCH_TAGS")]
+object_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("OBJ_DATA")]
+relatedw_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("RELATED_WORKS")]
+# exhibits_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("EXHIBITIONS")]
+# lit_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("LITERATURE")]
+
+# column names for creating the JSON in the folders
+json_index_columns = copy.deepcopy(VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("DESCRIPTION"):VINCENT_DF_COLUMNS.index("RELATED_WORKS")+1])
+print(json_index_columns)
 
 # ___________________________________________________
 #  Functions to print webpage recovered data
@@ -205,22 +252,24 @@ class View(object):
         """
 
         print("========================= WELCOME =========================")
-        print("1) Start gallery index (scraping webpage)") # create a new index based in the root url
-        print("2) Save gallery index (saving data in CSV)") #save in files all the scrapped data
-        print("3) Load gallery index (load existing data)") # load preavious scraped data into model
-        print("4) Check gallery index (read existing data)") # load preavious scraped data into model
+        print("1) Start gallery index (scraping webpage for ID, TITLE and COLLECTION_URL)") # create a new index based in the root url
+        print("2) Save gallery data (saving data in CSV)") #save in files all the scrapped data
+        print("3) Load gallery data (load existing data in CSV)") # load preavious scraped data into model
+        print("4) Check gallery data (read existing data memory)") # load preavious scraped data into model
 
-        # persists in the model/dataframe the data recovered in option 1)
-        print("5) Compose for basic data of the gallery elements (ID, TITLE, COLLECTION_URL)")
+        # recovers the basic data from the gallery query
+        print("5) Compose for the basic description and image of the gallery elements (DESCRIPTION)")
 
-        # complement the basic data created from option 1) and 4)
-        print("6) Compose for the description and image of the gallery elements (DESCRIPTION, DOWNLOAD_URL)")
-        print("7) Compose for the search tags of the gallery elements (SEARCH_TAGS)")
-        print("8) Compose for the collection data of the gallery elements (OBJ_DATA)")
-        print("9) Compose for the related works of the gallery elements (RELATED_WORKS)")
-        print("10) Compose for the exhibition history of the gallery elements EXHIBITIONS)")
-        print("11) Compose for the literature references of the gallery elements  (LITERATURE)")
-        print("12- EXIT") # finish program
+        # complement the basic data created from option 6) and 12)
+        print("6) Compose download URLs of the gallery elements (DOWNLOAD_URL)")
+        print("7) Download image file of the gallery elements (HAS_PICTURE)")
+        print("8) Compose for the search tags of the gallery elements (SEARCH_TAGS)")
+        print("9) Compose for the collection data of the gallery elements (OBJ_DATA)")
+        print("10) Compose for the related works of the gallery elements (RELATED_WORKS)")
+        print("11) Exporting DataFrame to JSON Files (from CSV to Local Gallery)")
+        # print("11) Compose for the exhibition history of the gallery elements EXHIBITIONS)")
+        # print("12) Compose for the literature references of the gallery elements (LITERATURE)")
+        print("0) EXIT (last option)") # finish program
 
     def run(self):
         """
@@ -230,7 +279,7 @@ class View(object):
         self.galleryWEB = vincent_page
 
         # setting up local dir for saving data
-        self.localGallery = self.galleryControl.SetUpLocal(vincent_localpath, sourceFolder, paintsFolder)
+        self.localGallery = self.galleryControl.SetUpLocal(galleryFolder, sourceFolder, paintsFolder)
         print("== == == == == == == Configuring the gallery View == == == == == == ==")
         print("View localdir: " + str(self.localGallery))
         print("View remote gallery URL: " + str(self.galleryWEB))
@@ -255,81 +304,121 @@ class View(object):
             inputs = input('Select an option to continue\n')
 
             # starting gallery object to scrap data
-            if int(inputs[0]) == 1:
-                print("Starting new gallery index (scraping URL!!!)...")
+            if int(inputs) == 1:
+                print("Starting new gallery index(scraping URL!!! = ID, TITLE, COLLECTION_URL)...")
                 # starting the gallery index from scratch
                 galleryIndex = self.galleryControl.scrapIndex(self.galleryWEB, 5, id_div, id_attrs)
                 id_data = self.galleryControl.getID(galleryIndex, id_element)
+                print("the gallery IDs have been processed...")
+
                 galleryIndex = self.galleryControl.scrapAgain(title_div, title_attrs)
                 title_data = self.galleryControl.getTitle(galleryIndex, title_element)
+                print("the gallery Titles have ben processed...")
+
                 galleryIndex = self.galleryControl.scrapAgain(id_div, id_attrs)
                 link_data = self.galleryControl.getURL(galleryIndex, vincent_root, id_element)
+                print("the gallery collection URLs have ben processed...")
 
                 index_data = (id_data, title_data, link_data)
 
-                answer = self.galleryControl.updateDataFrame(start_index_columns, index_data)
-                print("================================================")
-                print(answer)
+                answer = self.galleryControl.newDataFrame(start_index_columns, index_data)
+                print("the Model new DataFrame is created...")
+                
+                self.galleryControl.createLocalFolders(self.galleryControl.localGallery, id_cname)
+                print("the local gallery folders are created...")
+                print(" ======================= REPORT ========================= ")
 
-            elif int(inputs[0]) == 2:
+            elif int(inputs) == 2:
                 print("Saving gallery dataframe model into CSV file...")
                 self.galleryControl.saveGallery(indexFile, dataFolder)
-
-            elif int(inputs[0]) == 3:
-                print("Loading gallery from CSV file into dataframe model...")
-                self.galleryControl.loadGallery(indexFile, dataFolder)
-
-            elif int(inputs[0]) == 4:
-                print("Checking gallery status in the model (dataframe from CSV)...")
                 answer = self.galleryControl.checkGallery()
-                print("================================================")
+                print(" ======================= REPORT ========================= ")
                 print(answer)
 
-            elif int(inputs[0]) == 5:
-                print("function not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+            elif int(inputs) == 3:
+                print("Loading gallery from CSV file into dataframe model...")
+                self.galleryControl.loadGallery(indexFile, dataFolder)
+                self.galleryControl.createLocalFolders(self.galleryControl.localGallery, id_cname)
+                answer = self.galleryControl.checkGallery()
+                print(" ======================= REPORT ========================= ")
+                print(answer)
 
-            elif int(inputs[0]) == 6:
-                print("function not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+            elif int(inputs) == 4:
+                print("Checking gallery status in the model (dataframe from CSV)...")
+                answer = self.galleryControl.checkGallery()
+                print(" ======================= REPORT ========================= ")
+                print(answer)
 
-            elif int(inputs[0]) == 7:
-                print("gitfunction not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+            elif int(inputs) == 5:
+                print("Composing elements basic descripion (DESCRIPTION)...")
+                descrip_data = self.galleryControl.scrapPageDescription(colurl_cname, desc_div, desc_attrs, desc_element, multiple = True)
+                answer = self.galleryControl.updateData(descrip_cname, descrip_data)
+                print(" ======================= REPORT ========================= ")
+                print(answer)
 
-            elif int(inputs[0]) == 8:
-                print("function not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+            elif int(inputs) == 6:
+                print("Composing download data for the gallery pictures (DOWNLOAD_URL)...")
+                urlpic_data = self.galleryControl.scrapPagePicture(colurl_cname, vincent_root, pic_div, pic_attrs, pic_elements, multiple = False)
+                answer = self.galleryControl.updateData(donwload_cname, urlpic_data)
+                print(" ======================= REPORT ========================= ")
+                print(answer)
 
-            elif int(inputs[0]) == 9:
-                print("function not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+            elif int(inputs) == 7:
+                print("Downloading the the gallery pictures and check-in its existence in the model (HAS_PICTURE)...")
+                urlpic_data = self.galleryControl.getData(donwload_cname)
+                haspic_data = self.galleryControl.downloadPictures(urlpic_data, self.galleryControl.localGallery)
+                answer = self.galleryControl.updateData(haspic_cname, haspic_data)
+                print(" ======================= REPORT ========================= ")
+                print(answer)
 
-            elif int(inputs[0]) == 10:
-                print("function not yet implemented!!!")
-                # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+            elif int(inputs) == 8:
+                print("Composing collection search tags data for the gallery pictures (SEARCH_TAGS)...")
+                search_data = self.galleryControl.scrapPageSearchTags(colurl_cname, vincent_root, search_div, search_attrs, search_elements, multiple = True)
+                answer = self.galleryControl.updateData(search_cname, search_data)
+                print(" ======================= REPORT ========================= ")
+                print(answer)
 
-            elif int(inputs[0]) == 11:
-                print("function not yet implemented!!!")
+            elif int(inputs) == 9:
+                print("Composing collection object data for the gallery pictures (OBJ_DATA)...")
+                object_data = self.galleryControl.scrapPageObjData(colurl_cname, object_div, object_attrs, object_elements, multiple = False)
+                answer = self.galleryControl.updateData(object_cname, object_data)
+                print(" ======================= REPORT ========================= ")
+                print(answer)
+
+            elif int(inputs) == 10:
+                print("Composing related work data for the gallery pictures (RELATED_WORKS)...")
                 # authorname = input("Nombre del autor a buscar: ")
-                # authorinfo = controller.getBooksByAuthor(cont, authorname)
-                # printAuthorData(authorinfo)
+                relatedw_data = self.galleryControl.scrapPageRelWork(colurl_cname, vincent_root, relatedw_div, relatedw_attrs, relatedw_elements, multiple = True)
+                answer = self.galleryControl.updateData(relatedw_cname, relatedw_data)
+                print(" ======================= REPORT ========================= ")
+                print(answer)
+
+            elif int(inputs) == 11:
+                print("Exporting to JSON format the DataFrame (CSV to local gallery)...")
+
+                # JSON export for desccription, search tags, object date and related work
+                for temp_cname in json_index_columns:
+                    self.galleryControl.exportToJSON(self.galleryControl.localGallery, id_cname, temp_cname, temp_cname.lower())
+
+
+                answer = self.galleryControl.checkGallery()
+                print(" =======================  REPORT ========================= ")
+                print(answer)
+
+            # elif int(inputs) == 12:
+            #     print("Composing literature data related to the gallery pictures (LITERATURE)...")
+            #     # authorname = input("Nombre del autor a buscar: ")
+
+            #     lit_data = None
+            #     answer = self.galleryControl.updateData(lit_cname, lit_data)
+            #     print(" =======================  REPORT ========================= ")
+            #     print(answer)
+
+            elif int(inputs) == 0:
+                sys.exit(0)
 
             else:
-                sys.exit(0)
-        sys.exit(0)
+                print("Invalid option, please try again...")
 
 if __name__ == "__main__":
 
