@@ -70,15 +70,15 @@ DEFAULT_FRAME_SCHEMA = [
     "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
     "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
     "RELATED_WORKS",        # JSON cell with the related work text and URLs of the element in the gallery
-    "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
-    "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
+    # "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
+    # "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
 ]
 
 # default number of paintings in the gallery
 DEFAULT_MAX_PAINTS = 10
 
 # defaul wating time for scrapping anything, this helps not to get blocked
-DEFAULT_SLEEP_TIME = 2.0
+DEFAULT_SLEEP_TIME = 3.0
 
 class Controller (object):
     """[summary]
@@ -317,15 +317,17 @@ class Controller (object):
             # get the url list from the dataframe in the model
             answer = list()
             urls = self.galleryModel.getColData(columnName)
+            i = 0
 
             for url in urls:
 
-                print(url)
                 tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
                 ans = self.getPageDescription(tempSoup, scrapElements)
                 # compose answer
                 answer.append(ans)
                 time.sleep(DEFAULT_SLEEP_TIME)
+                i = i + 1
+                # print("# " + str(i) + ": " + str(url))
 
             return answer
 
@@ -340,6 +342,7 @@ class Controller (object):
             answer = list()
             # getting the element url in the gallery
             urls = self.galleryModel.getColData(columnName)
+            i = 0
 
             for url in urls:
                 # scraping elements each gallery page
@@ -349,6 +352,9 @@ class Controller (object):
                 answer.append(ans)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
+                i = i + 1
+                # print("# " + str(i) + ": " + str(url))
+                
             return answer
 
         # exception handling
@@ -375,6 +381,7 @@ class Controller (object):
             # get the url list from the dataframe in the model
             answer = list()
             urls = self.galleryModel.getColData(columnName)
+            i = 0
 
             for url in urls:
 
@@ -383,6 +390,9 @@ class Controller (object):
                 # compose answer
                 answer.append(ans)
                 time.sleep(DEFAULT_SLEEP_TIME)
+
+                i = i + 1
+                # print("# " + str(i) + ": " + str(url))
 
             return answer
 
@@ -410,16 +420,19 @@ class Controller (object):
             # get the url list from the dataframe in the model
             answer = list()
             urls = self.galleryModel.getColData(columnName)
+            i = 0
 
             for url in urls:
                 # scraping elements each gallery page
                 tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
-                print(url)
+
                 # extracting the search tags from the soup
                 ans = self.getSearchTags(tempSoup, scrapElements, rootURL)
                 # compose answer
                 answer.append(ans)
                 time.sleep(DEFAULT_SLEEP_TIME)
+                i = i + 1
+                # print("# " + str(i) + ": " + str(url))
 
             return answer
 
@@ -447,6 +460,7 @@ class Controller (object):
             # get the url list from the dataframe in the model
             answer = list()
             urls = self.galleryModel.getColData(columnName)
+            i = 0
 
             for url in urls:
                 # scraping elements each gallery page
@@ -461,6 +475,8 @@ class Controller (object):
                 # compose answer
                 answer.append(ans)
                 time.sleep(DEFAULT_SLEEP_TIME)
+                i = i + 1
+                # print("# " + str(i) + ": " + str(url))
 
             return answer
 
@@ -485,6 +501,7 @@ class Controller (object):
             # getting the element url in the gallery
             urls = list(downloadURLData)
             answer = list()
+            i = 0
 
             for url in urls:
 
@@ -501,6 +518,8 @@ class Controller (object):
                     answer.append(ans)
                     
                 time.sleep(DEFAULT_SLEEP_TIME)
+                i = i + 1
+                # print("# " + str(i) + ": " + str(url))
 
             return answer
 
@@ -546,26 +565,28 @@ class Controller (object):
             answer = dict()
 
             # checking if searchtags exists
-            print(len(elementSoup))
-            print(type(elementSoup))
             if elementSoup != None:
 
-                # finding searhtags <a> in the sou
-                tags = elementSoup[0].findAll(searchElement)
+                # checking is the correct collection search tags
+                if len(elementSoup) > 0:
 
-                # processing the search tags
-                if len(tags) > 0 and isinstance(tags, list) == True:
-                    ansd = dict()
-                    for tag in tags:
+                    # finding searhtags <a> in the sou
+                    tags = elementSoup[0].findAll(searchElement)
 
-                        # cleaning data
-                        key = str(tag.string)
-                        url = tag.get("href")
-                        # reconstructing all the url from the page
-                        value = str(urllib.parse.urljoin(rootURL, url))
-                        td = {key: value}
-                        # updating answer dict
-                        answer.update(copy.deepcopy(td))
+                    # processing the search tags
+                    if len(tags) > 0 and isinstance(tags, list) == True:
+
+                        ansd = dict()
+                        for tag in tags:
+
+                            # cleaning data
+                            key = str(tag.string)
+                            url = tag.get("href")
+                            # reconstructing all the url from the page
+                            value = str(urllib.parse.urljoin(rootURL, url))
+                            td = {key: value}
+                            # updating answer dict
+                            answer.update(copy.deepcopy(td))
 
             answer = self.toJSON(answer)
             return answer
@@ -715,30 +736,33 @@ class Controller (object):
             # requesting page
             downReq = requests.get(downloadURL)
 
-            # to get the file name from headears I go to the URL request headers and extract it from the string
-            pictureFile = str(downReq.headers.__getitem__("Content-Disposition"))
-            pictureFile = pictureFile.split(";")[1].strip().strip("filename=")
+            # succesful request
+            if downReq.status_code == 200:
 
-            # parsing of the URL to choose the local folder to save the file
-            elementFolder = urlparse(downloadURL)
-            elementFolder = elementFolder.path.split("/")[len(elementFolder.path.split("/"))-1]
-            filePath = os.path.join(galleryFolder, elementFolder, pictureFile)
-            
-            # if the file doesnt exists
-            if not os.path.exists(filePath):
+                # to get the file name from headears I go to the URL request headers and extract it from the string
+                pictureFile = str(downReq.headers.__getitem__("Content-Disposition"))
+                pictureFile = pictureFile.split(";")[1].strip().strip("filename=")
+
+                # parsing of the URL to choose the local folder to save the file
+                elementFolder = urlparse(downloadURL)
+                elementFolder = elementFolder.path.split("/")[len(elementFolder.path.split("/"))-1]
+                filePath = os.path.join(galleryFolder, elementFolder, pictureFile)
                 
-                # seving file from content requests in bit form
-                with open(filePath, "wb") as file:
-                    file.write(downReq.content)
-                    file.close()
+                # if the file doesnt exists
+                if not os.path.exists(filePath):
+                    
+                    # seving file from content requests in bit form
+                    with open(filePath, "wb") as file:
+                        file.write(downReq.content)
+                        file.close()
+                        answer = True
+                        return answer
+
+                # if the file already exists
+                elif os.path.exists(filePath):
+
                     answer = True
                     return answer
-
-            # if the file already exists
-            elif os.path.exists(filePath):
-
-                answer = True
-                return answer
 
             return answer
 
@@ -903,7 +927,6 @@ class Controller (object):
             answer = dict()
 
             # some pages dont follow the most commond diagram
-            # print(type(elementSoup), len(elementSoup))
             if elementSoup != None:
             
                 if len(elementSoup) > 0:
@@ -971,7 +994,6 @@ class Controller (object):
         # exception handling
         except Exception as exp:
             raise exp
-
 
     def newDataFrame(self, columns, data):
         """[summary]

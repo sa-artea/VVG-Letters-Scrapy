@@ -64,7 +64,7 @@ into the CSV files.
 # URL for the webpage to recover the paintings
 # url query excluding the written part of the letters
 vincent_page = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
-# url with small quey for fast tests
+# url with small query for fast tests
 # vincent_page = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=study"
 vincent_root = "https://vangoghmuseum.nl"
 

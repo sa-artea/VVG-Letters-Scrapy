@@ -153,17 +153,17 @@ class Gallery(object):
             raise exp
 
     def createNewIndex(self, columns, data):
-        """[summary]
+        """this function creates a new dataframe in the model based on the columns names and new data.
 
         Args:
-            columns ([type]): [description]
-            data ([type]): [description]
+            columns (list): list of names of the columns you want to add in the dataframe
+            data (list:list or pandas/numpy matrix): data of each column you want to add in the dataframe
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            [dataframe.info()]: return the pandas description of the new dataframe
         """
         try:
             self.dataFrame = pd.DataFrame(columns=self.modelStruct)
@@ -180,14 +180,14 @@ class Gallery(object):
             raise exp
 
     def updateData(self, column, data):
-        """[summary]
+        """this function updates a single column with new data
 
         Args:
-            column ([type]): [description]
+            column (str): [description]
             data ([type]): [description]
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
             [type]: [description]
@@ -211,7 +211,7 @@ class Gallery(object):
             column ([type]): [description]
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
             [type]: [description]
@@ -230,7 +230,7 @@ class Gallery(object):
         """[summary]
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
             [type]: [description]
@@ -265,7 +265,7 @@ class Gallery(object):
             data ([type]): [description]
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
             [type]: [description]
@@ -292,7 +292,7 @@ class Gallery(object):
             dataFolder ([type]): [description]
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
         """
         try:
             # pandas function to save dataframe in CSV file
@@ -312,7 +312,7 @@ class Gallery(object):
             dataFolder ([type]): [description]
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
         """
         try:
             # read an existing CSV fileto update the dataframe
