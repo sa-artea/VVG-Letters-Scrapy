@@ -44,12 +44,12 @@ import pandas as pd
 # developed python libraries
 # ___________________________________________________
 # from .Lib.Recovery.Content import Page as page
-import config
+import Config
 from Lib.Utils import Error as Error
 from Lib.Recovery.Content import Page
 assert Page
 assert Error
-assert config
+assert Config
 
 # default template for the element/paint dict in gallery
 DEFAULT_FRAME_SCHEMA = [

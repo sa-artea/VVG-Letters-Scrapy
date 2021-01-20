@@ -45,8 +45,8 @@ from bs4 import BeautifulSoup
 # from Lib.Recovery.Pages import page as page
 # from Lib.Utils import error as error
 import Config
-from Apps.Scrapy.Controller import Controller
-from Apps.Scrapy.Model import Gallery
+from Scrapy.Controller import Controller
+from Scrapy.Model import Gallery
 assert Controller
 assert Gallery
 assert Config
@@ -88,7 +88,7 @@ dataFolder = "Data"
 # idex csv file
 # indexFile = "VanGoghGallery_small.csv"
 indexFile = "VanGoghGallery_large.csv"
-# indexFile = "VanGoghGallery_complete.csv"
+# indexFile = "VanGoghGallery_extensive.csv"
 
 # default template for the element/paint dict in gallery
 VINCENT_DF_COLUMNS = [
@@ -101,6 +101,8 @@ VINCENT_DF_COLUMNS = [
     "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
     "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
     "RELATED_WORKS",        # JSON cell with the related work text and URLs of the element in the gallery
+    # "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
+    # "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
 ]
 
 # default number of paintings in the gallery
@@ -190,12 +192,28 @@ relatedw_attrs = {
     }
 relatedw_elements = "article"
 
+# # html tags for the exhibition data in the gallery elements.
+# exhibits_div = "div"
+# exhibits_attrs = {
+#     "class": "accordion-item expanded",
+#     "string": re.compile("Exhibitions")
+#     }
+# exhibits_elements = "markdown"
+
+# # html tags for the literature reference data in the gallery elements.
+# lit_div = ""
+# lit_attrs = {
+#     }
+# lit_elements = ""
+
 # dummy var for the index of the dataframe
 donwload_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("DOWNLOAD_URL")]
 haspic_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("HAS_PICTURE")]
 search_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("SEARCH_TAGS")]
 object_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("OBJ_DATA")]
 relatedw_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("RELATED_WORKS")]
+# exhibits_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("EXHIBITIONS")]
+# lit_cname = VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("LITERATURE")]
 
 # column names for creating the JSON in the folders
 json_index_columns = copy.deepcopy(VINCENT_DF_COLUMNS[VINCENT_DF_COLUMNS.index("DESCRIPTION"):VINCENT_DF_COLUMNS.index("RELATED_WORKS")+1])

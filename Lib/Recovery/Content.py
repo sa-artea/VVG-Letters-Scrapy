@@ -37,8 +37,9 @@ from bs4 import BeautifulSoup
 # ___________________________________________________
 # Local application imports
 # ___________________________________________________
-import config
-assert config
+import Config
+# import Lib.Utils.Error as Error
+assert Config
 
 class Page(object):
 

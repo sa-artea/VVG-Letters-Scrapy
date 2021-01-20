@@ -46,9 +46,9 @@ from urllib.parse import urlparse
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
-import config
-assert config
-from Apps.Scrapy.Model import Gallery
+import Config
+assert Config
+from Scrapy.Model import Gallery
 from Lib.Recovery.Content import Page as Page
 assert Gallery
 
@@ -79,6 +79,8 @@ DEFAULT_MAX_PAINTS = 10
 
 # defaul wating time for scrapping anything, this helps not to get blocked
 DEFAULT_SLEEP_TIME = 3.0
+
+DEFAULT_SHORT_SLEEP_TIME = 0.2
 
 class Controller (object):
 
@@ -528,8 +530,9 @@ class Controller (object):
             for tindex, tdata in zip(idData, exportData):
                 
                 tfile = fileName + ".json"
-
+                # print("---\n", tindex, tdata)
                 self.saveToJSON(tdata, galleryFolder, tindex, tfile)
+                time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
         # exception handling
         except Exception as exp:
