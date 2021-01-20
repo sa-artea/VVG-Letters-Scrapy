@@ -48,7 +48,7 @@ from urllib.parse import urlparse
 # ___________________________________________________
 import Config
 assert Config
-from Scrapy.Model import Gallery
+from App.Model import Gallery
 from Lib.Recovery.Content import Page as Page
 assert Gallery
 

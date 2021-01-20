@@ -45,8 +45,8 @@ from bs4 import BeautifulSoup
 # from Lib.Recovery.Pages import page as page
 # from Lib.Utils import error as error
 import Config
-from Scrapy.Controller import Controller
-from Scrapy.Model import Gallery
+from App.Controller import Controller
+from App.Model import Gallery
 assert Controller
 assert Gallery
 assert Config
