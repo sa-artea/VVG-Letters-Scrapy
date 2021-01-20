@@ -393,15 +393,6 @@ class View(object):
                 print(" =======================  REPORT ========================= ")
                 print(answer)
 
-            # elif int(inputs) == 12:
-            #     print("Composing literature data related to the gallery pictures (LITERATURE)...")
-            #     # authorname = input("Nombre del autor a buscar: ")
-
-            #     lit_data = None
-            #     answer = self.galleryControl.updateData(lit_cname, lit_data)
-            #     print(" =======================  REPORT ========================= ")
-            #     print(answer)
-
             elif int(inputs) == 0:
                 sys.exit(0)
 
