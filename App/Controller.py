@@ -1,5 +1,5 @@
 """
-* Copyright 2020, Maestria de Humanidades Digitales, 
+* Copyright 2020, Maestria de Humanidades Digitales,
 * Universidad de Los Andes
 *
 * Developed for the Msc graduation project in Digital Humanities
@@ -21,7 +21,6 @@
 # ___________________________________________________
 # native python libraries
 # ___________________________________________________
-import sys
 import re
 import os
 import copy
@@ -29,27 +28,20 @@ import json
 import urllib
 import requests
 import validators
-import datetime
 import time
 
 # ___________________________________________________
 # extension python libraries
 # ___________________________________________________
-import numpy as np
-import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options
-from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
 import Config
-assert Config
 from App.Model import Gallery
 from Lib.Recovery.Content import Page as Page
+assert Config
 assert Gallery
 
 """
@@ -61,56 +53,76 @@ elements in the models or various models.
 
 # default template for the element/paint dict in gallery
 DEFAULT_FRAME_SCHEMA = [
-    "ID",                   # unique ID for an element in the gallery, its also its folder name in the localdir
-    "TITLE",                # tittle of the element inside the gallery
-    "COLLECTION_URL",       # element (paint) URL/link recovered with ScrapyWEB
-    "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
-    "HAS_PICTURE",          # boolean data to identify if there is a picture file in the local folder, based on DOWNLOAD_URL
-    "DESCRIPTION",          # JSON cell with the description of the element in the gallery
-    "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
-    "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
-    "RELATED_WORKS",        # JSON cell with the related work text and URLs of the element in the gallery
-    # "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
-    # "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
+    # ID element in the gallery and local folder name
+    "ID",
+
+    # tittle of the element in the gallery
+    "TITLE",
+
+    # recovered element (paint) URL
+    "COLLECTION_URL",
+
+    # direct image URL/link for the image in the gallery
+    "DOWNLOAD_URL",
+
+    # boolean if there is a picture file in the local folder
+    "HAS_PICTURE",
+
+    # JSON with the description of the element
+    "DESCRIPTION",
+
+    # JSON with the collection tags of the element
+    "SEARCH_TAGS",
+
+    # JSON with the museum object data of the element
+    "OBJ_DATA",
+
+    # JSON with the related work text and URLs of the element
+    "RELATED_WORKS",
 ]
 
-# default number of paintings in the gallery
-DEFAULT_MAX_PAINTS = 10
-
-# defaul wating time for scrapping anything, this helps not to get blocked
+# defaul waiting time for scrapping data, this helps not to get blocked
 DEFAULT_SLEEP_TIME = 3.0
 
+# default short waiting time for scrapping data, avoids some errors if the
+# script goes to fast
 DEFAULT_SHORT_SLEEP_TIME = 0.2
 
+
 class Controller (object):
+    """
+    Controller class, comunicate the View() and the Model()
+    """
 
-
-    galleryWEB = str()
-    localGallery = str()
+    # =========================================
+    # class variables
+    # =========================================
+    webGallery = str()
+    galleryPath = str()
     modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-    galleryModel = Gallery()
-    maxPaints = DEFAULT_MAX_PAINTS
+    gallery = Gallery()
+    wpage = Page()
 
     def __init__(self, *args, **kwargs):
-        """[summary]
+        """
+        Controller() class creator
 
         Args:
-            galleryWEB ([type]): [description]
-            localGallery ([type]): [description]
-            modelStruct ([type]): [description]
-            galleryModel ([type]): [description]
-            maxPaints ([type]): [description]
+            webGallery (str): URL for the gallery to scrap data
+            galleryPath (str): local dirpath for the gallery data
+            modelStruct (list): array with the column names for the model
+            gallery (Gallery): object with the gallery dataframe model
+            wpage (Page): the current webpage the controller is scrapping
         """
 
         try:
 
             # Controller default values
-            self.galleryWEB = str()
-            self.localGallery = str()
+            self.webGallery = str()
+            self.galleryPath = str()
             self.modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-            self.galleryModel = Gallery()
-            self.currentPage = Page()
-            self.maxPaints = DEFAULT_MAX_PAINTS
+            self.gallery = Gallery()
+            self.wpage = Page()
 
             # when arguments are pass as parameters
             if len(args) > 0:
@@ -119,15 +131,15 @@ class Controller (object):
 
                     # URL of the remote gallery to scrap
                     if i == 0:
-                        self.galleryWEB = args[i]
+                        self.webGallery = args[i]
 
                     # local dirpath to save the gallery CSV
                     if i == 1:
-                        self.localGallery = args[i]
+                        self.galleryPath = args[i]
 
-                    # list of paintings containing the in memory data of the gallery
+                    # painting list containing the data of the gallery
                     if i == 2:
-                        self.galleryModel = args[i]
+                        self.gallery = args[i]
 
             # if there are dict decrators in the creator
             if len(kwargs) > 0:
@@ -146,27 +158,31 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def SetUpLocal(self, galleryFolder, *args):
-        """[summary]
+    def SetUpLocal(self, galleryF, *args):
+        """
+        set up local gallery filepath accorrding to the root gallery folder and
+        other subfolders
 
         Args:
-            galleryFolder ([type]): [description]
+            galleryF (str): name of the main gallery folder
+            subfolders (list, optional): array with the subfolders names to the
+            gallery folder conforming the absolute dirpath
 
         Raises:
-            Exception: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            workPath (str): returns the local filepath to the gallery
         """
         try:
 
-            # integratnig subfoders in the realpath
+            # answer with realpath local subfoders
             workPath = str()
 
             if len(args) > 0:
 
                 for i in range(int(len(args))):
-                    workPath = os.path.join(galleryFolder, args[i])
+                    workPath = os.path.join(galleryF, args[i])
 
                 # if the path doesnt exists you create it
                 if not os.path.exists(workPath):
@@ -179,442 +195,520 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def createLocalFolders(self, galleryFolder, *args, **kwargs):
-        """[summary]
+    def createLocalFolders(self, galleryF, *args, **kwargs):
+        """
+        creates local subfolders with the gallery folder as root for them
 
         Args:
-            galleryFolder ([type]): [description]
+            galleryF (str): name of the main gallery folder
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
         """
         try:
             # list of IDs as folder names for the local gallery
-            folders = self.galleryModel.getColData(args[0])
-            
+            folders = self.gallery.getData(args[0])
+
             # looping trhough the possible folders in the local gallery
             for folder in folders:
 
                 # create the local folder path to create if necessary
-                tempPaintFolder = os.path.join(galleryFolder, folder)
+                tempPF = os.path.join(galleryF, folder)
 
                 # if the local folder doesnt exists
-                if not os.path.exists(tempPaintFolder):
+                if not os.path.exists(tempPF):
 
-                    os.makedirs(tempPaintFolder)
+                    os.makedirs(tempPF)
 
                 # the local forlder already ecists
-                elif os.path.exists(tempPaintFolder):
+                elif os.path.exists(tempPF):
                     pass
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapIndex(self, galleryUrl, sleepTime, scrapDivision, scrapAttributes):
-        """[summary]
+    def scrapIndex(self, galleryUrl, sleepTime, div, attrs):
+        """
+        scrap the gallery index for all the elements within it
 
         Args:
-            galleryUrl ([type]): [description]
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
-            sleepTime ([type]): [description]
+            galleryUrl (str): URL for the gallery to scrap data
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            the search and scrap
+            sleepTime (float): waiting time between requests
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (bs-obj): div and attrs filtered beatifulsoup object
         """
         try:
 
-            self.currentPage = Page()
-            self.currentPage.getCollection(galleryUrl, sleepTime)
-            answer = self.currentPage.findInReq(scrapDivision, attributes=scrapAttributes)
+            # reset working web page
+            self.wpage = Page()
+            ans = None
 
-            return answer
+            # getting the basic element list from gallery online index
+            self.wpage.getCollection(galleryUrl, sleepTime)
+            ans = self.wpage.findInReq(div, attributes=attrs)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapAgain(self, scrapDivision, scrapAttributes):
-        """[summary]
+    def scrapAgain(self, div, attrs):
+        """
+        using the previous index scraped results, search for new information to
+        complement the dataframe index
 
         Args:
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (bs-obj): div and attrs filtered beatifulsoup object
         """
         try:
-            answer = self.currentPage.findInReq(scrapDivision, attributes=scrapAttributes)
-            return answer
+            ans = None
+            ans = self.wpage.findInReq(div, attributes=attrs)
+            # returning answer
+            return ans
+
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapElement(self, elementUrl, scrapDivision, scrapAttributes, **kwargs):
-        """[summary]
+    def scrapElement(self, elemUrl, div, attrs, **kwargs):
+        """
+        scrap all elements within a link based on its <div> html mark and other
+        attributes/decoratos
 
         Args:
-            elementUrl ([type]): [description]
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
+            elemUrl (str): gallery's element url
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (bs-obj): div and attrs filtered beatifulsoup object
         """
         try:
 
-            self.currentPage = Page()
+            # reset working web page
+            self.wpage = Page()
+
             # get the body of the element url
-            reqStatus = self.currentPage.getBody(elementUrl)
-            answer = None
+            reqStatus = self.wpage.getBody(elemUrl)
+            ans = None
 
             if reqStatus == 200:
-                # find exaclty what I want in the page body
-                answer = self.currentPage.findInReq(scrapDivision, attributes=scrapAttributes, multiple=kwargs.get("multiple"))
+                # find element inside the html body
+                ans = self.wpage.findInReq(
+                        div,
+                        attributes=attrs,
+                        multiple=kwargs.get("multiple")
+                        )
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapPageDescription(self, columnName, scrapDivision, scrapAttributes, scrapElements, **kwargs):
-        """[summary]
+    def scrapPageDescription(self, coln, div, attrs, elem, **kwargs):
+        """
+        takes a column name, html divs and decorators to scrap the gallery
+        element description from url
 
         Args:
-            columnName ([type]): [description]
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
-            scrapElements ([type]): [description]
+            coln (str): column name in the dataframe to save the scraped data
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            elem (str): element is a secondary <div> keyword to refine the
+            search and scrap process
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (bs-obj): div and attrs filtered beatifulsoup object
         """
         try:
 
             # get the url list from the dataframe in the model
-            answer = list()
-            urls = self.galleryModel.getColData(columnName)
+            ans = list()
+
+            urls = self.gallery.getData(coln)
             i = 0
 
             for url in urls:
 
-                tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
-                ans = self.getPageDescription(tempSoup, scrapElements)
+                tempSoup = self.scrapElement(url, div, attrs, **kwargs)
+                temp = self.getPageDescription(tempSoup, elem)
+
                 # compose answer
-                answer.append(ans)
+                ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
                 i = i + 1
-                # print("# " + str(i) + ": " + str(url))
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapPagePicture(self, columnName, rootURL, scrapDivision, scrapAttributes, scrapElements, **kwargs):
+    def scrapPagePicture(self, coln, rootUrl, div, attrs, elem, **kwargs):
+        """
+        using the column name and a root URL scrap the data to download the
+        element/picture file
 
+        Args:
+            coln (str): column name in the dataframe to save the scraped data
+            rootUrl (str): root URL of the domain to download the picture
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            elem (str): element is a secondary <div> keyword to refine the
+            search and scrap process
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): the list of downloadable picture files recovered in the
+            gallery element
+        """
         try:
 
-            answer = list()
+            ans = list()
             # getting the element url in the gallery
-            urls = self.galleryModel.getColData(columnName)
-            i = 0
+            urls = self.gallery.getData(coln)
 
             for url in urls:
+
                 # scraping elements each gallery page
-                tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
-                ans = self.getDownloadURL(tempSoup, rootURL, scrapElements)
+                tempSoup = self.scrapElement(url, div, attrs, **kwargs)
+                temp = self.getDownloadURL(tempSoup, rootUrl, elem)
+
                 # compose answer
-                answer.append(ans)
+                ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
-                i = i + 1
-                # print("# " + str(i) + ": " + str(url))
-                
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapPageObjData(self, columnName, scrapDivision, scrapAttributes, scrapElements, **kwargs):
-        """[summary]
+    def scrapPageObjData(self, coln, div, attrs, elem, **kwargs):
+        """
+        able to scrap the object data from the webpage using the dataframe's
+        column name, the HTML divs and other decorators in the url
 
         Args:
-            columnName ([type]): [description]
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
-            scrapElements ([type]): [description]
+            coln (str): column name in the dataframe to save the scraped data
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            elem (str): element is a secondary <div> keyword to refine the
+            search and scrap process
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): the list of the object data recovered from the
+            gallery element
         """
         try:
 
             # get the url list from the dataframe in the model
-            answer = list()
-            urls = self.galleryModel.getColData(columnName)
-            i = 0
+            ans = list()
+            urls = self.gallery.getData(coln)
 
             for url in urls:
 
-                tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
-                ans = self.getObjectData(tempSoup, scrapElements)
+                tempSoup = self.scrapElement(url, div, attrs, **kwargs)
+                temp = self.getObjectData(tempSoup, elem)
+
                 # compose answer
-                answer.append(ans)
+                ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
-                i = i + 1
-                # print("# " + str(i) + ": " + str(url))
-
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapPageSearchTags(self, columnName, rootURL, scrapDivision, scrapAttributes, scrapElements, **kwargs):
-        """[summary]
+    def scrapPageSearchTags(self, coln, rootUrl, div, attrs, elem, **kwargs):
+        """
+        able to scrap the element/image  search tags from the webpage using the
+        dataframe's column name, the HTML divs and other decorators in the url
 
         Args:
-            columnName ([type]): [description]
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
-            scrapElements ([type]): [description]
+            coln (str): column name in the dataframe to save the scraped data
+            rootUrl (str): root URL of the domain to complete the search tags
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            elem (str): element is a secondary <div> keyword to refine the
+            search and scrap process
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): the list of the search tags recovered from the
+            gallery element
         """
         try:
 
             # get the url list from the dataframe in the model
-            answer = list()
-            urls = self.galleryModel.getColData(columnName)
+            ans = list()
+            urls = self.gallery.getData(coln)
             i = 0
 
             for url in urls:
                 # scraping elements each gallery page
-                tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
+                tempSoup = self.scrapElement(url, div, attrs, **kwargs)
 
                 # extracting the search tags from the soup
-                ans = self.getSearchTags(tempSoup, scrapElements, rootURL)
+                temp = self.getSearchTags(tempSoup, elem, rootUrl)
                 # compose answer
-                answer.append(ans)
+                ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
                 i = i + 1
                 # print("# " + str(i) + ": " + str(url))
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def scrapPageRelWork(self, columnName, rootURL, scrapDivision, scrapAttributes, scrapElements, **kwargs):
-        """[summary]
+    def scrapPageRelWork(self, coln, rootUrl, div, attrs, elem, **kwargs):
+        """
+        able to scrap the related work data from the webpage using the
+        dataframe's column name, the HTML divs and other decorators in the url
 
         Args:
-            columnName ([type]): [description]
-            scrapDivision ([type]): [description]
-            scrapAttributes ([type]): [description]
-            scrapElements ([type]): [description]
+            coln (str): column name in the dataframe to save the scraped data
+            rootUrl (str): root URL of the domain to complete the related work
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            elem (str): element is a secondary <div> keyword to refine the
+            search and scrap process
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): the list of the related work recovered from the
+            gallery elements
         """
         try:
 
             # get the url list from the dataframe in the model
-            answer = list()
-            urls = self.galleryModel.getColData(columnName)
-            i = 0
+            ans = list()
+            urls = self.gallery.getData(coln)
 
             for url in urls:
                 # scraping elements each gallery page
-                tempSoup = self.scrapElement(url, scrapDivision, scrapAttributes, **kwargs)
+                tempSoup = self.scrapElement(url, div, attrs, **kwargs)
 
                 # default empty dict to return
-                ans = dict()
+                temp = dict()
                 # checking if there is any related work to process
                 if len(tempSoup) > 0:
                     # extracting the search tags from the soup
-                    ans = self.getRelatedWork(tempSoup, scrapElements, rootURL)
+                    temp = self.getRelatedWork(tempSoup, elem, rootUrl)
                 # compose answer
-                answer.append(ans)
+                ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
-                i = i + 1
-                # print("# " + str(i) + ": " + str(url))
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def downloadPictures(self, downloadURLData, galleryFolder, *args, **kwarg):
-        """[summary]
+    def downloadPictures(self, dlUrlData, galleryF, *args, **kwarg):
+        """
+        download the picture files from a list of available url in the gallery
 
         Args:
-            downloadURLData ([type]): [description]
-            galleryFolder ([type]): [description]
+            dlUrlData (str): list of downloadable known URLs
+            galleryF (str): name of the main gallery folder
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): list of boolean marking if it is possible to download a
+            picture file or not
         """
         try:
             # getting the element url in the gallery
-            urls = list(downloadURLData)
-            answer = list()
-            i = 0
+            urls = list(dlUrlData)
+            ans = list()
 
             for url in urls:
 
                 # the url is valir, it can be null or na or none
-                if validators.url(str(url)) == True:
-                    
-                    ans = self.getPicture(url, galleryFolder, *args, **kwarg)
-                    answer.append(ans)
+                if validators.url(str(url)) is True:
+
+                    temp = self.getPicture(url, galleryF, *args, **kwarg)
+                    ans.append(temp)
 
                 # invalid url
                 else:
 
-                    ans = False
-                    answer.append(ans)
-                    
-                time.sleep(DEFAULT_SLEEP_TIME)
-                i = i + 1
-                # print("# " + str(i) + ": " + str(url))
+                    temp = False
+                    ans.append(temp)
 
-            return answer
+                time.sleep(DEFAULT_SLEEP_TIME)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def exportToJSON(self, galleryFolder, indexColumn, exportColumn, fileName):  # id_cname, descrip_cname):
+    def exportToJSON(self, galleryF, indexCol, expCol, fname):
+        """
+        export the data from one column in the model's dataframe into JSON file
+        in an specific local gallery folder
 
+        Args:
+            galleryF (str): name of the main gallery folder
+            indexCol (str): name of the column in the dataframe with the
+            gallery index with unique IDs for each elements (same as the local
+            folder's names)
+            expCol (str): name of the column with the data to export to JSON
+            fname (str): name of the file to save
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+        """
         try:
 
-            idData = self.getData(indexColumn)
-            exportData = self.getData(exportColumn)
-            # args.append(fileName)
+            idData = self.getData(indexCol)
+            expData = self.getData(expCol)
+            # args.append(fname)
 
-            for tindex, tdata in zip(idData, exportData):
-                
-                tfile = fileName + ".json"
-                # print("---\n", tindex, tdata)
-                self.saveToJSON(tdata, galleryFolder, tindex, tfile)
+            for tindex, tdata in zip(idData, expData):
+
+                tfile = fname + ".json"
+                self.saveToJSON(tdata, galleryF, tindex, tfile)
                 time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
         # exception handling
         except Exception as exp:
             raise exp
 
-
-    def getSearchTags(self, elementSoup, searchElement, rootURL):
-        """[summary]
+    def getSearchTags(self, elemSoup, searchElem, rootUrl):
+        """
+        process the scraped data from the beatifulSoup object and saves the
+        relevant information into a JSON files
 
         Args:
-            elementSoup ([type]): [description]
-            searchElement ([type]): [description]
-            rootURL ([type]): [description]
+            elemSoup (bs-obj): beatifulSoup object with the search tags data
+            searchElem (str): HTML <div> keyword to search and scrap the search
+            tags data
+            rootUrl (str): root URL of the domain to complete the search tags
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (json): json with the search tags data recovered from the
+            gallery element
         """
         try:
             # default answer
-            answer = dict()
+            ans = dict()
 
             # checking if searchtags exists
-            if elementSoup != None:
+            if elemSoup is not None:
 
                 # checking is the correct collection search tags
-                if len(elementSoup) > 0:
+                if len(elemSoup) > 0:
 
                     # finding searhtags <a> in the sou
-                    tags = elementSoup[0].findAll(searchElement)
+                    tags = elemSoup[0].findAll(searchElem)
 
                     # processing the search tags
-                    if len(tags) > 0 and isinstance(tags, list) == True:
+                    if len(tags) > 0 and isinstance(tags, list) is True:
 
-                        ansd = dict()
                         for tag in tags:
-
                             # cleaning data
                             key = str(tag.string)
                             url = tag.get("href")
-                            # reconstructing all the url from the page
-                            value = str(urllib.parse.urljoin(rootURL, url))
-                            td = {key: value}
-                            # updating answer dict
-                            answer.update(copy.deepcopy(td))
 
-            answer = self.toJSON(answer)
-            return answer
+                            # reconstructing all the url from the page
+                            value = str(urllib.parse.urljoin(rootUrl, url))
+                            td = {key: value}
+
+                            # updating answer dict
+                            ans.update(copy.deepcopy(td))
+
+            ans = self.toJSON(ans)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
-        
-    def getObjectData(self, elementSoup, searchElement):
-        """[summary]
+
+    def getObjectData(self, elemSoup, objElem):
+        """
+        process the scraped data from the beatifulSoup object and saves the
+        object data into a JSON files
 
         Args:
-            elementSoup ([type]): [description]
-            searchElement ([type]): [description]
+            elemSoup (bs-obj): beatifulSoup object with the object data
+            object data to recover the search tags
+            objElem (str): HTML <div> keyword to process the Page's scraped
+            object-data
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (json): json with the object-data recovered from the
+            gallery element
         """
         try:
             # default answer
-            answer = dict()
+            ans = dict()
 
             # checking if object-data exists
-            if elementSoup != None:
+            if elemSoup is not None:
 
                 # finding <dt> and <dd> from the soup
-                keys = elementSoup.findAll(searchElement[0])
-                values = elementSoup.findAll(searchElement[1])
-                
-                # both the keys and the values of the object data must be the same
+                keys = elemSoup.findAll(objElem[0])
+                values = elemSoup.findAll(objElem[1])
+
+                # soup keys and values must have data
                 if len(keys) > 0 and len(values) > 0:
-                    
+
                     # looping over the <dt> and <dd> data
                     for key, value in zip(keys, values):
 
@@ -625,40 +719,45 @@ class Controller (object):
                         # temp dict for complete answer
                         td = {key: value}
                         # updating answer dict
-                        answer.update(copy.deepcopy(td))
-            
+                        ans.update(copy.deepcopy(td))
+
             # transforming the answer to JSON
-            answer = self.toJSON(answer)
-            return answer
+            ans = self.toJSON(ans)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getRelatedWork(self, elementSoup, searchElement, rootURL):
-        """[summary]
+    def getRelatedWork(self, elemSoup, relwElem, rootUrl):
+        """
+        process the scraped data from the beatifulSoup object and saves the
+        related work information into a JSON files
 
         Args:
-            elementSoup ([type]): [description]
-            searchElement ([type]): [description]
-            rootURL ([type]): [description]
+            elemSoup (bs-obj): beatifulSoup object with the related work data
+            relwElem (str): HTML <div> keyword to process the Page's scraped
+            related work
+            rootUrl (str): domain root URL to complete the related work link
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (json): json with the related work recovered from the
+            gallery element
         """
         try:
-
             # default answer
-            answer = dict()
+            ans = dict()
 
             # checking if searchtags exists
-            if elementSoup != None:
+            if elemSoup is not None:
 
                 # finding searhtags <article> in the sou
-                relworks = elementSoup[0].findAll(searchElement)
+                relworks = elemSoup[0].findAll(relwElem)
 
                 # processing related work
                 i = 1
@@ -666,321 +765,386 @@ class Controller (object):
                     # cleaning data and getting all keys and values
                     key = str(rw.find("span").string)
                     url = rw.find("a").get("href")
-                    value = str(urllib.parse.urljoin(rootURL, url))
+                    value = str(urllib.parse.urljoin(rootUrl, url))
 
                     # may names are similar in related work
-                    if key in answer.keys():
-                        
+                    if key in ans.keys():
+
                         # creating alternate key for the dict
                         key = key + " " + str(i)
                         i += 1
 
                     # updating answer dict
                     td = {key: value}
-                    answer.update(copy.deepcopy(td))
+                    ans.update(copy.deepcopy(td))
 
-            answer = self.toJSON(answer)
-            return answer
+            ans = self.toJSON(ans)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getData(self, columnName, *args, **kwargs):
-        """[summary]
+    def getData(self, coln, *args, **kwargs):
+        """
+        get the data based in the column name of the model's dataframe
 
         Args:
-            columnName ([type]): [description]
+            coln (str): column name in the dataframe to save the scraped data
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): return the list with the column name data
         """
         try:
             # getting the element url in the gallery
-            answer = list()
-            answer = self.galleryModel.getData(columnName, *args, **kwargs)
-            return answer
+            ans = list()
+            ans = self.gallery.getData(coln, *args, **kwargs)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getPicture(self, downloadURL, galleryFolder, *args, **kwargs):
-        """[summary]
+    def getPicture(self, downloadUrl, galleryF, *args, **kwargs):
+        """
+        save the element image file in a local dirpath folder
 
         Args:
-            downloadURL ([type]): [description]
-            galleryFolder ([type]): [description]
+            downloadUrl (str): url address with the downlodable image file
+            galleryF (str): root local dirpath where the file is going to be
+            save
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (bool): True if the file was downloaded in the local dirpath,
+            False if not
         """
         try:
-
             # default answer
-            answer = False
+            ans = False
 
             # requesting page
-            downReq = requests.get(downloadURL)
+            downReq = requests.get(downloadUrl)
 
             # succesful request
             if downReq.status_code == 200:
 
-                # to get the file name from headears I go to the URL request headers and extract it from the string
-                pictureFile = str(downReq.headers.__getitem__("Content-Disposition"))
-                pictureFile = pictureFile.split(";")[1].strip().strip("filename=")
+                # get the request header to get the file name str
+                picFile = downReq.headers.__getitem__("Content-Disposition")
+                picFile = str(picFile)
+                picFile = picFile.split(";")[1].strip().strip("filename=")
 
-                # parsing of the URL to choose the local folder to save the file
-                elementFolder = urlparse(downloadURL)
-                elementFolder = elementFolder.path.split("/")[len(elementFolder.path.split("/"))-1]
-                filePath = os.path.join(galleryFolder, elementFolder, pictureFile)
-                
+                # parsing the URL to choose the local folder to save the file
+                elemf = urlparse(downloadUrl)
+                elemf = elemf.path.split("/")[len(elemf.path.split("/"))-1]
+                filePath = os.path.join(galleryF, elemf, picFile)
+
                 # if the file doesnt exists
                 if not os.path.exists(filePath):
-                    
+
                     # seving file from content requests in bit form
                     with open(filePath, "wb") as file:
+
                         file.write(downReq.content)
                         file.close()
-                        answer = True
-                        return answer
+                        ans = True
+                        return ans
 
                 # if the file already exists
                 elif os.path.exists(filePath):
 
-                    answer = True
-                    return answer
+                    ans = True
+                    return ans
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getID(self, gallerySoup, idElement):
-        """[summary]
+    def getID(self, gallerySoup, idElem):
+        """
+        get the unique identifier (ID) of the gallery element and assign it to
+        the dataframe record
 
         Args:
-            gallerySoup ([type]): [description]
-            idElement ([type]): [description]
+            gallerySoup (bs-obj): beatifulSoup object containing the gallery's
+            element list
+            idElem (str): HTML <div> keyword to process the Page's scraped
+            gallery's IDs
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): list with the gallery's element IDs
         """
         try:
-            answer = list()
+            ans = list()
 
             for element in gallerySoup:
-                
-                tid = element.get(idElement).replace("/en/collection/", "")
-                answer.append(tid)
 
-            return answer
+                tid = element.get(idElem).replace("/en/collection/", "")
+                ans.append(tid)
+
+            # returning answer
+            return ans
 
             # exception handling
         except Exception as exp:
             raise exp
 
-    def getURL(self, gallerySoup, rootURL, urlElement):
-        """[summary]
+    def getURL(self, gallerySoup, rootUrl, urlElem):
+        """
+        get the list of the elements inside the gallery index based on the root
+        domain url and html div tags
 
         Args:
-            gallerySoup ([type]): [description]
-            rootURL ([type]): [description]
-            urlElement ([type]): [description]
+            gallerySoup (bs-obj): beatifulSoup object containing the gallery's
+            element list
+            rootUrl (str): root URL of the domain to complete the element url
+            urlElem (str): HTML <div> keyword to process the Page's scraped
+            gallery urls
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): list with each of the gallery's unique urls
         """
         try:
-            answer = list()
+            ans = list()
 
             for title in gallerySoup:
 
-                turl = urllib.parse.urljoin(rootURL, title.get(urlElement))
-                answer.append(turl)
+                turl = urllib.parse.urljoin(rootUrl, title.get(urlElem))
+                ans.append(turl)
 
-            return answer
-
-        # exception handling
-        except Exception as exp:
-            raise exp
-
-    def getDownloadURL(self, gallerySoup, rootURL, urlElement):
-        """[summary]
-
-        Args:
-            gallerySoup ([type]): [description]
-            rootURL ([type]): [description]
-            urlElement ([type]): [description]
-
-        Raises:
-            exp: [description]
-
-        Returns:
-            [type]: [description]
-        """
-        try:
-            answer = None
-
-            if gallerySoup != None:
-                url = gallerySoup.get(urlElement)
-                answer = urllib.parse.urljoin(rootURL, url)
-
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getTitle(self, gallerySoup, titleElement):
-        """[summary]
+    def getDownloadURL(self, gallerySoup, rootUrl, urlElem):
+        """
+        recovers the download url for a gallery element
+
         Args:
-            gallerySoup ([type]): [description]
-            titleElement ([type]): [description]
+            gallerySoup (bs-obj): beatifulSoup object containing the gallery's
+            element list
+            rootUrl (str): root URL of the domain to complete the related work
+            urlElem (str): HTML <div> keyword to process the Page's scraped
+            gallery's urls to download files
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
+
         Returns:
-            [type]: [description]
+            ans (str): unique url with the downlodable element's file
         """
         try:
-            answer = list()
+            ans = None
+
+            if gallerySoup is not None:
+                url = gallerySoup.get(urlElem)
+                ans = urllib.parse.urljoin(rootUrl, url)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getTitle(self, gallerySoup, titleElem):
+        """
+        get the element titles from the gallery main page
+
+        Args:
+            gallerySoup (bs-obj): beatifulSoup object containing the gallery's
+            element list
+            titleElem HTML <div> keyword to process the scraped data from
+            the gallery's soup to get the element titles
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list with the gallery's element tittles as str
+        """
+        try:
+            ans = list()
             for element in gallerySoup:
                 # default unknown element name
 
                 title = "untitled"
-                
-                # if we know the name of the element 
-                if element.get(titleElement) != None:
-                    title = element.get(titleElement)
-                                
+
+                # if we know the name of the element
+                if element.get(titleElem) is not None:
+                    title = element.get(titleElem)
+
                 # update the answer
-                answer.append(title)
+                ans.append(title)
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getPageTittle(self, elementSoup, titleElement):
-        """[summary]
+    def getPageTittle(self, elemSoup, titleElem):
+        """
+        get the page's tittle from the beatifulSoup object
 
         Args:
-            elementSoup ([type]): [description]
-            titleElement ([type]): [description]
+            elemSoup (bs-obj): beatifulSoup object with the page tittle data
+            titleElem (str): HTML <div> keyword to recover the scraped page
+            title
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (str): Page's tittle
         """
         try:
             # get the title in the painting page
-            answer = elementSoup.find(titleElement).string
+            ans = elemSoup.find(titleElem).string
             # cleaning data
-            answer = str(answer).strip()
-            answer = re.sub(" \s+", "", answer)
-            answer = re.sub("\n", "", answer)
+            ans = str(ans).strip()
+            ans = re.sub(r" \s+", "", ans)
+            ans = re.sub(r"\n", "", ans)
 
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getPageDescription(self, elementSoup, descripElement):
-        """[summary]
+    def getPageDescription(self, elemSoup, desElem):
+        """
+        get the page's description from the beatifulSoup object
 
         Args:
-            elementSoup ([type]): [description]
-            descripElement ([type]): [description]
+            elemSoup (bs-obj): beatifulSoup object with the description scraped
+            from the webpage
+            desElem (str): HTML <div> keyword to recover the scraped page
+            description data
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (str): Page's tittle
         """
         try:
             # get the title in the painting page
-            answer = dict()
+            ans = dict()
 
             # some pages dont follow the most commond diagram
-            if elementSoup != None:
-            
-                if len(elementSoup) > 0:
-                    
+            if elemSoup is not None:
+
+                if len(elemSoup) > 0:
+
                     # finding title <h1> in the soup
-                    value = elementSoup[0].find(descripElement[0])
+                    value = elemSoup[0].find(desElem[0])
                     # cleaning data
                     key = value.attrs.get("class")[0]
                     key = str(key).replace("art-object-page-content-", "", 1)
                     value = str(value.string).strip()
-                    value = re.sub(" \s+", "", value)
-                    value = re.sub("\n", "", value)
+                    value = re.sub(r" \s+", "", value)
+                    value = re.sub(r"\n", "", value)
 
                     # creating the dict to return to save as JSON
-                    td ={key:value}
+                    td = {key: value}
 
                     # updating answer dict
-                    answer.update(copy.deepcopy(td))
+                    ans.update(copy.deepcopy(td))
 
-                    # finding all the paragraphs of the description <p> in the soup
-                    description = elementSoup[0].findAll(descripElement[1])
+                    # finding all  description paragraphs <p> in the soup
+                    description = elemSoup[0].findAll(desElem[1])
                     for element in description:
 
                         key = element.attrs.get("class")[0]
-                        key = str(key).replace("art-object-page-content-", "", 1)
+                        key = str(key)
+                        key = key.replace("art-object-page-content-", "", 1)
                         value = str(element.string).strip()
-                        value = re.sub(" \s+", "", value)
-                        value = re.sub("\n", "", value)
+                        value = re.sub(r" \s+", "", value)
+                        value = re.sub(r"\n", "", value)
 
                         # creating the dict to return to save as JSON
                         td = {key: value}
 
                         # updating answer dict
-                        answer.update(copy.deepcopy(td))
+                        ans.update(copy.deepcopy(td))
 
-            answer = self.toJSON(answer)
-            return answer
+            ans = self.toJSON(ans)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
     def toJSON(self, dictData, *args, **kwargs):
+        """
+        transform a python dictionary into a JSON
 
+        Args:
+            dictData (dict): dictionary with the relevant data to transform
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (JSOM): a proper JSON object containing the dictionary data
+        """
         try:
+            # transforming dictionary to JSON
+            td = copy.deepcopy(dictData)
+            ans = json.dumps(td, ensure_ascii=False, indent=4)
 
-            # transforming dictionary to an interoperable JSON structure
-            answer = json.dumps(copy.deepcopy(dictData), ensure_ascii = False, indent = 4)
-            return answer
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
-    
-    def saveToJSON(self, jsonData, galleryFolder, *args, **kwargs):
+
+    def saveToJSON(self, jsonData, galleryF, *args, **kwargs):
+        """
+        saves a json object into a local file according to the gallery folder
+        and subfolders
+
+        Args:
+            jsonData (JSON): JSON data to save in file
+            galleryF (str): name of the main gallery folder
+            subfolders (str, optional) a subfolder name to the main gallery
+            folder, can be as much as neeeded
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+        """
         try:
-            # guardo en un archivo el JSON de la descripcion.
+            # configuring local filepath
+            localFP = os.path.join(galleryF, *args)
 
-            localFilePath = os.path.join(galleryFolder, *args)
-
-            with open(localFilePath, "w", encoding="utf-8") as file:
+            # saving data in with utf-8 encoding
+            with open(localFP, "w", encoding="utf-8") as file:
                 file.write(jsonData)
                 file.close()
 
@@ -989,95 +1153,103 @@ class Controller (object):
             raise exp
 
     def newDataFrame(self, columns, data):
-        """[summary]
+        """
+        creates a new model dataframe with
 
         Args:
-            columns ([type]): [description]
-            data ([type]): [description]
+            columns (list): list of columns names for the new dataframe
+            data (dataframe): new dataframe data, it can be empty
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (dataframe.info()): pandas description of dataframe
         """
         try:
-            
-            answer = self.galleryModel.createNewIndex(columns, data)
-            return answer
-            
+
+            ans = self.gallery.createNewIndex(columns, data)
+            # returning answer
+            return ans
+
         # exception handling
         except Exception as exp:
             raise exp
 
     def updateData(self, column, data):
-        """[summary]
+        """
+        update the data in one column of the gallery model (dataframe)
 
         Args:
-            column ([type]): [description]
-            data ([type]): [description]
+            column (str): model column name to update
+            data (list): new data to update in the column, must be of the same
+            the dataframe column
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (dataframe.info()): pandas description of dataframe
         """
         try:
 
-            answer = self.galleryModel.updateData(column, data)
-            return answer
+            ans = self.gallery.updateData(column, data)
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def saveGallery(self, fileName, dataFolder):
-        """[summary]
+    def saveGallery(self, fname, folder):
+        """
+        write the gallery model (pandas) into a CSV file
 
         Args:
-            fileName ([type]): [description]
-            dataFolder ([type]): [description]
+            fname (str): file name to write the gallery model
+            folder (str): subfolder to write the CSV file
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
         """
         try:
-            
-            self.galleryModel.saveGallery(fileName, dataFolder)
+
+            self.gallery.saveGallery(fname, folder)
 
             # exception handling
         except Exception as exp:
             raise exp
 
-    def loadGallery(self, fileName, dataFolder):
-        """[summary]
+    def loadGallery(self, fname, folder):
+        """
+        read the gallery model (pandas) from a CSV file
 
         Args:
-            fileName ([type]): [description]
-            dataFolder ([type]): [description]
+            fname (str): file name from where to read the gallery model
+            folder (str): subfolder from where to read the CSV file
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
         """
         try:
-            self.galleryModel.loadGallery(fileName, dataFolder)
+            self.gallery.loadGallery(fname, folder)
 
             # exception handling
         except Exception as exp:
             raise exp
 
     def checkGallery(self):
-        """[summary]
+        """
+        checks the data stats of the gallery dataframe
 
         Raises:
-            exp: [description]
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (dataframe.info()): pandas description of dataframe
         """
         try:
-            return self.galleryModel.checkGallery()
+            return self.gallery.checkGallery()
 
             # exception handling
         except Exception as exp:

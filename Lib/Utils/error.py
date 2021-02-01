@@ -1,5 +1,5 @@
 """
-* Copyright 2020, Maestria de Humanidades Digitales, 
+* Copyright 2020, Maestria de Humanidades Digitales,
 * Universidad de Los Andes
 *
 * Developed for the Msc graduation project in Digital Humanities
@@ -18,9 +18,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-"""
-generic function used to reraise errors in different parts of the app
-"""
+
 def reraise(excp, *args):
+    """
+    generic function used to reraise errors in different parts of the app
+    """
     excp.args = args + excp.args
     raise excp.with_traceback(excp.__traceback__)

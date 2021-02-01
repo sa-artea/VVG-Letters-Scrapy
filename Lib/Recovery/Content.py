@@ -1,5 +1,5 @@
 """
-* Copyright 2020, Maestria de Humanidades Digitales, 
+* Copyright 2020, Maestria de Humanidades Digitales,
 * Universidad de Los Andes
 *
 * Developed for the Msc graduation project in Digital Humanities
@@ -17,15 +17,10 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
 # ___________________________________________________
 # Standard library imports
 # ___________________________________________________
-import os
-import sys
-import re
 import time
-
 # ___________________________________________________
 # Third party imports
 # ___________________________________________________
@@ -34,45 +29,56 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
+
 # ___________________________________________________
 # Local application imports
 # ___________________________________________________
 import Config
-# import Lib.Utils.Error as Error
+from Lib.Utils import Error as Error
 assert Config
+assert Error
+
+# ___________________________________________________
+# Global variables
+# ___________________________________________________
+DEFAULT_HTML_PARSER = "html.parser"
+
 
 class Page(object):
-
     """
-    this module make a request of an URL and helps translate its 
+    this module make a request of an URL and helps translate
     data into readable information for the dataframe
     """
 
-    #___________________________________________
-    # class parameters
-    #___________________________________________
-    url = ""
+    # =========================================
+    # class variables
+    # =========================================
+    url = str()
     request = None
+    sbody = None
     shead = None
-    rsoup = None
-    dialect = "html.parser"
+    dialect = DEFAULT_HTML_PARSER
 
     def __init__(self, *args, **kwargs):
         """
-        creator of the class page()
+        class creator for page()
 
         Args:
-            url (str, optional): url of the page I want to recover. Defaults to str().
-            dialect (str, optional): parse dialect I use, the same as beautiful soup. Defaults to "html.parser".
+            url (str, optional): page url to recover. Defaults is empty str
+            dialect (str, optional): beautifulSoup parser dialect. Defaults
+            "html.parser"
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
         """
         try:
 
-            # not passing parameters in the creator
+            # default object attributes
             self.url = str()
-            # setting default dialect
-            self.dialect = "html.parser"
+            self.dialect = DEFAULT_HTML_PARSER
             self.request = None
-            self.rsoup = None
+            self.sbody = None
+            self.shead = None
 
             # when arguments are pass as parameters
             if len(args) > 0:
@@ -99,15 +105,17 @@ class Page(object):
             raise exp
 
     def getCollection(self, galleryUrl, sleepTime):
-        """[summary]
+        """
+        Gets an URL and a wait time to update the BeautifulSoup
+        object in the class attribute. only works with a page with an infinite
+        scroll option
 
         Args:
-            galleryUrl ([type]): [description]
-            elementAttributes ([type]): [description]
-            sleepTime ([type]): [description]
+            galleryUrl (str): url of the main gallery to parse.
+            sleepTime (float): waiting time between HTML request with selenium.
 
-        Returns:
-            [type]: [description]
+        Raises:
+            exp: raise a generic exception if something goes wrong
         """
         try:
 
@@ -120,47 +128,57 @@ class Page(object):
             self.scrollCollection(self.request, sleepTime)
 
             # HTML from `<html>`
-            resquestBody = self.request.execute_script("return document.documentElement.innerHTML;")
+            resquestBody = self.request.execute_script(
+                "return document.documentElement.innerHTML;")
 
             # HTML from `<body>`
-            resquestBody = self.request.execute_script("return document.body.innerHTML;")
+            resquestBody = self.request.execute_script(
+                "return document.body.innerHTML;")
 
             # Once scroll returns bs4 parsers the page_source
-            self.rsoup = BeautifulSoup(resquestBody, self.dialect)
+            self.sbody = BeautifulSoup(resquestBody, self.dialect)
 
             # closing driver
             self.request.close()
-            
+
         # exception handling
         except Exception as exp:
             raise exp
 
     def scrollCollection(self, browserDriver, sleepTime):
-        """this function scroll an infinte gallery of items in a web page with selenium driver
+        """
+        private void function to scroll an infinte gallery of items in a web
+        page with selenium driver
 
         Args:
-            driver (driver): selenium driver created to extract de information (firefox, chrome, safari).
-            timeout (int): wating time for the HTTP response to return to the driver and compile the information.
+            driver(driver): selenium driver created to extract de information
+            (firefox, chrome, safari).
+            timeout(int): wating time for the HTTP response to return to the
+            driver and compile the information.
 
-        Returns:
-            None: activate firefox and scroll the gallery, after execution the browser will close.
+        Raises:
+            exp: raise a generic exception if something goes wrong
         """
+
         try:
 
             scroll_pause_time = sleepTime
 
             # Get scroll height
-            last_height = browserDriver.execute_script("return document.body.scrollHeight")
+            last_height = browserDriver.execute_script(
+                "return document.body.scrollHeight")
 
             while True:
                 # Scroll down to bottom
-                browserDriver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                browserDriver.execute_script(
+                    "window.scrollTo(0, document.body.scrollHeight);")
 
                 # Wait to load page
                 time.sleep(scroll_pause_time)
 
-                # Calculate new scroll height and compare with last scroll height
-                new_height = browserDriver.execute_script("return document.body.scrollHeight")
+                # Calculate new scroll height and compare with last one
+                new_height = browserDriver.execute_script(
+                    "return document.body.scrollHeight")
                 if new_height == last_height:
                     # If heights are the same it will exit the function
                     break
@@ -169,43 +187,54 @@ class Page(object):
         # exception handling
         except Exception as exp:
             raise exp
-    
+
     def findInReq(self, division, attributes=None, multiple=True):
-        """[summary]
+        """
+        This function find HTML tags inside a BeautifulSoup class attribute.
 
         Args:
-            division (str): the html division to find in the soup ie.: "div", "li"
-            attributes ([type], optional): decorators to reduce the divs options. Defaults to None.
-            multiple (bool, optional): if the method finds multiple or just one occurrence of the HTML divs. Defaults to True.
+            division (str): HTML tag to find in soup ie.: "div", or
+            "li"
+            attributes (dict, optional): decorators to highlight the divs
+            options. Defaults to None.
+            multiple (bool, optional): True to find multiple tag occurrences in
+            the HTML, False if not. Default to True
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            answer: return the element or the list of elements of the soup, -1 if nothing something goes wrong
+            ans (bs-obj): filtered BeautifulSoup object
         """
         try:
 
-            if multiple == True:
+            if multiple is True:
 
-                answer = self.rsoup.findAll(division, attrs=attributes)
-                return answer
+                ans = self.sbody.findAll(division, attrs=attributes)
+                return ans
 
-            elif multiple == False:
+            elif multiple is False:
 
-                answer = self.rsoup.find(division, attrs=attributes)
-                return answer
+                ans = self.sbody.find(division, attrs=attributes)
+                return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
     def getBody(self, *args):
-        """ 
-        the method makes a request with the URL. if succesfull retunrs the REST status code of the page and updates the self.request attribute of page().
+        """
+        Request the URL. if succesfull returns the REST page's status code and
+        updates the BODY attribute of page() with the information collected it
 
         Args:
-            url (str, optional): url of the page I want to recover. Defaults to str().
+            url (str, optional): page url to recover. Defaults to empty str.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            int: the status code of the recovered page in the request status_code
+            ans (int): page's request status code (i.e: 200)
         """
         try:
 
@@ -213,34 +242,38 @@ class Page(object):
             if len(args) == 0:
 
                 self.request = requests.get(self.url)
-                self.rsoup = BeautifulSoup(self.request.content, self.dialect)
-                answer = self.request.status_code
+                self.sbody = BeautifulSoup(self.request.content, self.dialect)
+                ans = self.request.status_code
                 self.request.close()
-                return answer
+                return ans
 
             # requesting the page with the url parameter
             elif len(args) > 0:
 
                 self.url = args[0]
                 self.request = requests.get(self.url)
-                self.rsoup = BeautifulSoup(self.request.content, self.dialect)
-                answer = self.request.status_code
+                self.sbody = BeautifulSoup(self.request.content, self.dialect)
+                ans = self.request.status_code
                 self.request.close()
-                return answer
+                return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
     def getHeader(self, *args):
-        """ 
-        the method makes a request with the URL. if succesfull retunrs the REST status code of the page and updates the self.request attribute of page().
+        """
+        Request the URL. if succesfull returns the REST page's status code and
+        updates the HEAD attribute of page() with the information collected it
 
         Args:
-            url (str, optional): url of the page I want to recover. Defaults to str().
+            url (str, optional): page url to recover. Defaults to empty str.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
         Returns:
-            int: the status code of the recovered page in the request status_code
+            ans (int): page's request status code (i.e: 200)
         """
         try:
 
@@ -248,20 +281,20 @@ class Page(object):
             if len(args) == 0:
 
                 self.request = requests.get(self.url)
-                self.rsoup = BeautifulSoup(self.request.headers, self.dialect)
-                answer = self.request.status_code
+                self.shead = BeautifulSoup(self.request.headers, self.dialect)
+                ans = self.request.status_code
                 self.request.close()
-                return answer
+                return ans
 
             # requesting the page with the url parameter
             elif len(args) > 0:
 
                 self.url = args[0]
                 self.request = requests.get(self.url)
-                self.rsoup = BeautifulSoup(self.request.headers, self.dialect)
-                answer = self.request.status_code
+                self.shead = BeautifulSoup(self.request.headers, self.dialect)
+                ans = self.request.status_code
                 self.request.close()
-                return answer
+                return ans
 
         # exception handling
         except Exception as exp:

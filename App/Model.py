@@ -1,5 +1,5 @@
 """
-* Copyright 2020, Maestria de Humanidades Digitales, 
+* Copyright 2020, Maestria de Humanidades Digitales,
 * Universidad de Los Andes
 *
 * Developed for the Msc graduation project in Digital Humanities
@@ -22,28 +22,17 @@
 # native python libraries
 # ___________________________________________________
 # from Apps.Scrapy.controller import DEFAULT_FRAME_SCHEMA
-import re
 import os
-import sys
 import copy
-import json
-import urllib
-import datetime
-from urllib.parse import urlparse
 
 # ___________________________________________________
 # extension python libraries
 # ___________________________________________________
-import requests
-import validators
-from bs4 import BeautifulSoup as bs4
-import numpy as np
 import pandas as pd
 
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
-# from .Lib.Recovery.Content import Page as page
 import Config
 from Lib.Utils import Error as Error
 from Lib.Recovery.Content import Page
@@ -53,93 +42,99 @@ assert Config
 
 # default template for the element/paint dict in gallery
 DEFAULT_FRAME_SCHEMA = [
-    "ID",                   # unique ID for an element in the gallery, its also its folder name in the localdir
-    "TITLE",                # tittle of the element inside the gallery
-    "COLLECTION_URL",       # element (paint) URL/link recovered with ScrapyWEB
-    "DOWNLOAD_URL",         # direct image URL/link for the image in the gallery
-    "HAS_PICTURE",          # boolean data to identify if there is a picture file in the local folder, based on DOWNLOAD_URL
-    "DESCRIPTION",          # JSON cell with the description of the element in the gallery
-    "SEARCH_TAGS",          # JSON cell with the collection tags of the element in the gallery
-    "OBJ_DATA",             # JSON cell with the museum object data of the element in the gallery
-    "RELATED_WORKS",        # JSON cell with the related work text and URLs of the element in the gallery
-    "EXHIBITIONS",          # JSON cell with the list of the exhibitions were the element in the gallery has been displayed
-    "LITERATURE",           # JSON cell with the list of the literatire references for the gallery elements
+    # ID element in the gallery and local folder name
+    "ID",
+
+    # tittle of the element in the gallery
+    "TITLE",
+
+    # recovered element (paint) URL
+    "COLLECTION_URL",
+
+    # direct image URL/link for the image in the gallery
+    "DOWNLOAD_URL",
+
+    # boolean if there is a picture file in the local folder
+    "HAS_PICTURE",
+
+    # JSON with the description of the element
+    "DESCRIPTION",
+
+    # JSON with the collection tags of the element
+    "SEARCH_TAGS",
+
+    # JSON with the museum object data of the element
+    "OBJ_DATA",
+
+    # JSON with the related work text and URLs of the element
+    "RELATED_WORKS",
 ]
 
-# default number of paintings in the gallery
-DEFAULT_MAX_PAINTS = 10
 
 # -----------------------------------------------------
 # API for the scrapping the gallery of paintings
 # -----------------------------------------------------
 class Gallery(object):
     """
-    this class implement the gallery of the model, containing all its elements (ie.: painintgs)
-    contains all gallery data in memory and helps create the dataFrame for it.
+    this class implement the gallery of the model, containing all its elements
+    (ie.: painintgs) contains all gallery data in memory and helps create the
+    dataFrame for it.
     """
 
-    #___________________________________________
-    # class parameters
-    #___________________________________________
-    galleryWEB = str()
-    localGallery = str()
-    modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-    gallerySize = DEFAULT_MAX_PAINTS
-    currentPaint = 0
+    # =========================================
+    # class variables
+    # =========================================
+
+    webGallery = str()
+    galleryPath = str()
+    schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
     dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
 
     # =========================================
     # functions to create a new gallery
     # =========================================
-
     def __init__(self, *args, **kwargs):
         """
         creator of the class gallery()
 
         Args:
-            galleryWEB (str, optional): url of the page I want to recover. Defaults to str().
-            localGallery ([type]): [description]
-            modelStruct (list, optional): dictionary for the data template of the elements in the gallery.
-            gallerySize (int, optional): size of the gallery, len of the galleryList. Default to 10.
-            currentPaint (int, optional): index of the working element in gallery, usefull when a gallery is created with elements. Default to 0.
-            dataFrame (dataFrame, optional): element dataframe (ie.: paintings) in the gallery, you can pass an existing df to the creator. Default is empty
+            webGallery (str, optional): url of the page I want to recover.
+            Defaults to str().
+            galleryPath ([type]): [description]
+            schema (list, optional): dictionary for the data template of the
+            elements in the gallery.
+            dataFrame (dataFrame, optional): element dataframe (ie.: paintings)
+            in the gallery, you can pass an existing df to the creator. Default
+            is empty.
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            [Model]: return a new model object
+            Model (Model): return a new Model() object
         """
         try:
-            
-            # default creator
-            # not passing parameters in the creator
-            self.galleryWEB = str()
-            self.localGallery = str()
-            self.modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-            self.currentPaint = 0
-            self.gallerySize = DEFAULT_MAX_PAINTS
+
+            # default creator attributes
+            self.webGallery = str()
+            self.galleryPath = str()
+            self.schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
             self.dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
 
             # when arguments are pass as parameters
             if len(args) > 0:
-                i = 0
-                for i in range(int(len(args))):
+                for arg in args:
                     # URL of the remote gallery to scrap
-                    if i == 0:
-                        self.galleryWEB = args[i]
+                    if args.index(arg) == 0:
+                        self.webGallery = arg
 
                     # local dirpath to save the gallery CSV
-                    if i == 1:
-                        self.localGallery = args[i]
+                    if args.index(arg) == 1:
+                        self.galleryPath = arg
 
-                    # paintings dataframes containing the in memory data of the gallery
-                    if i == 2:
-                        self.dataFrame = args[i]
-
-                    # the current painting in the dataframe to process
-                    if i == 3:
-                        self.currentPaint = args[i]
+                    # dataframes containing the data of the gallery
+                    if args.index(arg) == 2:
+                        self.dataFrame = arg
 
             # if there are dict decrators in the creator
             if len(kwargs) > 0:
@@ -148,102 +143,107 @@ class Gallery(object):
 
                     # updating schema in the model
                     if key == "schema":
-                        self.modelStruct = copy.deepcopy(kwargs[key])
-
-                    # setting the max size of the gallery
-                    if key == "size":
-                        self.maxPaints = kwargs[key]
+                        self.schema = copy.deepcopy(kwargs[key])
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def createNewIndex(self, columns, data):
-        """this function creates a new dataframe in the model based on the columns names and new data.
+    def createNewIndex(self, cols, data):
+        """
+        creates a new dataframe in the model based on the columns
+        names and new data.
 
         Args:
-            columns (list): list of names of the columns you want to add in the dataframe
-            data (list:list or pandas/numpy matrix): data of each column you want to add in the dataframe
+            columns (list): list of names of the columns you want to add in the
+            dataframe
+            data (list:list or pandas/numpy matrix): data of each column you
+            want to add in the dataframe
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            [dataframe.info()]: return the pandas description of the new dataframe
+            ans (dataframe.info()): new pandas dataframe description
         """
         try:
-            self.dataFrame = pd.DataFrame(columns=self.modelStruct)
+            # self.schema = cols
+            self.dataFrame = pd.DataFrame(columns=self.schema)
 
-            for col, td in zip(columns, data):
+            for col, td in zip(cols, data):
 
                 self.dataFrame[col] = td
-            
-            answer = self.dataFrame.info()
-            return answer
+
+            ans = self.dataFrame.info()
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
     def updateData(self, column, data):
-        """this function updates a single column with new data
+        """
+        updates a single column with new data, the size of the data needs to be
+        the same as the existing records
 
         Args:
-            column (str): [description]
-            data ([type]): [description]
+            column (str): name of the column in the dataframe to update
+            data (list/np.array): dataframe of the data to update
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (dataframe.info()): updated pandas dataframe description
         """
         try:
             self.dataFrame[column] = data
-            answer = self.dataFrame.info()
-            return answer
+            ans = self.dataFrame.info()
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
     # =========================================
-    # consult functions 
+    # consult functions
     # =========================================
     def getData(self, column, *args, **kwargs):
-        """[summary]
+        """
+        gets the data from a given column name, returning a list
 
         Args:
-            column ([type]): [description]
+            column (str): name of the column in the dataframe to update
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (list): formated copy of the data in the dataframe
         """
         try:
 
-            answer = copy.deepcopy(self.dataFrame[column])
-            answer = list(answer)
-            return answer
+            ans = copy.deepcopy(self.dataFrame[column])
+            ans = list(ans)
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
     def checkGallery(self):
-        """[summary]
+        """
+        checks the state of the model's dataframe
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (dataframe.info()): pandas dataframe description
         """
         try:
-            answer = self.dataFrame.info()
-            return answer
+            ans = self.dataFrame.info()
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -253,8 +253,8 @@ class Gallery(object):
 
         try:
 
-            answer = list(self.dataFrame[column])
-            return answer
+            ans = list(self.dataFrame[column])
+            return ans
 
         except Exception as exp:
             raise exp
@@ -262,25 +262,26 @@ class Gallery(object):
     # =========================================
     # update functions
     # =========================================
-
     def updateIndex(self, column, data):
-        """[summary]
+        """
+        updates a single column according to its index/name in the dataframe
 
         Args:
-            column ([type]): [description]
-            data ([type]): [description]
+            column (str): column name in the dataframe
+            data (list): list with the updated data for the pandas dataframe,
+            needs to have the same size of the original
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            [type]: [description]
+            ans (dataframe.info()): pandas dataframe description
         """
         try:
 
             self.dataFrame[column] = data
-            answer = self.dataFrame.info()
-            return answer
+            ans = self.dataFrame.info()
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -291,11 +292,13 @@ class Gallery(object):
     # =========================================
 
     def saveGallery(self, fileName, dataFolder):
-        """[summary]
+        """
+        save the in memory dataframe into a CSV file with UTF-8 encoding
 
         Args:
-            fileName ([type]): [description]
-            dataFolder ([type]): [description]
+            fileName (str): file's name with .csv extension
+            dataFolder (file-object): valid dirpath str or an array with valid
+            folders.
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -311,11 +314,13 @@ class Gallery(object):
             raise exp
 
     def loadGallery(self, fileName, dataFolder):
-        """[summary]
+        """
+        loads the gallery from a CSV file in UTF-8 encoding
 
         Args:
-            fileName ([type]): [description]
-            dataFolder ([type]): [description]
+            fileName (str): file's name with .csv extension
+            dataFolder (file-object): valid dirpath str or an array with valid
+            folders.
 
         Raises:
             exp: raise a generic exception if something goes wrong
