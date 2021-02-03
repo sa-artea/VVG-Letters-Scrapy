@@ -509,7 +509,7 @@ class View(object):
                                         rwork_attrs,
                                         rwork_elem,
                                         multiple=True)
-
+                    print(rwork_data)
                     ans = gc.updateData(rwork_col, rwork_data)
                     print("=================== REPORT ===================")
                     print(ans)

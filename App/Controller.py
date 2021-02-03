@@ -34,6 +34,7 @@ import time
 # extension python libraries
 # ___________________________________________________
 from urllib.parse import urlparse
+import unicodedata
 
 # ___________________________________________________
 # developed python libraries
@@ -479,7 +480,6 @@ class Controller (object):
             # get the url list from the dataframe in the model
             ans = list()
             urls = self.gallery.getData(coln)
-            i = 0
 
             for url in urls:
                 # scraping elements each gallery page
@@ -490,8 +490,6 @@ class Controller (object):
                 # compose answer
                 ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
-                i = i + 1
-                # print("# " + str(i) + ": " + str(url))
 
             # returning answer
             return ans
@@ -527,15 +525,19 @@ class Controller (object):
             urls = self.gallery.getData(coln)
 
             for url in urls:
+
                 # scraping elements each gallery page
                 tempSoup = self.scrapElement(url, div, attrs, **kwargs)
 
-                # default empty dict to return
+                # # default empty dict to return
                 temp = dict()
                 # checking if there is any related work to process
+
                 if len(tempSoup) > 0:
+
                     # extracting the search tags from the soup
                     temp = self.getRelatedWork(tempSoup, elem, rootUrl)
+
                 # compose answer
                 ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
@@ -659,6 +661,11 @@ class Controller (object):
                         for tag in tags:
                             # cleaning data
                             key = str(tag.string)
+                            key = unicodedata.normalize('NFD', key)
+                            key = key.encode('ascii', 'ignore')
+                            key = key.decode("utf-8")
+                            key = str(key)
+                            key = re.sub(r'[^\w\s]', '', key)
                             url = tag.get("href")
 
                             # reconstructing all the url from the page
@@ -714,6 +721,11 @@ class Controller (object):
 
                         # cleaning data for dictionary
                         key = str(key.string)
+                        key = unicodedata.normalize('NFD', key)
+                        key = key.encode('ascii', 'ignore')
+                        key = key.decode("utf-8")
+                        key = str(key)
+                        key = re.sub(r'[^\w\s]', '', key)
                         value = str(value.string)
 
                         # temp dict for complete answer
@@ -764,6 +776,11 @@ class Controller (object):
                 for rw in relworks:
                     # cleaning data and getting all keys and values
                     key = str(rw.find("span").string)
+                    key = unicodedata.normalize('NFD', key)
+                    key = key.encode('ascii', 'ignore')
+                    key = key.decode("utf-8")
+                    key = str(key)
+                    key = re.sub(r'[^\w\s]', '', key)
                     url = rw.find("a").get("href")
                     value = str(urllib.parse.urljoin(rootUrl, url))
 
