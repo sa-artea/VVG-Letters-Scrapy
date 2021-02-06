@@ -111,6 +111,9 @@ VINCENT_DF_COLS = [
 
     # JSON with the related work text and URLs of the element
     "RELATED_WORKS",
+
+    # numpy RGW matrix created from original image
+    "IMG_DATA",
 ]
 
 # ______________________________________________________
@@ -201,6 +204,9 @@ rwork_attrs = {
 }
 rwork_elem = "article"
 
+# img file extension to work in the gallery elements
+imgf = ".jpg"
+
 # ___________________________________________________
 #  Functions to print webpage recovered data
 # ___________________________________________________
@@ -210,6 +216,7 @@ haspic_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("HAS_PICTURE")]
 search_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("SEARCH_TAGS")]
 objd_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("OBJ_DATA")]
 rwork_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("RELATED_WORKS")]
+img_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_DATA")]
 
 # column names for creating the JSON in the folders
 json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
@@ -295,8 +302,10 @@ class View(object):
             print("8) Get Gallery's elements search-tags (SEARCH_TAGS)")
             print("9) Get Gallery's elements collection-data (OBJ_DATA)")
             print("10) Get Gallery's elements related work (RELATED_WORKS)")
-            print("11) Export DataFrame to JSON Files (from CSV to Local dir)")
-            print("0) EXIT (last option)")  # finish program
+            print("11) Transform images into matrix (IMG_DATA)")
+            print("12) Export DataFrame to JSON Files (from CSV to Local dir)")
+            print("0) EXIT (last option)")
+            # finish program
 
         # exception handling
         except Exception as exp:
@@ -509,12 +518,28 @@ class View(object):
                                         rwork_attrs,
                                         rwork_elem,
                                         multiple=True)
-                    print(rwork_data)
+
                     ans = gc.updateData(rwork_col, rwork_data)
                     print("=================== REPORT ===================")
                     print(ans)
 
                 elif int(inputs) == 11:
+                    print("Transforming local images into dataframe matrix")
+                    print("...\n")
+
+                    img_data = gc.exportImages(
+                                    id_col,
+                                    haspic_col,
+                                    imgf,
+                                    galleryFolder,
+                                    sourceFolder,
+                                    paintsFolder)
+
+                    ans = gc.updateData(img_col, img_data)
+                    print("=================== REPORT ===================")
+                    print(ans)
+
+                elif int(inputs) == 12:
                     print("Exporting pandas-df to JSON in local gallery")
                     print("...\n")
 
@@ -525,10 +550,10 @@ class View(object):
                     # - related work
                     for temp_cname in json_index_cols:
                         gc.exportToJSON(
-                                gc.galleryPath,
-                                id_col,
-                                temp_cname,
-                                temp_cname.lower())
+                            gc.galleryPath,
+                            id_col,
+                            temp_cname,
+                            temp_cname.lower())
 
                     ans = gc.checkGallery()
                     print("=================== REPORT ===================")

@@ -29,6 +29,7 @@ import copy
 # extension python libraries
 # ___________________________________________________
 import pandas as pd
+import cv2
 
 # ___________________________________________________
 # developed python libraries
@@ -68,6 +69,9 @@ DEFAULT_FRAME_SCHEMA = [
 
     # JSON with the related work text and URLs of the element
     "RELATED_WORKS",
+
+    # numpy RGW matrix created from original image
+    "IMG_DATA",
 ]
 
 
@@ -330,6 +334,34 @@ class Gallery(object):
             galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
             self.dataFrame = pd.read_csv(
                 galleryFilePath, sep=",", encoding="utf-8", engine="python")
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def imgToData(self, fname, fn, *args, **kwargs):
+        """
+        open the image file and creates an unaltered numpyarray from it
+
+        Args:
+            fname (str): image file root folder location
+            fn (str): image's file name with extension ie.: .jpg
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (np.array): image's numpy data matrix
+        """
+        try:
+            ans = None
+            # joining folder name and filename
+            imgfn = os.path.join(fname, fn)
+            # reading all data from image
+            ans = cv2.imread(imgfn, cv2.IMREAD_UNCHANGED)
+            ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:

@@ -35,6 +35,7 @@ import time
 # ___________________________________________________
 from urllib.parse import urlparse
 import unicodedata
+import numpy as np
 
 # ___________________________________________________
 # developed python libraries
@@ -80,6 +81,9 @@ DEFAULT_FRAME_SCHEMA = [
 
     # JSON with the related work text and URLs of the element
     "RELATED_WORKS",
+
+    # numpy RGW matrix created from original image
+    "IMG_DATA",
 ]
 
 # defaul waiting time for scrapping data, this helps not to get blocked
@@ -609,10 +613,9 @@ class Controller (object):
             exp: raise a generic exception if something goes wrong
         """
         try:
-
+            # working variables
             idData = self.getData(indexCol)
             expData = self.getData(expCol)
-            # args.append(fname)
 
             for tindex, tdata in zip(idData, expData):
 
@@ -678,6 +681,77 @@ class Controller (object):
             ans = self.toJSON(ans)
 
             # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def exportImages(self, indexCol, hasImgCol, imgf, *args, **kwargs):
+        """
+        reads the gallery's element id folder, get the image file and  export
+        them an RGB to a numpy matrix
+
+        Args:
+            indexCol ([type]): [description]
+            imgCol ([type]): [description]
+            galleryF ([type]): [description]
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): the list of the related work recovered from the
+            gallery elements
+        """
+
+        try:
+            # working variables
+            ans = list()
+            indexData = self.getData(indexCol)
+            # boolean for img existance
+            hasImgData = self.getData(hasImgCol)
+            rootDir = self.galleryPath
+
+            # iterating 2 list at the same time
+            for tid in indexData:
+
+                timgfn = os.path.join(rootDir, tid)
+
+                # recovering image
+                timg = self.getImage(timgfn, imgf, *args, **kwargs)
+                ans.append(timg)
+
+            # return answer list
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getImage(self, fname, imgf, *args, **kwargs):
+
+        try:
+            # default answer
+            ans = None
+            flist = os.listdir(fname)
+            fn = ""
+
+            # finding the propper file
+            for tf in flist:
+                if tf.endswith(imgf):
+                    fn = tf
+
+            # if the file exists
+            if fn != "":
+                ans = self.gallery.imgToData(fname, fn, *args, **kwargs)
+
+            elif fn == "":
+                ans = np.zeros([512, 512, 4])
+
+            print(ans.shape)
+            ans = copy.deepcopy(ans)
+
             return ans
 
         # exception handling
