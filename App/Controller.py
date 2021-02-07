@@ -687,15 +687,16 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def exportImages(self, indexCol, hasImgCol, imgf, *args, **kwargs):
+    def exportImages(self, indexCol, imgf, *args, **kwargs):
         """
         reads the gallery's element id folder, get the image file and  export
-        them an RGB to a numpy matrix
+        them an RGBA to a numpy matrix
 
         Args:
-            indexCol ([type]): [description]
-            imgCol ([type]): [description]
-            galleryF ([type]): [description]
+            indexCol (str): name of the column in the dataframe with the
+            gallery index with unique IDs for each elements (same as the local
+            folder's names)
+            imgf (str): relevant image's extension to process
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -704,13 +705,10 @@ class Controller (object):
             ans (list): the list of the related work recovered from the
             gallery elements
         """
-
         try:
             # working variables
             ans = list()
             indexData = self.getData(indexCol)
-            # boolean for img existance
-            hasImgData = self.getData(hasImgCol)
             rootDir = self.galleryPath
 
             # iterating 2 list at the same time
@@ -730,6 +728,19 @@ class Controller (object):
             raise exp
 
     def getImage(self, fname, imgf, *args, **kwargs):
+        """
+        get the image using a folder dirpath and the name of the file
+
+        Args:
+            fname (str): Gallery's root dirpath in local drive
+            imgf (str): image's file format, ie.: ".jpg"
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (np.array): numpy matrix with the image's RGBA data
+        """
 
         try:
             # default answer
@@ -746,10 +757,10 @@ class Controller (object):
             if fn != "":
                 ans = self.gallery.imgToData(fname, fn, *args, **kwargs)
 
-            elif fn == "":
-                ans = np.zeros([512, 512, 4])
+            # elif fn == "":
+            #     ans = np.zeros([512, 512, 4])
 
-            print(ans.shape)
+            # print(ans.shape)
             ans = copy.deepcopy(ans)
 
             return ans
