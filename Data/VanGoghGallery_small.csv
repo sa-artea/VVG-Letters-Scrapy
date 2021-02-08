@@ -3,7 +3,8 @@ s0004V1962r,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0004V1962r,h
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, May 1885"",
     ""details"": ""oil on canvas, 43.5 cm x 36.2 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -73,7 +74,9 @@ s0006V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0006V1962,htt
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, April 1885"",
     ""details"": ""oil on canvas, 43.2 cm x 30.0 cm x 2.2 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""This woman is Gordina de Groot, who posed with her family for The Potato Eaters. To prepare for that painting, Van Gogh made over 40 studies of farmworkers' heads, including this one. He hoped this would make him a better figure painter.NoneVan Gogh wanted to portray peasants as people of a special kind, who had been working the land for centuries. 'They remind one of the earth, sometimes appear to have been modelled out of it,' Vincent wrote to his brother Theo.NoneThis work was a study in colour. Van Gogh concentrated on the complementary colours red and green."",
+    ""complementary colours"": ""https://www.vangoghmuseum.nl/en/stories/looking-for-contrast#3""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -149,7 +152,8 @@ s0010V1962,Portrait of an Old Woman,https://vangoghmuseum.nl/en/collection/s0010
     ""title"": ""Portrait of an Old Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
     ""details"": ""oil on canvas, 50.5 cm x 39.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""The old woman's grey hair sticks out from under her white cap. Van Gogh liked bonnets like this, which made a fine contrast with dark clothing and backgrounds. Using rough brushstrokes, Van Gogh suggested the shadows in her face.NoneNoneIn Antwerp (BE), Van Gogh wanted to master portrait painting. He heard from local art dealers that women's heads sold better than men's. From that time on, he focused on female models.""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Antwerp"": ""https://vangoghmuseum.nl/en/collection?Place=Antwerp"",
@@ -218,7 +222,9 @@ s0056V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0056V1962,http
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 46.0 cm x 38.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Van Gogh was thorough in everything he did. So when he decided to practise painting plaster models of classical sculptures, he immediately produced a whole series. He painted this torso of Venus five times, in each case from a different angle.NoneNoneThis time he has turned the model to face away from him. He has used a lot of paint and followed the curves of the body with his brush."",
+    ""this torso of Venus"": ""https://www.vangoghmuseum.nl/en/collection/s0199V1962""
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -296,7 +302,9 @@ s0058V1962,Woman with a Mourning Shawl,https://vangoghmuseum.nl/en/collection/s0
     ""title"": ""Woman with a Mourning Shawl"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
     ""details"": ""oil on canvas, 45.5 cm x 33.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Here, Van Gogh was practising painting strong contrasts between light and dark, using only a few colours  ochre for hands and face and green for background and clothing.NoneNoneThe woman is wearing a falie or mourning shawl. If you look carefully, you can just spot a white bonnet peeping out from under it. In the spring and summer of 1885, Van Gogh drew and painted other women wearing shawls over their heads in this way. They were worn at funerals or when in mourning."",
+    ""drew"": ""https://www.vangoghmuseum.nl/en/collection/d0024V1962""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -366,7 +374,8 @@ s0059V1962,Head of a Prostitute,https://vangoghmuseum.nl/en/collection/s0059V196
     ""title"": ""Head of a Prostitute"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
     ""details"": ""oil on canvas, 35.2 cm x 24.4 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""By choosing this contemporary subject, Van Gogh presented himself as a modern painter of city life. That included the margins of society and the prostitutes who lived there.NoneNoneThis woman may not look like a prostitute at first glance. But in the nineteenth century, loose hair was a sign of loose morals. Van Gogh used rough brushstrokes to paint her face. He succeeded in giving her features volume and life.""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Antwerp"": ""https://vangoghmuseum.nl/en/collection?Place=Antwerp"",
@@ -438,7 +447,9 @@ s0061V1962,Portrait of an Old Man,https://vangoghmuseum.nl/en/collection/s0061V1
     ""title"": ""Portrait of an Old Man"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
     ""details"": ""oil on canvas, 44.4 cm x 33.7 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Van Gogh painted this man in Antwerp (BE), where he lived from late November 1885 to late February 1886. He has impressive features, as Van Gogh wrote to his brother Theo: 'I have an appointment for tomorrow with a splendid old man  will he come???'NoneNoneVan Gogh had a hard time finding suitable models. Besides, models were expensive. But this man did show up to pose for him. Van Gogh thought that the man's full beard made him look like the author Victor Hugo. Using rough but well-placed brushstrokes, he made a compelling portrait."",
+    ""Van Gogh wrote"": ""http://vangoghletters.org/vg/letters/let546/letter.html""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Antwerp"": ""https://vangoghmuseum.nl/en/collection?Place=Antwerp"",
@@ -509,7 +520,8 @@ s0062V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0062V1962,htt
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March 1885"",
     ""details"": ""oil on canvas on triplex, 42.2 cm x 34.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -585,7 +597,8 @@ s0068V1962r,Head of a Man,https://vangoghmuseum.nl/en/collection/s0068V1962r,htt
     ""title"": ""Head of a Man"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
     ""details"": ""oil on canvas, 42.5 cm x 32.1 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""To practise portraying peasant types, Van Gogh aimed to paint at least 50 different heads. He began the project in October 1884, on the advice of an artist friend. This Head of a Man is one of the last in the series.NoneNoneThe name and identity of the man are unknown. Van Goghs letters tell us little about his models. We only know that he found them in Nuenen, where he had returned to live temporarily with his parents.""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -656,7 +669,8 @@ s0069V1962,Head of a Man,https://vangoghmuseum.nl/en/collection/s0069V1962,https
     ""on-view"": ""None"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, November 1884-February 1885"",
     ""details"": ""oil on canvas, 37.7 cm x 29.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1884"": ""https://vangoghmuseum.nl/en/collection?Date=1884"",
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
@@ -733,7 +747,8 @@ s0072V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0072V1962,htt
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, November 1884-January 1885"",
     ""details"": ""oil on canvas, 42.0 cm x 33.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Van Gogh hoped one day to become a figure painter. So he was constantly drawing and painting studies of heads. He made portraits of countless men and women who worked on farms around Nuenen (NL). To him, these were not portraits of individuals but depictions of types. In his eyes, they represented the hard life of farm workers.NoneNoneAbove this woman's left eye (on the right of the painting) is a black dot: her pupil. This bit of paint shifted after the painting was done and ended up on her eyelid.""
 }","{
     ""1884"": ""https://vangoghmuseum.nl/en/collection?Date=1884"",
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
@@ -811,7 +826,8 @@ s0075V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collectio
     ""title"": ""Plaster Cast of a Woman's Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, February-March 1887"",
     ""details"": ""oil on cardboard, 32.9 cm x 24.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -886,7 +902,8 @@ s0084V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0084V1962,htt
     ""on-view"": ""None"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
     ""details"": ""oil on canvas, 43.8 cm x 30.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Van Gogh painted this countrywoman in Nuenen, where he had returned to live with his parents. She posed for him, as did many other villagers. He regarded the paintings he made of them not as portraits, but as study heads. He passionately wanted to become a good figure painter and he regarded this activity as an essential preparatory exercise.NoneNoneHe aimed to produce a total of 50 such studies, of which 47 have survived. The Van Gogh Museum has 10 of them in its collection.""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -962,7 +979,9 @@ s0089V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0089V1962,http
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 46.4 cm x 38.1 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Practice makes perfect: in June 1886, van Gogh painted this study of a plaster model of a classical sculpture. It was part of a whole series of such studies. This standing torso of Venus must have been his favourite model: he made no fewer than five studies of it. Two of them are now in the collection of the Van Gogh Museum.NoneNoneVan Gogh painted the background deep blue. He thought there was nothing so fine as [cobalt blue] for putting space around things  in other words, for creating an illusion of depth."",
+    ""standing torso of Venus"": ""https://www.vangoghmuseum.nl/en/collection/s0201V1962""
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1040,7 +1059,8 @@ s0097V1962r,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0097V1962r,h
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
     ""details"": ""oil on canvas, 42.2 cm x 34.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""Did Van Gogh care if his models were good-looking or not? He chose this woman for her appearance, but not for the reason you might expect.NoneNoneHe was looking specifically for country people, both men and women, who had coarse, flat faces with low foreheads and thick lips. He wanted to paint 50 of them as what he called study heads. Their facial features were intended to show that they lived in close communion with nature and the land they farmed. Van Goghs interest in physiognomy may seem odd to us now, but in his own time it was not unusual.""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -1110,7 +1130,8 @@ s0101V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0101V1962,http
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 35.3 cm x 27.1 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1188,7 +1209,8 @@ s0102V1962,Kneeling Ecorché,https://vangoghmuseum.nl/en/collection/s0102V1962,h
     ""title"": ""Kneeling Ecorché"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 35.2 cm x 26.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""An ecorche is a figure shown without skin, so that all the muscles and tendons are visible. Such figures are used as aids in studying anatomy. Van Gogh had this type of plaster model, which he depicted here. He was then studying at the Antwerp art academy.NoneNoneThe painting is an exercise in suggesting volume. In traditional painting, volume is created through the play of light and shadow. But here Van Gogh tried to achieve the same effect through the thickness of his paint and the direction of his brushstrokes.""
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1266,7 +1288,8 @@ s0103V1962,Male Torso,https://vangoghmuseum.nl/en/collection/s0103V1962,https://
     ""title"": ""Male Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 35.0 cm x 27.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1345,7 +1368,8 @@ s0132V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0132V1962,htt
     ""on-view"": ""None"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March 1885"",
     ""details"": ""oil on canvas, 38.8 cm x 31.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -1418,7 +1442,10 @@ s0139V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0139V1962,htt
     ""on-view"": ""None"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March 1885"",
     ""details"": ""oil on canvas, 42.7 cm x 33.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""In the winter of 1884-1885, Van Gogh made a large series of paintings in Nuenen (NL): studies of farm workers' heads. Peasant women in Brabant really did wear white headdresses in those days. These intrigued Van Gogh because of the contrast with their faces, which remained partly in shadow. 'The heads of these women here with the white caps  its difficult  but its so eternally beautiful', he wrote. At first glance, this woman's headdress looks white, but if you look more carefully you can see that Van Gogh used a variety of colours.NoneNoneOut of all the study heads from Nuenen, this woman is the only one whose name is known: Gordina de Groot. She is also at the table in The Potato Eaters."",
+    ""he wrote"": ""http://www.vangoghletters.org/vg/letters/let478/letter.html"",
+    ""The Potato Eaters"": ""https://www.vangoghmuseum.nl/en/collection/s0005V1962""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Nuenen"": ""https://vangoghmuseum.nl/en/collection?Place=Nuenen"",
@@ -1495,7 +1522,8 @@ s0143V1962,Portrait of a Prostitute,https://vangoghmuseum.nl/en/collection/s0143
     ""title"": ""Portrait of a Prostitute"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
     ""details"": ""oil on canvas, 46.3 cm x 38.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""With her hair in a bun and her jewellery, this woman looks perfectly respectable to us. But to Van Gogh's contemporaries, her low-cut dress and eye makeup told a different story. Van Gogh painted this woman shortly after moving to Antwerp (BE). He needed models so that he could practise portrait painting. Only 'ladies of easy virtue' could be persuaded to pose for a painter they had never met before.NoneNoneVan Gogh painted this portrait in a single sitting. For the glittering earring, Van Gogh used a thick blob of pinkish-white paint that later fell off.""
 }","{
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
     ""Antwerp"": ""https://vangoghmuseum.nl/en/collection?Place=Antwerp"",
@@ -1566,7 +1594,8 @@ s0199V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collectio
     ""title"": ""Plaster Cast of a Woman's Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, February-March 1887"",
     ""details"": ""oil on canvas, 40.8 cm x 27.1 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""The more you zoom in, the better you can see that Van Gogh used a large network of thin brushstrokes to suggest the forms of the human body. It's almost as if he were drawing in thin paint. You can also see the contrasting colours: green, orange-red and purple. But if you look from a distance (or through your eyelashes), all those colours melt into a warm grey.NoneNoneVan Gogh based the female torso in this painting on one of his favourite plaster casts: a small copy of a classical sculpture of Venus.""
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1640,7 +1669,8 @@ s0200V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collectio
     ""title"": ""Plaster Cast of a Woman's Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, February-March 1887"",
     ""details"": ""oil on canvas, 41.0 cm x 32.7 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1714,7 +1744,10 @@ s0201V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0201V1962,http
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 35.3 cm x 27.2 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""This painting is one of a series of studies of plaster models. Van Gogh owned around eleven such models of sculptures from classical antiquity or the Renaissance. Among them was this standing torso of Venus, which he painted a number of times.NoneNoneAmong other things, Van Gogh was experimenting with the effect of different kinds of background. Here, he has placed his brushstrokes at right-angles to each other, so that they look rather like wickerwork. He would use this technique more than once in his later work."",
+    ""which he painted a number of times"": ""https://www.vangoghmuseum.nl/en/collection/s0089V1962"",
+    ""He would use this technique more than once in his later work"": ""https://www.vangoghmuseum.nl/en/collection/s0032V1962""
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1792,7 +1825,8 @@ s0202V1962,Horse,https://vangoghmuseum.nl/en/collection/s0202V1962,https://vango
     ""title"": ""Horse"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
     ""details"": ""oil on cardboard, 33.1 cm x 40.9 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": ""For this study in oils, Van Gogh used a small plaster model of a horse. He was then studying at the Antwerp art academy. There drawing was taught with the help of models like these, but painting had to be practiced at home. He painted this little horse on cardboard instead of canvas, because that was much cheaper.NoneNoneThe model was preserved by the Van Gogh family through the years. It is now part of the Van Gogh Museum collection.""
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -1869,7 +1903,8 @@ s0343V1966,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0343V1966,htt
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, November 1884-May 1885"",
     ""details"": ""oil on canvas on panel, 47.8 cm x 34.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1884"": ""https://vangoghmuseum.nl/en/collection?Date=1884"",
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
@@ -1939,7 +1974,8 @@ d0012V1962r,"Studies of a Seated Girl, L'Ecorché and Venus",https://vangoghmuse
     ""title"": ""Studies of a Seated Girl, L'Ecorché and Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 47.5 cm x 62.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2010,7 +2046,8 @@ d0012V1962v,Seated Girl and Venus,https://vangoghmuseum.nl/en/collection/d0012V1
     ""title"": ""Seated Girl and Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 47.5 cm x 62.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2081,7 +2118,8 @@ d0013V1962,Idol,https://vangoghmuseum.nl/en/collection/d0013V1962,https://vangog
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, chalk, on paper, 47.7 cm x 30.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2152,7 +2190,8 @@ d0014V1962r,Idol,https://vangoghmuseum.nl/en/collection/d0014V1962r,https://vang
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, chalk, on paper, 47.7 cm x 31.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2223,7 +2262,8 @@ d0014V1962v,Idol,https://vangoghmuseum.nl/en/collection/d0014V1962v,https://vang
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, chalk, on paper, 47.7 cm x 31.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2294,7 +2334,8 @@ d0015V1962r,Idol,https://vangoghmuseum.nl/en/collection/d0015V1962r,https://vang
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, chalk, on paper, 47.5 cm x 30.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2365,7 +2406,8 @@ d0015V1962v,Idol,https://vangoghmuseum.nl/en/collection/d0015V1962v,https://vang
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, chalk, on paper, 47.5 cm x 30.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2436,7 +2478,8 @@ d0031V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0031V1962v,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, chalk, on paper, 31.4 cm x 47.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2507,7 +2550,8 @@ d0034V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0034V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk, lithographic crayon, on paper, 32.2 cm x 24.9 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2578,7 +2622,8 @@ d0036V1962r,Venus in a Top Hat,https://vangoghmuseum.nl/en/collection/d0036V1962
     ""title"": ""Venus in a Top Hat"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 38.3 cm x 19.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2649,7 +2694,8 @@ d0036V1962v,A Woman's Legs,https://vangoghmuseum.nl/en/collection/d0036V1962v,ht
     ""title"": ""A Woman's Legs"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 19.8 cm x 38.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -2719,7 +2765,8 @@ d0056V1962r,Arm,https://vangoghmuseum.nl/en/collection/d0056V1962r,https://vango
     ""title"": ""Arm"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, December 1884-May 1885"",
     ""details"": ""chalk on paper, 20.8 cm x 34.4 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1884"": ""https://vangoghmuseum.nl/en/collection?Date=1884"",
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
@@ -2789,7 +2836,8 @@ d0056V1962v,Arm,https://vangoghmuseum.nl/en/collection/d0056V1962v,https://vango
     ""title"": ""Arm"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, December 1884-May 1885"",
     ""details"": ""chalk on paper, 20.8 cm x 34.4 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1884"": ""https://vangoghmuseum.nl/en/collection?Date=1884"",
     ""1885"": ""https://vangoghmuseum.nl/en/collection?Date=1885"",
@@ -2859,7 +2907,8 @@ d0062V1962,Standing and Sitting Male Nude (after Bargue),https://vangoghmuseum.n
     ""title"": ""Standing and Sitting Male Nude (after Bargue)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Auvers-sur-Oise, June 1890"",
     ""details"": ""pencil on paper, 44.6 cm x 54.6 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1890"": ""https://vangoghmuseum.nl/en/collection?Date=1890"",
     ""AuverssurOise"": ""https://vangoghmuseum.nl/en/collection?Place=Auvers-sur-Oise"",
@@ -2929,7 +2978,8 @@ d0136V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0136V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk on paper, 31.7 cm x 24.6 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3000,7 +3050,8 @@ d0136V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0136V1962v,,F
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk on paper, 31.7 cm x 24.6 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3071,7 +3122,8 @@ d0137V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0137V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk on paper, 32.1 cm x 24.6 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3142,7 +3194,8 @@ d0137V1962v,Torso of Venus and a Landscape,https://vangoghmuseum.nl/en/collectio
     ""title"": ""Torso of Venus and a Landscape"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk, pen and ink, on paper, 32.1 cm x 24.6 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3214,7 +3267,8 @@ d0138V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0138V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk on paper, 32.2 cm x 24.6 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3285,7 +3339,8 @@ d0140V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0140V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
     ""details"": ""chalk, pencil, on paper, 20.8 cm x 13.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3356,7 +3411,8 @@ d0153V1970,Apartment Blocks and Miscellaneous Studies,https://vangoghmuseum.nl/e
     ""title"": ""Apartment Blocks and Miscellaneous Studies"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June-September 1887"",
     ""details"": ""pencil on paper, 29.1 cm x 46.0 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1887"": ""https://vangoghmuseum.nl/en/collection?Date=1887"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3427,7 +3483,8 @@ d0158V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0158V1962,http
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal, pencil, on paper, 48.9 cm x 31.8 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3498,7 +3555,8 @@ d0159V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0159V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 47.5 cm x 31.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3569,7 +3627,8 @@ d0159V1962v,Venus,https://vangoghmuseum.nl/en/collection/d0159V1962v,https://van
     ""title"": ""Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""pencil on paper, 47.5 cm x 31.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3640,7 +3699,8 @@ d0160V1962v,Idol and Sketches of Venus,https://vangoghmuseum.nl/en/collection/d0
     ""title"": ""Idol and Sketches of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 47.3 cm x 35.2 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3711,7 +3771,8 @@ d0180V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0180V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 61.1 cm x 45.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3782,7 +3843,8 @@ d0180V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0180V1962v,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 61.1 cm x 45.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -3853,7 +3915,8 @@ d0190V1962r,Standing Male Nude and Sitting Figure (after Bargue),https://vangogh
     ""title"": ""Standing Male Nude and Sitting Figure (after Bargue)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Auvers-sur-Oise, June 1890"",
     ""details"": ""pencil on paper, 44.3 cm x 27.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1890"": ""https://vangoghmuseum.nl/en/collection?Date=1890"",
     ""AuverssurOise"": ""https://vangoghmuseum.nl/en/collection?Place=Auvers-sur-Oise"",
@@ -3922,7 +3985,8 @@ d0212V1962v,Sitting Male Nude (after Bargue),https://vangoghmuseum.nl/en/collect
     ""title"": ""Sitting Male Nude (after Bargue)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Auvers-sur-Oise, June 1890"",
     ""details"": ""pencil on paper, 43.7 cm x 26.9 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1890"": ""https://vangoghmuseum.nl/en/collection?Date=1890"",
     ""AuverssurOise"": ""https://vangoghmuseum.nl/en/collection?Place=Auvers-sur-Oise"",
@@ -3991,7 +4055,8 @@ d0303V1972v,Fragment of a Venus,https://vangoghmuseum.nl/en/collection/d0303V197
     ""title"": ""Fragment of a Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 26.6 cm x 22.1 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -4061,7 +4126,8 @@ d0399V1962,Venus,https://vangoghmuseum.nl/en/collection/d0399V1962,https://vango
     ""title"": ""Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""charcoal (?), chalk, on paper, 50.9 cm x 39.7 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -4132,7 +4198,8 @@ d0401V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0401V1962,http
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 43.7 cm x 31.3 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -4203,7 +4270,8 @@ d0402V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0402V1962r,ht
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 47.6 cm x 31.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -4274,7 +4342,8 @@ d0402V1962v,Venus de Milo,https://vangoghmuseum.nl/en/collection/d0402V1962v,htt
     ""title"": ""Venus de Milo"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
     ""details"": ""chalk on paper, 47.6 cm x 31.5 cm"",
-    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)""
+    ""credit"": ""Credits (obliged to state): Van Gogh Museum, Amsterdam (Vincent van Gogh Foundation)"",
+    ""section"": """"
 }","{
     ""1886"": ""https://vangoghmuseum.nl/en/collection?Date=1886"",
     ""Paris"": ""https://vangoghmuseum.nl/en/collection?Place=Paris"",
@@ -4344,7 +4413,8 @@ d1125S2005,The Daughter of Jacob Meyer (after Bargue after Holbein),https://vang
     ""title"": ""The Daughter of Jacob Meyer (after Bargue after Holbein)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Brussels, October 1880-April 1881"",
     ""details"": ""pencil on paper, 42.6 cm x 30.5 cm"",
-    ""credit"": ""Credits: Kröller Muller Museum, Otterlo and Van Gogh Museum, Amsterdam (purchased with support from the BankGiro Loterij)""
+    ""credit"": ""Credits: Kroller Muller Museum, Otterlo and Van Gogh Museum, Amsterdam (purchased with support from the BankGiro Loterij)"",
+    ""section"": """"
 }","{
     ""1871  1880"": ""https://vangoghmuseum.nl/en/collection?Date=1871 - 1880"",
     ""1881"": ""https://vangoghmuseum.nl/en/collection?Date=1881"",

@@ -35,7 +35,6 @@ import time
 # ___________________________________________________
 from urllib.parse import urlparse
 import unicodedata
-import numpy as np
 
 # ___________________________________________________
 # developed python libraries
@@ -348,7 +347,8 @@ class Controller (object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (bs-obj): div and attrs filtered beatifulsoup object
+            ans (list): list with JSON objects collecting the elements
+            descriptions
         """
         try:
 
@@ -356,7 +356,6 @@ class Controller (object):
             ans = list()
 
             urls = self.gallery.getData(coln)
-            i = 0
 
             for url in urls:
 
@@ -366,7 +365,6 @@ class Controller (object):
                 # compose answer
                 ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
-                i = i + 1
 
             # returning answer
             return ans
@@ -664,11 +662,11 @@ class Controller (object):
                         for tag in tags:
                             # cleaning data
                             key = str(tag.string)
-                            key = unicodedata.normalize('NFD', key)
-                            key = key.encode('ascii', 'ignore')
+                            key = unicodedata.normalize("NFD", key)
+                            key = key.encode("ascii", "ignore")
                             key = key.decode("utf-8")
                             key = str(key)
-                            key = re.sub(r'[^\w\s]', '', key)
+                            key = re.sub(r"[^\w\s]", "", key)
                             url = tag.get("href")
 
                             # reconstructing all the url from the page
@@ -760,9 +758,8 @@ class Controller (object):
             # elif fn == "":
             #     ans = np.zeros([512, 512, 4])
 
-            # print(ans.shape)
+            # returning answer
             ans = copy.deepcopy(ans)
-
             return ans
 
         # exception handling
@@ -810,8 +807,12 @@ class Controller (object):
                         key = key.encode('ascii', 'ignore')
                         key = key.decode("utf-8")
                         key = str(key)
-                        key = re.sub(r'[^\w\s]', '', key)
+                        key = re.sub(r"[^\w\s]", "", key)
+                        # re.sub('[^A-Za-z0-9]+', "", mystring)
                         value = str(value.string)
+                        value = value.encode('ascii', 'ignore')
+                        value = value.decode("utf-8")
+                        value = str(value)
 
                         # temp dict for complete answer
                         td = {key: value}
@@ -865,7 +866,7 @@ class Controller (object):
                     key = key.encode('ascii', 'ignore')
                     key = key.decode("utf-8")
                     key = str(key)
-                    key = re.sub(r'[^\w\s]', '', key)
+                    key = re.sub(r"[^\w\s]", "", key)
                     url = rw.find("a").get("href")
                     value = str(urllib.parse.urljoin(rootUrl, url))
 
@@ -1126,6 +1127,10 @@ class Controller (object):
             ans = elemSoup.find(titleElem).string
             # cleaning data
             ans = str(ans).strip()
+            ans = unicodedata.normalize('NFD', ans)
+            ans = ans.encode('ascii', 'ignore')
+            ans = ans.decode("utf-8")
+            ans = str(ans)
             ans = re.sub(r" \s+", "", ans)
             ans = re.sub(r"\n", "", ans)
 
@@ -1160,19 +1165,20 @@ class Controller (object):
             if elemSoup is not None:
 
                 if len(elemSoup) > 0:
-
+                    
                     # finding title <h1> in the soup
                     value = elemSoup[0].find(desElem[0])
                     # cleaning data
                     key = value.attrs.get("class")[0]
                     key = str(key).replace("art-object-page-content-", "", 1)
+
                     value = str(value.string).strip()
+        
                     value = re.sub(r" \s+", "", value)
                     value = re.sub(r"\n", "", value)
 
                     # creating the dict to return to save as JSON
                     td = {key: value}
-
                     # updating answer dict
                     ans.update(copy.deepcopy(td))
 
@@ -1183,9 +1189,71 @@ class Controller (object):
                         key = element.attrs.get("class")[0]
                         key = str(key)
                         key = key.replace("art-object-page-content-", "", 1)
+                        key = unicodedata.normalize('NFD', key)
+                        key = key.encode('ascii', 'ignore')
+                        key = key.decode("utf-8")
+                        key = str(key)
+
                         value = str(element.string).strip()
                         value = re.sub(r" \s+", "", value)
                         value = re.sub(r"\n", "", value)
+                        value = unicodedata.normalize('NFD', value)
+                        value = value.encode('ascii', 'ignore')
+                        value = value.decode("utf-8")
+                        value = str(value)
+
+                        # creating the dict to return to save as JSON
+                        td = {key: value}
+
+                        # updating answer dict
+                        ans.update(copy.deepcopy(td))
+
+                    # getting description text section
+                    key = elemSoup[1]
+                    key = key.attrs.get("class")[0]
+                    key = str(key)
+                    # cleaning data
+                    # key = value.attrs.get("class")[0]
+                    key = key.replace("art-object-page-content-", "", 1)
+
+                    # getting section description text
+                    text = elemSoup[1].find(desElem[1])
+                    value = str()
+                    for txt in text:
+                        txt = txt.string
+                        txt = str(txt)
+                        value = value + txt
+
+                    # cleaning data
+                    value = str(value).strip()
+                    value = re.sub(r" \s+", "", value)
+                    value = re.sub(r"\n", "", value)
+                    value = unicodedata.normalize('NFD', value)
+                    value = value.encode('ascii', 'ignore')
+                    value = value.decode("utf-8")
+                    value = str(value)
+
+                    # updating answer dict
+                    td = {key: value}
+                    ans.update(copy.deepcopy(td))
+
+                    # finding all the related links in the description
+                    links = elemSoup[1].findAll(desElem[2])
+                    for link in links:
+                        # key = link.attrs.get("")[0]
+                        key = str(link.string)
+                        key = str(key)
+                        key = unicodedata.normalize('NFD', key)
+                        key = key.encode('ascii', 'ignore')
+                        key = key.decode("utf-8")
+                        key = str(key)
+
+                        # getting the link URL
+                        url = link.get("href")
+                        # reconstructing all the url from the page
+                        # value = str(urllib.parse.urljoin(rootUrl, url))
+                        value = str(url)
+                        td = {key: value}
 
                         # creating the dict to return to save as JSON
                         td = {key: value}

@@ -53,11 +53,10 @@ into the CSV files.
 
 # URL for the webpage to recover the paintings
 # url with small query for small tests
-vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=study"
+# vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=study"
 
 # url query for VVG large consult excluding the written part of the letters
-# vvg_search =
-# "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
+vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
 
 # url with complete query with many artists related with VVG
 # vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
@@ -79,8 +78,8 @@ sourceFolder = "Source"
 # app subfoder
 dataFolder = "Data"
 # idex csv file
-# indexFile = "VanGoghGallery_small.csv"
-indexFile = "VanGoghGallery_large.csv"
+indexFile = "VanGoghGallery_small.csv"
+# indexFile = "VanGoghGallery_large.csv"
 # indexFile = "VanGoghGallery_extensive.csv"
 
 # default template for the element/paint dict in gallery
@@ -169,7 +168,7 @@ desc_div = "section"
 desc_attrs = {
     "class": re.compile("art-object-page-content-"),
 }
-desc_elem = ["h1", "p"]
+desc_elem = ["h1", "p", "a"]
 
 # working variable for the program
 desc_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("DESCRIPTION")]
