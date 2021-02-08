@@ -1165,7 +1165,7 @@ class Controller (object):
             if elemSoup is not None:
 
                 if len(elemSoup) > 0:
-                    
+
                     # finding title <h1> in the soup
                     value = elemSoup[0].find(desElem[0])
                     # cleaning data
@@ -1173,7 +1173,7 @@ class Controller (object):
                     key = str(key).replace("art-object-page-content-", "", 1)
 
                     value = str(value.string).strip()
-        
+
                     value = re.sub(r" \s+", "", value)
                     value = re.sub(r"\n", "", value)
 
