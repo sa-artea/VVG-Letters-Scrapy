@@ -29,10 +29,10 @@ particular data column.
     12] FIXME!!!
 
 Originaly developed for the final project for the tittle of Digital humanities
-Msc dregree between 2019 - 2021.
+Msc. degree between 2019 - 2021.
 
-This code was refactored and its comentaries extended for the official
-presentation for the 2020/2021 Uniandes Digital Humanities graduated program.
+The code was refactored and commented for the official and final presentation
+for the 2020/2021 project of the Uniandes Digital Humanities graduate program.
 
 ---
 
