@@ -662,11 +662,7 @@ class Controller (object):
                         for tag in tags:
                             # cleaning data
                             key = str(tag.string)
-                            key = unicodedata.normalize("NFD", key)
-                            key = key.encode("ascii", "ignore")
-                            key = key.decode("utf-8")
-                            key = str(key)
-                            key = re.sub(r"[^\w\s]", "", key)
+                            key = self.cleanText(key)
                             url = tag.get("href")
 
                             # reconstructing all the url from the page
@@ -803,16 +799,10 @@ class Controller (object):
 
                         # cleaning data for dictionary
                         key = str(key.string)
-                        key = unicodedata.normalize('NFD', key)
-                        key = key.encode('ascii', 'ignore')
-                        key = key.decode("utf-8")
-                        key = str(key)
-                        key = re.sub(r"[^\w\s]", "", key)
-                        # re.sub('[^A-Za-z0-9]+', "", mystring)
+                        key = self.cleanText(key)
+
                         value = str(value.string)
-                        value = value.encode('ascii', 'ignore')
-                        value = value.decode("utf-8")
-                        value = str(value)
+                        value = self.cleanText(value)
 
                         # temp dict for complete answer
                         td = {key: value}
@@ -862,11 +852,8 @@ class Controller (object):
                 for rw in relworks:
                     # cleaning data and getting all keys and values
                     key = str(rw.find("span").string)
-                    key = unicodedata.normalize('NFD', key)
-                    key = key.encode('ascii', 'ignore')
-                    key = key.decode("utf-8")
-                    key = str(key)
-                    key = re.sub(r"[^\w\s]", "", key)
+                    key = self.cleanText(key)
+
                     url = rw.find("a").get("href")
                     value = str(urllib.parse.urljoin(rootUrl, url))
 
@@ -1171,11 +1158,10 @@ class Controller (object):
                     # cleaning data
                     key = value.attrs.get("class")[0]
                     key = str(key).replace("art-object-page-content-", "", 1)
+                    key = self.cleanText(key)
 
                     value = str(value.string).strip()
-
-                    value = re.sub(r" \s+", "", value)
-                    value = re.sub(r"\n", "", value)
+                    value = self.cleanText(value)
 
                     # creating the dict to return to save as JSON
                     td = {key: value}
@@ -1189,18 +1175,10 @@ class Controller (object):
                         key = element.attrs.get("class")[0]
                         key = str(key)
                         key = key.replace("art-object-page-content-", "", 1)
-                        key = unicodedata.normalize('NFD', key)
-                        key = key.encode('ascii', 'ignore')
-                        key = key.decode("utf-8")
-                        key = str(key)
+                        key = self.cleanText(key)
 
                         value = str(element.string).strip()
-                        value = re.sub(r" \s+", "", value)
-                        value = re.sub(r"\n", "", value)
-                        value = unicodedata.normalize('NFD', value)
-                        value = value.encode('ascii', 'ignore')
-                        value = value.decode("utf-8")
-                        value = str(value)
+                        value = self.cleanText(value)
 
                         # creating the dict to return to save as JSON
                         td = {key: value}
@@ -1212,9 +1190,8 @@ class Controller (object):
                     key = elemSoup[1]
                     key = key.attrs.get("class")[0]
                     key = str(key)
-                    # cleaning data
-                    # key = value.attrs.get("class")[0]
                     key = key.replace("art-object-page-content-", "", 1)
+                    key = self.cleanText(key)
 
                     # getting section description text
                     text = elemSoup[1].find(desElem[1])
@@ -1226,12 +1203,7 @@ class Controller (object):
 
                     # cleaning data
                     value = str(value).strip()
-                    value = re.sub(r" \s+", "", value)
-                    value = re.sub(r"\n", "", value)
-                    value = unicodedata.normalize('NFD', value)
-                    value = value.encode('ascii', 'ignore')
-                    value = value.decode("utf-8")
-                    value = str(value)
+                    value = self.cleanText(value)
 
                     # updating answer dict
                     td = {key: value}
@@ -1242,11 +1214,7 @@ class Controller (object):
                     for link in links:
                         # key = link.attrs.get("")[0]
                         key = str(link.string)
-                        key = str(key)
-                        key = unicodedata.normalize('NFD', key)
-                        key = key.encode('ascii', 'ignore')
-                        key = key.decode("utf-8")
-                        key = str(key)
+                        key = self.cleanText(key)
 
                         # getting the link URL
                         url = link.get("href")
@@ -1422,5 +1390,48 @@ class Controller (object):
             return self.gallery.checkGallery()
 
             # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanText(self, text):
+        """
+        clean text from HTML, remove all
+
+        Args:
+            text (str): text to be clean
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans(str): cleaned and processed text
+        """
+        try:
+            # asigning text as ans
+            ans = str(text)
+
+            # attempt striping
+            ans = ans.strip()
+
+            # fix encoding
+            ans = unicodedata.normalize('NFD', ans)
+            ans = ans.encode('ascii', 'ignore')
+            ans = ans.decode("utf-8")
+            ans = str(ans)
+
+            # removing conflicting characters
+            ans = re.sub(r" \s+", "", ans)
+            ans = re.sub(r"\n", "", ans)
+            ans = re.sub(r"[^\w\s]", "", ans)
+
+            # final cast and rechecking
+            ans = str(ans)
+            ans = re.sub(r"\W", " ", ans)
+            ans = re.sub(r" \s+", "", ans)
+
+            # return answer
+            return ans
+
+        # exception handling
         except Exception as exp:
             raise exp

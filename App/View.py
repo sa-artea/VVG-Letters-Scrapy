@@ -235,6 +235,7 @@ class View(object):
     galleryModel = Gallery()
     galleryPath = str()
     webGallery = str()
+    inputs = -1
 
     def __init__(self, *args, **kwargs):
         """
@@ -252,6 +253,7 @@ class View(object):
             # generic creation
             self.galleryModel = Gallery()
             self.galleryControl = Controller()
+            self.inputs = -1
 
             # if args parameters are input in the creator
             if len(args) > 0:
@@ -303,6 +305,7 @@ class View(object):
             print("10) Get Gallery's elements related work (RELATED_WORKS)")
             print("11) Transform images into matrix (IMG_DATA)")
             print("12) Export DataFrame to JSON Files (from CSV to Local dir)")
+            print("99) Full auto script for steps [3, 5, 6, 8, 9, 10, 11, 12]")
             print("0) EXIT (last option)")
             # finish program
 
@@ -369,12 +372,17 @@ class View(object):
 
             while True:
                 self.menu()
-                inputs = input('Select an option to continue\n')
+                # self.inputs = input('Select an option to continue\n')
+                inp = self.inputs
                 gc = self.galleryControl
                 wg = self.webGallery
 
+                # known if the is auto or manual input
+                if inp < 0:
+                    inp = input('Select an option to continue\n')
+
                 # starting gallery object to scrap data
-                if int(inputs) == 1:
+                if int(inp) == 1:
                     print("Starting a new Gallery (ID, TITLE, COLLECTION_URL)")
                     print("...\n")
 
@@ -402,7 +410,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 2:
+                elif int(inp) == 2:
                     print("Saving gallery Model into CSV file...")
                     print("...\n")
 
@@ -412,7 +420,7 @@ class View(object):
                     ans = gc.checkGallery()
                     print(ans)
 
-                elif int(inputs) == 3:
+                elif int(inp) == 3:
                     print("Loading Gallery's CSV file into Model...")
                     print("...\n")
 
@@ -423,7 +431,7 @@ class View(object):
                     ans = gc.checkGallery()
                     print(ans)
 
-                elif int(inputs) == 4:
+                elif int(inp) == 4:
                     print("Checking Gallery Model status (dataframe from CSV)")
                     print("...\n")
 
@@ -431,7 +439,7 @@ class View(object):
                     ans = gc.checkGallery()
                     print(ans)
 
-                elif int(inputs) == 5:
+                elif int(inp) == 5:
                     print("Recovering elements descripion (DESCRIPTION)")
                     print("...\n")
 
@@ -446,7 +454,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 6:
+                elif int(inp) == 6:
                     print("Recovering pictures download urls (DOWNLOAD_URL)")
                     print("...\n")
 
@@ -462,7 +470,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 7:
+                elif int(inp) == 7:
                     print("Downloading Gallery's picture (HAS_PICTURE)")
                     print("...\n")
 
@@ -475,7 +483,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 8:
+                elif int(inp) == 8:
                     print("Recovering Gallery's search tags (SEARCH_TAGS)")
                     print("...\n")
 
@@ -491,7 +499,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 9:
+                elif int(inp) == 9:
                     print("Recovering Gallery's object-data (OBJ_DATA)")
                     print("...\n")
 
@@ -506,7 +514,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 10:
+                elif int(inp) == 10:
                     print("Recovering Gallery's related work (RELATED_WORKS)")
                     print("...\n")
 
@@ -522,7 +530,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 11:
+                elif int(inp) == 11:
                     print("Transforming local images into dataframe matrix")
                     print("...\n")
 
@@ -538,7 +546,7 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 12:
+                elif int(inp) == 12:
                     print("Exporting pandas-df to JSON in local gallery")
                     print("...\n")
 
@@ -558,7 +566,16 @@ class View(object):
                     print("=================== REPORT ===================")
                     print(ans)
 
-                elif int(inputs) == 0:
+                elif int(inp) == 99:
+                    # FIXME not working, entering in a loop
+                    auto = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
+                    for step in auto:
+                        print("Auto executing option No. " + str(step) + "!!!")
+                        self.inputs = step
+                        # self.run()
+                    self.inputs = -1
+
+                elif int(inp) == 0:
                     sys.exit(0)
 
                 else:
