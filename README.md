@@ -3,7 +3,30 @@
 This is a project to train a Machine Learning model based in the Vinvent Van
 Gogh collection data. In here the script scrap the Webpage, recovers all the
 possible data from Vincent, Including the paint description, its tag,
-collection's data, and related work
+collection's data, and related work.
+
+The script creates a local gallery from the Web request within an specific path
+and creates a CSV file compiling all the data recovered from the online gallery.
+
+Each option in the menu complete the Gallery data. Each option scrap a
+particular data column.
+
+1. Creates the gallery's index, recovering the ID, the title and the target URL to
+   scrap the rest of the information.
+2. Saves the gallery's information into a CSV file.
+3. Loads the gallery's information from the CSV file.
+4. Check the current gallery's dataframe description.
+5. Scrap the basic description data for each gallery's objects.
+6. Recover the download link to the image of each gallery's objects.
+7. Sets the boolean flag to know if each of the object's image is available in
+   the local directory.
+8. Scrap the search tags related to each gallery's objects.
+9. Scrap the museum's Collection-Data related to each gallery's objects.
+10. Scrap the related work of each of the gallery's objects.
+11. Transform each available image into a numpy array with CV2.
+12. Export all available data from the dataframe to JSON files in the local directory.
+13. Full automatic script to execute a sequence of steps [3, 5, 6, 8, 9, 10, 11,
+    12] FIXME!!!
 
 Originaly developed for the final project for the tittle of Digital humanities
 Msc dregree between 2019 - 2021.
@@ -49,6 +72,23 @@ presentation for the 2020/2021 Uniandes Digital Humanities graduated program.
   * _**test_page.py**_ basic tests for the _Page_ class and its methods.
   * _**test_selenium_bs4.py**_ proofe of concept to use selenium with bs4 in the
     collection index.
+
+---
+
+## Data Structure
+
+The description of the CSV files inside the _**\*\Data**_ folder goes as follows:
+
+* _ID:_ element ID in the gallery and local folder name.
+* _TITLE:_ tittle of the element in the gallery.
+* _COLLECTION\_URL:_ recovered element (paint) URL.
+* _DOWNLOAD\_URL:_ direct image URL/link for the image in the gallery.
+* _HAS\_PICTURE:_ boolean if there is a picture file in the local folder.
+* _DESCRIPTION:_ JSON with the description of the element.
+* _SEARCH\_TAGS:_ JSON with the collection tags of the element.
+* _OBJ\_DATA:_ JSON with the museum object data of the element.
+* _RELATED\_WORKS:_ JSON with the related work text and URLs of the element.
+* _IMG\_DATA:_ numpy RGB matrix created from original image
 
 ---
 
