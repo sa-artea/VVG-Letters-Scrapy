@@ -204,7 +204,7 @@ rwork_attrs = {
 rwork_elem = "article"
 
 # img file extension to work in the gallery elements
-imgf = ".jpg"
+imgf = "jpg"
 
 # ___________________________________________________
 #  Functions to print webpage recovered data
@@ -222,6 +222,9 @@ json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
     "DESCRIPTION"):VINCENT_DF_COLS.index("RELATED_WORKS")+1])
 print(json_index_cols)
 
+# list with steps for dataframe automatic generator
+AUTO_LIST = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
+
 
 class View(object):
     """
@@ -235,6 +238,8 @@ class View(object):
     galleryModel = Gallery()
     galleryPath = str()
     webGallery = str()
+    autoStepList = AUTO_LIST
+    autoStep = 0
     inputs = -1
 
     def __init__(self, *args, **kwargs):
@@ -253,6 +258,8 @@ class View(object):
             # generic creation
             self.galleryModel = Gallery()
             self.galleryControl = Controller()
+            self.autoStepList = AUTO_LIST
+            self.autoStep = 0
             self.inputs = -1
 
             # if args parameters are input in the creator
@@ -536,7 +543,6 @@ class View(object):
 
                     img_data = gc.exportImages(
                                     id_col,
-                                    haspic_col,
                                     imgf,
                                     galleryFolder,
                                     sourceFolder,
@@ -568,7 +574,6 @@ class View(object):
 
                 elif int(inp) == 99:
                     # FIXME not working, entering in a loop
-                    auto = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
                     for step in auto:
                         print("Auto executing option No. " + str(step) + "!!!")
                         self.inputs = step

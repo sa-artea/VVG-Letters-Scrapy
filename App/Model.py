@@ -358,6 +358,7 @@ class Gallery(object):
             # joining folder name and filename
             imgfn = os.path.join(fname, fn)
             # reading all data from image
+
             ans = cv2.imread(imgfn, cv2.IMREAD_UNCHANGED)
             # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
             # returning answer
