@@ -25,9 +25,11 @@ presentation for the 2020/2021 Uniandes Digital Humanities graduated program.
   architecture of the script, to run it execute the _view.py_ file and follow
   the console instructions.
 
-  * _**Model.py**_ aaaaaa.
-  * _**View.py:**_ sssssssss.
-  * _**Controller.py:**_ ssssssssssssss.
+  * _**Model.py**_ module containing the _Gallery_ class, in here the _pandas_
+    dataframe works with the _Page_ implementation to format the scrapped data.
+  * _**View.py:**_ Console interface to create, populate and save the gallery's dataframe.
+  * _**Controller.py:**_ module connecting the _Model.py_ and the _View.py_, it
+    controls the export process to JSON format and all the data cleaning functions.
 * _**\*\Data**_ is the folder containing the CSV files containing the gallery's
   scraped data.
   * _**VanGoghGallery_large.csv**_ Gallery's large file with 964 register of Vincent Van
