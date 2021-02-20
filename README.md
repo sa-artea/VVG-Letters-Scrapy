@@ -88,7 +88,7 @@ The description of the CSV files inside the _**\*\Data**_ folder goes as follows
 * _SEARCH\_TAGS:_ JSON with the collection tags of the element.
 * _OBJ\_DATA:_ JSON with the museum object data of the element.
 * _RELATED\_WORKS:_ JSON with the related work text and URLs of the element.
-* _IMG\_DATA:_ numpy RGB matrix created from original image
+* _IMG\_DATA:_ numpy RGB matrix created from original image.
 
 ---
 
