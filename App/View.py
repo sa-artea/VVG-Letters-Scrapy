@@ -574,7 +574,7 @@ class View(object):
 
                 elif int(inp) == 99:
                     # FIXME not working, entering in a loop
-                    for step in auto:
+                    for step in self.auto:
                         print("Auto executing option No. " + str(step) + "!!!")
                         self.inputs = step
                         # self.run()

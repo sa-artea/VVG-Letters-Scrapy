@@ -489,6 +489,7 @@ class Controller (object):
 
                 # extracting the search tags from the soup
                 temp = self.getSearchTags(tempSoup, elem, rootUrl)
+
                 # compose answer
                 ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
@@ -1427,7 +1428,7 @@ class Controller (object):
             # final cast and rechecking
             ans = str(ans)
             ans = re.sub(r"\W", " ", ans)
-            ans = re.sub(r" \s+", "", ans)
+            ans = re.sub(r" \s+", " ", ans)
 
             # return answer
             return ans
