@@ -113,6 +113,9 @@ VINCENT_DF_COLS = [
 
     # numpy RGW matrix created from original image
     "IMG_DATA",
+
+    # numpy array shape for the RGW matrix
+    "IMG_SHAPE",
 ]
 
 # ______________________________________________________
@@ -216,6 +219,7 @@ search_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("SEARCH_TAGS")]
 objd_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("OBJ_DATA")]
 rwork_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("RELATED_WORKS")]
 img_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_DATA")]
+shape_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_SHAPE")]
 
 # column names for creating the JSON in the folders
 json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
@@ -310,7 +314,7 @@ class View(object):
             print("8) Get Gallery's elements search-tags (SEARCH_TAGS)")
             print("9) Get Gallery's elements collection-data (OBJ_DATA)")
             print("10) Get Gallery's elements related work (RELATED_WORKS)")
-            print("11) Transform images into matrix (IMG_DATA)")
+            print("11) Transform images into matrix (IMG_DATA, IMG_SHAPE)")
             print("12) Export DataFrame to JSON Files (from CSV to Local dir)")
             print("99) Full auto script for steps [3, 5, 6, 8, 9, 10, 11, 12]")
             print("0) EXIT (last option)")
@@ -538,17 +542,25 @@ class View(object):
                     print(ans)
 
                 elif int(inp) == 11:
-                    print("Transforming local images into dataframe matrix")
+                    print("Transforming local images into np.ndarray + shape")
                     print("...\n")
 
-                    img_data = gc.exportImages(
+                    img_data, shape_data = gc.exportImages(
                                     id_col,
                                     imgf,
                                     galleryFolder,
                                     sourceFolder,
                                     paintsFolder)
 
+                    # shape_data = gc.exportShape(
+                    #                 id_col,
+                    #                 imgf,
+                    #                 galleryFolder,
+                    #                 sourceFolder,
+                    #                 paintsFolder)
+
                     ans = gc.updateData(img_col, img_data)
+                    ans = gc.updateData(shape_col, shape_data)
                     print("=================== REPORT ===================")
                     print(ans)
 

@@ -351,18 +351,21 @@ class Gallery(object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (np.array): image's numpy data matrix
+            ans1 (np.array): image's numpy data matrix
+            ans2 (np.array.shape): image's numpy data shape
         """
         try:
-            ans = None
+            ans1 = None
+            ans2 = None
             # joining folder name and filename
             imgfn = os.path.join(fname, fn)
             # reading all data from image
 
-            ans = cv2.imread(imgfn, cv2.IMREAD_COLOR)
+            ans1 = cv2.imread(imgfn, cv2.IMREAD_COLOR)
+            ans2 = ans1.shape
             # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
             # returning answer
-            return ans
+            return ans1, ans2
 
         # exception handling
         except Exception as exp:

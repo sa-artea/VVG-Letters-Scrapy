@@ -702,7 +702,8 @@ class Controller (object):
         """
         try:
             # working variables
-            ans = list()
+            ans1 = list()
+            ans2 = list()
             indexData = self.getData(indexCol)
             rootDir = self.galleryPath
 
@@ -712,11 +713,12 @@ class Controller (object):
                 timgfn = os.path.join(rootDir, tid)
 
                 # recovering image
-                timg = self.getImage(timgfn, imgf, *args, **kwargs)
-                ans.append(timg)
+                timg, tshape = self.getImage(timgfn, imgf, *args, **kwargs)
+                ans1.append(timg)
+                ans2.append(tshape)
 
             # return answer list
-            return ans
+            return ans1, ans2
 
         # exception handling
         except Exception as exp:
@@ -734,12 +736,14 @@ class Controller (object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (np.array): numpy matrix with the image's RGBA data
+            ans1 (np.array): list with the numpy matrix of the image's RGB data
+            ans2 (np.array.shape): list with the image's numpy shape
         """
 
         try:
             # default answer
-            ans = None
+            ans1 = None
+            ans2 = None
             flist = os.listdir(fname)
             fn = ""
 
@@ -750,14 +754,11 @@ class Controller (object):
 
             # if the file exists
             if fn != "":
-                ans = self.gallery.imgToData(fname, fn, *args, **kwargs)
-
-            # elif fn == "":
-            #     ans = np.zeros([512, 512, 4])
+                ans1, ans2 = self.gallery.imgToData(fname, fn, *args, **kwargs)
 
             # returning answer
-            ans = copy.deepcopy(ans)
-            return ans
+            ans1 = copy.deepcopy(ans1)
+            return ans1, ans2
 
         # exception handling
         except Exception as exp:

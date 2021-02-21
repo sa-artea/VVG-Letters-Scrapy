@@ -1,4 +1,4 @@
-ID,TITLE,COLLECTION_URL,DOWNLOAD_URL,HAS_PICTURE,DESCRIPTION,SEARCH_TAGS,OBJ_DATA,RELATED_WORKS,IMG_DATA
+ID,TITLE,COLLECTION_URL,DOWNLOAD_URL,HAS_PICTURE,DESCRIPTION,SEARCH_TAGS,OBJ_DATA,RELATED_WORKS,IMG_DATA,IMG_SHAPE
 s0004V1962r,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0004V1962r,https://vangoghmuseum.nl/asset/download/s0004V1962r,True,"{
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, May 1885"",
@@ -69,7 +69,7 @@ s0004V1962r,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0004V1962r,h
   ...
   [ 46  61  70]
   [ 49  65  77]
-  [ 54  70  82]]]"
+  [ 54  70  82]]]","(800, 675, 3)"
 s0006V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0006V1962,https://vangoghmuseum.nl/asset/download/s0006V1962,True,"{
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, April 1885"",
@@ -147,7 +147,7 @@ s0006V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0006V1962,htt
   ...
   [29 45 38]
   [27 43 36]
-  [25 41 34]]]"
+  [25 41 34]]]","(800, 545, 3)"
 s0010V1962,Portrait of an Old Woman,https://vangoghmuseum.nl/en/collection/s0010V1962,https://vangoghmuseum.nl/asset/download/s0010V1962,True,"{
     ""title"": ""Portrait of an Old Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
@@ -217,7 +217,7 @@ s0010V1962,Portrait of an Old Woman,https://vangoghmuseum.nl/en/collection/s0010
   ...
   [ 36  40  45]
   [ 39  43  48]
-  [ 40  44  49]]]"
+  [ 40  44  49]]]","(800, 622, 3)"
 s0056V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0056V1962,https://vangoghmuseum.nl/asset/download/s0056V1962,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -297,7 +297,7 @@ s0056V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0056V1962,http
   ...
   [151 165 159]
   [148 165 161]
-  [144 163 160]]]"
+  [144 163 160]]]","(800, 652, 3)"
 s0058V1962,Woman with a Mourning Shawl,https://vangoghmuseum.nl/en/collection/s0058V1962,https://vangoghmuseum.nl/asset/download/s0058V1962,True,"{
     ""title"": ""Woman with a Mourning Shawl"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
@@ -369,7 +369,7 @@ s0058V1962,Woman with a Mourning Shawl,https://vangoghmuseum.nl/en/collection/s0
   ...
   [17 32 24]
   [16 31 23]
-  [16 31 23]]]"
+  [16 31 23]]]","(800, 570, 3)"
 s0059V1962,Head of a Prostitute,https://vangoghmuseum.nl/en/collection/s0059V1962,https://vangoghmuseum.nl/asset/download/s0059V1962,True,"{
     ""title"": ""Head of a Prostitute"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
@@ -442,7 +442,7 @@ s0059V1962,Head of a Prostitute,https://vangoghmuseum.nl/en/collection/s0059V196
   ...
   [75 94 97]
   [73 93 98]
-  [73 93 98]]]"
+  [73 93 98]]]","(800, 547, 3)"
 s0061V1962,Portrait of an Old Man,https://vangoghmuseum.nl/en/collection/s0061V1962,https://vangoghmuseum.nl/asset/download/s0061V1962,True,"{
     ""title"": ""Portrait of an Old Man"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
@@ -515,7 +515,7 @@ s0061V1962,Portrait of an Old Man,https://vangoghmuseum.nl/en/collection/s0061V1
   ...
   [44 59 61]
   [41 58 61]
-  [41 58 61]]]"
+  [41 58 61]]]","(800, 610, 3)"
 s0062V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0062V1962,https://vangoghmuseum.nl/asset/download/s0062V1962,True,"{
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March 1885"",
@@ -592,7 +592,7 @@ s0062V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0062V1962,htt
   ...
   [ 52  68  75]
   [ 47  63  70]
-  [ 46  62  69]]]"
+  [ 46  62  69]]]","(800, 664, 3)"
 s0068V1962r,Head of a Man,https://vangoghmuseum.nl/en/collection/s0068V1962r,https://vangoghmuseum.nl/asset/download/s0068V1962r,True,"{
     ""title"": ""Head of a Man"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
@@ -663,7 +663,7 @@ s0068V1962r,Head of a Man,https://vangoghmuseum.nl/en/collection/s0068V1962r,htt
   ...
   [ 73  97 117]
   [ 64  93 114]
-  [ 62  94 117]]]"
+  [ 62  94 117]]]","(800, 606, 3)"
 s0069V1962,Head of a Man,https://vangoghmuseum.nl/en/collection/s0069V1962,https://vangoghmuseum.nl/asset/download/s0069V1962,True,"{
     ""title"": ""Head of a Man"",
     ""on-view"": ""None"",
@@ -742,7 +742,7 @@ s0069V1962,Head of a Man,https://vangoghmuseum.nl/en/collection/s0069V1962,https
   ...
   [ 58  79  77]
   [ 72  97 107]
-  [ 73 102 116]]]"
+  [ 73 102 116]]]","(800, 626, 3)"
 s0072V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0072V1962,https://vangoghmuseum.nl/asset/download/s0072V1962,True,"{
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, November 1884-January 1885"",
@@ -821,7 +821,7 @@ s0072V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0072V1962,htt
   ...
   [35 43 36]
   [30 38 31]
-  [30 37 32]]]"
+  [30 37 32]]]","(800, 641, 3)"
 s0075V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collection/s0075V1962,https://vangoghmuseum.nl/asset/download/s0075V1962,True,"{
     ""title"": ""Plaster Cast of a Woman's Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, February-March 1887"",
@@ -896,7 +896,7 @@ s0075V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collectio
   ...
   [ 71 119 167]
   [ 67 115 163]
-  [ 66 112 159]]]"
+  [ 66 112 159]]]","(800, 573, 3)"
 s0084V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0084V1962,https://vangoghmuseum.nl/asset/download/s0084V1962,True,"{
     ""title"": ""Head of a Woman"",
     ""on-view"": ""None"",
@@ -974,7 +974,7 @@ s0084V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0084V1962,htt
   ...
   [33 55 60]
   [29 51 56]
-  [22 45 53]]]"
+  [22 45 53]]]","(800, 545, 3)"
 s0089V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0089V1962,https://vangoghmuseum.nl/asset/download/s0089V1962,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -1054,7 +1054,7 @@ s0089V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0089V1962,http
   ...
   [ 96  96  60]
   [ 98  98  62]
-  [ 99  99  63]]]"
+  [ 99  99  63]]]","(800, 646, 3)"
 s0097V1962r,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0097V1962r,https://vangoghmuseum.nl/asset/download/s0097V1962r,True,"{
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, March-May 1885"",
@@ -1125,7 +1125,7 @@ s0097V1962r,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0097V1962r,h
   ...
   [ 22  28  35]
   [ 23  29  36]
-  [ 24  30  37]]]"
+  [ 24  30  37]]]","(800, 635, 3)"
 s0101V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0101V1962,https://vangoghmuseum.nl/asset/download/s0101V1962,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -1204,7 +1204,7 @@ s0101V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0101V1962,http
   ...
   [105 113  90]
   [109 118  97]
-  [115 124 104]]]"
+  [115 124 104]]]","(800, 613, 3)"
 s0102V1962,Kneeling Ecorché,https://vangoghmuseum.nl/en/collection/s0102V1962,https://vangoghmuseum.nl/asset/download/s0102V1962,True,"{
     ""title"": ""Kneeling Ecorché"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -1283,7 +1283,7 @@ s0102V1962,Kneeling Ecorché,https://vangoghmuseum.nl/en/collection/s0102V1962,h
   ...
   [ 81 103 121]
   [ 76  98 116]
-  [ 84 106 124]]]"
+  [ 84 106 124]]]","(800, 602, 3)"
 s0103V1962,Male Torso,https://vangoghmuseum.nl/en/collection/s0103V1962,https://vangoghmuseum.nl/asset/download/s0103V1962,True,"{
     ""title"": ""Male Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -1362,7 +1362,7 @@ s0103V1962,Male Torso,https://vangoghmuseum.nl/en/collection/s0103V1962,https://
   ...
   [ 81  99 106]
   [ 84 103 116]
-  [ 90 109 124]]]"
+  [ 90 109 124]]]","(800, 611, 3)"
 s0132V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0132V1962,https://vangoghmuseum.nl/asset/download/s0132V1962,True,"{
     ""title"": ""Head of a Woman"",
     ""on-view"": ""None"",
@@ -1436,7 +1436,7 @@ s0132V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0132V1962,htt
   ...
   [ 44  51  48]
   [ 31  38  35]
-  [ 23  30  27]]]"
+  [ 23  30  27]]]","(800, 641, 3)"
 s0139V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0139V1962,https://vangoghmuseum.nl/asset/download/s0139V1962,True,"{
     ""title"": ""Head of a Woman"",
     ""on-view"": ""None"",
@@ -1517,7 +1517,7 @@ s0139V1962,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0139V1962,htt
   ...
   [37 50 58]
   [41 54 62]
-  [45 58 66]]]"
+  [45 58 66]]]","(800, 620, 3)"
 s0143V1962,Portrait of a Prostitute,https://vangoghmuseum.nl/en/collection/s0143V1962,https://vangoghmuseum.nl/asset/download/s0143V1962,True,"{
     ""title"": ""Portrait of a Prostitute"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Antwerp, December 1885"",
@@ -1589,7 +1589,7 @@ s0143V1962,Portrait of a Prostitute,https://vangoghmuseum.nl/en/collection/s0143
   ...
   [ 58  79  80]
   [ 58  81  83]
-  [ 60  83  85]]]"
+  [ 60  83  85]]]","(800, 659, 3)"
 s0199V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collection/s0199V1962,https://vangoghmuseum.nl/asset/download/s0199V1962,True,"{
     ""title"": ""Plaster Cast of a Woman's Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, February-March 1887"",
@@ -1664,7 +1664,7 @@ s0199V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collectio
   ...
   [ 92 131 139]
   [ 88 127 135]
-  [ 82 124 131]]]"
+  [ 82 124 131]]]","(800, 523, 3)"
 s0200V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collection/s0200V1962,https://vangoghmuseum.nl/asset/download/s0200V1962,True,"{
     ""title"": ""Plaster Cast of a Woman's Torso"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, February-March 1887"",
@@ -1739,7 +1739,7 @@ s0200V1962,Plaster Cast of a Woman's Torso,https://vangoghmuseum.nl/en/collectio
   ...
   [ 96 124 141]
   [ 94 122 139]
-  [ 94 122 139]]]"
+  [ 94 122 139]]]","(800, 636, 3)"
 s0201V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0201V1962,https://vangoghmuseum.nl/asset/download/s0201V1962,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -1820,7 +1820,7 @@ s0201V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/s0201V1962,http
   ...
   [ 87  97  84]
   [ 87  97  84]
-  [ 90 100  87]]]"
+  [ 90 100  87]]]","(800, 609, 3)"
 s0202V1962,Horse,https://vangoghmuseum.nl/en/collection/s0202V1962,https://vangoghmuseum.nl/asset/download/s0202V1962,True,"{
     ""title"": ""Horse"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June 1886"",
@@ -1898,7 +1898,7 @@ s0202V1962,Horse,https://vangoghmuseum.nl/en/collection/s0202V1962,https://vango
   ...
   [ 60  94 123]
   [ 75 105 132]
-  [ 82 112 139]]]"
+  [ 82 112 139]]]","(644, 800, 3)"
 s0343V1966,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0343V1966,https://vangoghmuseum.nl/asset/download/s0343V1966,True,"{
     ""title"": ""Head of a Woman"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, November 1884-May 1885"",
@@ -1969,7 +1969,7 @@ s0343V1966,Head of a Woman,https://vangoghmuseum.nl/en/collection/s0343V1966,htt
   ...
   [41 74 89]
   [36 70 86]
-  [29 63 79]]]"
+  [29 63 79]]]","(800, 570, 3)"
 d0012V1962r,"Studies of a Seated Girl, L'Ecorché and Venus",https://vangoghmuseum.nl/en/collection/d0012V1962r,https://vangoghmuseum.nl/asset/download/d0012V1962r,True,"{
     ""title"": ""Studies of a Seated Girl, L'Ecorché and Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2041,7 +2041,7 @@ d0012V1962r,"Studies of a Seated Girl, L'Ecorché and Venus",https://vangoghmuse
   ...
   [187 205 222]
   [190 204 222]
-  [190 204 222]]]"
+  [190 204 222]]]","(620, 800, 3)"
 d0012V1962v,Seated Girl and Venus,https://vangoghmuseum.nl/en/collection/d0012V1962v,https://vangoghmuseum.nl/asset/download/d0012V1962v,True,"{
     ""title"": ""Seated Girl and Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2113,7 +2113,7 @@ d0012V1962v,Seated Girl and Venus,https://vangoghmuseum.nl/en/collection/d0012V1
   ...
   [193 218 234]
   [190 215 231]
-  [191 216 232]]]"
+  [191 216 232]]]","(611, 800, 3)"
 d0013V1962,Idol,https://vangoghmuseum.nl/en/collection/d0013V1962,https://vangoghmuseum.nl/asset/download/d0013V1962,True,"{
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2185,7 +2185,7 @@ d0013V1962,Idol,https://vangoghmuseum.nl/en/collection/d0013V1962,https://vangog
   ...
   [215 226 234]
   [216 227 235]
-  [216 227 235]]]"
+  [216 227 235]]]","(800, 529, 3)"
 d0014V1962r,Idol,https://vangoghmuseum.nl/en/collection/d0014V1962r,https://vangoghmuseum.nl/asset/download/d0014V1962r,True,"{
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2257,7 +2257,7 @@ d0014V1962r,Idol,https://vangoghmuseum.nl/en/collection/d0014V1962r,https://vang
   ...
   [164 191 211]
   [166 193 214]
-  [166 193 214]]]"
+  [166 193 214]]]","(800, 514, 3)"
 d0014V1962v,Idol,https://vangoghmuseum.nl/en/collection/d0014V1962v,https://vangoghmuseum.nl/asset/download/d0014V1962v,True,"{
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2329,7 +2329,7 @@ d0014V1962v,Idol,https://vangoghmuseum.nl/en/collection/d0014V1962v,https://vang
   ...
   [190 209 224]
   [191 210 225]
-  [191 210 225]]]"
+  [191 210 225]]]","(800, 517, 3)"
 d0015V1962r,Idol,https://vangoghmuseum.nl/en/collection/d0015V1962r,https://vangoghmuseum.nl/asset/download/d0015V1962r,True,"{
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2401,7 +2401,7 @@ d0015V1962r,Idol,https://vangoghmuseum.nl/en/collection/d0015V1962r,https://vang
   ...
   [199 225 237]
   [203 229 241]
-  [197 224 238]]]"
+  [197 224 238]]]","(800, 513, 3)"
 d0015V1962v,Idol,https://vangoghmuseum.nl/en/collection/d0015V1962v,https://vangoghmuseum.nl/asset/download/d0015V1962v,True,"{
     ""title"": ""Idol"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2473,7 +2473,7 @@ d0015V1962v,Idol,https://vangoghmuseum.nl/en/collection/d0015V1962v,https://vang
   ...
   [186 212 228]
   [188 214 230]
-  [189 215 231]]]"
+  [189 215 231]]]","(800, 500, 3)"
 d0031V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0031V1962v,https://vangoghmuseum.nl/asset/download/d0031V1962v,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2545,7 +2545,7 @@ d0031V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0031V1962v,ht
   ...
   [178 195 204]
   [179 192 200]
-  [178 191 199]]]"
+  [178 191 199]]]","(800, 520, 3)"
 d0034V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0034V1962r,https://vangoghmuseum.nl/asset/download/d0034V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -2617,7 +2617,7 @@ d0034V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0034V1962r,ht
   ...
   [212 228 240]
   [213 229 241]
-  [213 229 241]]]"
+  [213 229 241]]]","(800, 600, 3)"
 d0036V1962r,Venus in a Top Hat,https://vangoghmuseum.nl/en/collection/d0036V1962r,https://vangoghmuseum.nl/asset/download/d0036V1962r,True,"{
     ""title"": ""Venus in a Top Hat"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2689,7 +2689,7 @@ d0036V1962r,Venus in a Top Hat,https://vangoghmuseum.nl/en/collection/d0036V1962
   ...
   [165 184 192]
   [166 185 193]
-  [166 185 193]]]"
+  [166 185 193]]]","(800, 397, 3)"
 d0036V1962v,A Woman's Legs,https://vangoghmuseum.nl/en/collection/d0036V1962v,https://vangoghmuseum.nl/asset/download/d0036V1962v,True,"{
     ""title"": ""A Woman's Legs"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -2760,7 +2760,7 @@ d0036V1962v,A Woman's Legs,https://vangoghmuseum.nl/en/collection/d0036V1962v,ht
   ...
   [198 213 222]
   [191 206 215]
-  [199 214 223]]]"
+  [199 214 223]]]","(403, 800, 3)"
 d0056V1962r,Arm,https://vangoghmuseum.nl/en/collection/d0056V1962r,https://vangoghmuseum.nl/asset/download/d0056V1962r,True,"{
     ""title"": ""Arm"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, December 1884-May 1885"",
@@ -2831,7 +2831,7 @@ d0056V1962r,Arm,https://vangoghmuseum.nl/en/collection/d0056V1962r,https://vango
   ...
   [168 182 200]
   [168 180 198]
-  [179 191 209]]]"
+  [179 191 209]]]","(482, 800, 3)"
 d0056V1962v,Arm,https://vangoghmuseum.nl/en/collection/d0056V1962v,https://vangoghmuseum.nl/asset/download/d0056V1962v,True,"{
     ""title"": ""Arm"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Nuenen, December 1884-May 1885"",
@@ -2902,7 +2902,7 @@ d0056V1962v,Arm,https://vangoghmuseum.nl/en/collection/d0056V1962v,https://vango
   ...
   [150 184 213]
   [153 187 216]
-  [148 182 211]]]"
+  [148 182 211]]]","(484, 800, 3)"
 d0062V1962,Standing and Sitting Male Nude (after Bargue),https://vangoghmuseum.nl/en/collection/d0062V1962,https://vangoghmuseum.nl/asset/download/d0062V1962,True,"{
     ""title"": ""Standing and Sitting Male Nude (after Bargue)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Auvers-sur-Oise, June 1890"",
@@ -2973,7 +2973,7 @@ d0062V1962,Standing and Sitting Male Nude (after Bargue),https://vangoghmuseum.n
   ...
   [209 225 237]
   [215 231 243]
-  [213 229 241]]]"
+  [213 229 241]]]","(644, 800, 3)"
 d0136V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0136V1962r,https://vangoghmuseum.nl/asset/download/d0136V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -3045,7 +3045,7 @@ d0136V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0136V1962r,ht
   ...
   [164 185 193]
   [158 179 187]
-  [181 202 210]]]"
+  [181 202 210]]]","(800, 634, 3)"
 d0136V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0136V1962v,,False,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -3069,7 +3069,7 @@ d0136V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0136V1962v,,F
     ""Provenance"": ""Left by the artist at the apartment of his brother Theo van Gogh Paris 1887 after Theos death on 25 January 1891 inherited by his widow Jo van GoghBonger and their son Vincent Willem van Gogh Paris administered until her death on 2 September 1925 by Jo van GoghBonger BussumAmsterdamLaren transferred by Vincent Willem van Gogh Laren on 10 July 1962 to the Vincent van Gogh Foundation Amsterdam agreement concluded on 21 July 1962 between the Vincent van Gogh Foundation and the State of the Netherlands in which the preservation and management of the collection and its placing in the Rijksmuseum Vincent van Gogh to be realized in Amsterdam is entrusted to the State given on loan until the opening of the museum on 2 June 1973 to the Stedelijk Museum Amsterdam on permanent loan to the Rijksmuseum Vincent van Gogh from 2 June 1973 and at the Van Gogh Museum Amsterdam since 1 July 1994"",
     ""artist"": ""Vincent van Gogh"",
     ""Credits obliged to state"": ""Van Gogh Museum Amsterdam Vincent van Gogh Foundation""
-}",{},
+}",{},,
 d0137V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0137V1962r,https://vangoghmuseum.nl/asset/download/d0137V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -3141,7 +3141,7 @@ d0137V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0137V1962r,ht
   ...
   [186 204 211]
   [184 202 209]
-  [191 207 214]]]"
+  [191 207 214]]]","(800, 609, 3)"
 d0137V1962v,Torso of Venus and a Landscape,https://vangoghmuseum.nl/en/collection/d0137V1962v,,False,"{
     ""title"": ""Torso of Venus and a Landscape"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -3166,7 +3166,7 @@ d0137V1962v,Torso of Venus and a Landscape,https://vangoghmuseum.nl/en/collectio
     ""Provenance"": ""Left by the artist at the apartment of his brother Theo van Gogh Paris 1887 after Theos death on 25 January 1891 inherited by his widow Jo van GoghBonger and their son Vincent Willem van Gogh Paris administered until her death on 2 September 1925 by Jo van GoghBonger BussumAmsterdamLaren transferred by Vincent Willem van Gogh Laren on 10 July 1962 to the Vincent van Gogh Foundation Amsterdam agreement concluded on 21 July 1962 between the Vincent van Gogh Foundation and the State of the Netherlands in which the preservation and management of the collection and its placing in the Rijksmuseum Vincent van Gogh to be realized in Amsterdam is entrusted to the State given on loan until the opening of the museum on 2 June 1973 to the Stedelijk Museum Amsterdam on permanent loan to the Rijksmuseum Vincent van Gogh from 2 June 1973 and at the Van Gogh Museum Amsterdam since 1 July 1994"",
     ""artist"": ""Vincent van Gogh"",
     ""Credits obliged to state"": ""Van Gogh Museum Amsterdam Vincent van Gogh Foundation""
-}",{},
+}",{},,
 d0138V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0138V1962r,https://vangoghmuseum.nl/asset/download/d0138V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -3238,7 +3238,7 @@ d0138V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0138V1962r,ht
   ...
   [199 217 228]
   [199 217 228]
-  [201 219 230]]]"
+  [201 219 230]]]","(800, 615, 3)"
 d0140V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0140V1962r,https://vangoghmuseum.nl/asset/download/d0140V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, 1887"",
@@ -3310,7 +3310,7 @@ d0140V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0140V1962r,ht
   ...
   [143 168 188]
   [147 169 187]
-  [156 176 193]]]"
+  [156 176 193]]]","(800, 511, 3)"
 d0153V1970,Apartment Blocks and Miscellaneous Studies,https://vangoghmuseum.nl/en/collection/d0153V1970,https://vangoghmuseum.nl/asset/download/d0153V1970,True,"{
     ""title"": ""Apartment Blocks and Miscellaneous Studies"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, June-September 1887"",
@@ -3382,7 +3382,7 @@ d0153V1970,Apartment Blocks and Miscellaneous Studies,https://vangoghmuseum.nl/e
   ...
   [170 204 220]
   [170 204 220]
-  [168 202 218]]]"
+  [168 202 218]]]","(505, 800, 3)"
 d0158V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0158V1962,https://vangoghmuseum.nl/asset/download/d0158V1962,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -3454,7 +3454,7 @@ d0158V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0158V1962,http
   ...
   [158 186 197]
   [159 187 198]
-  [162 190 201]]]"
+  [162 190 201]]]","(800, 511, 3)"
 d0159V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0159V1962r,https://vangoghmuseum.nl/asset/download/d0159V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -3526,7 +3526,7 @@ d0159V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0159V1962r,ht
   ...
   [205 227 239]
   [205 227 239]
-  [204 226 238]]]"
+  [204 226 238]]]","(800, 600, 3)"
 d0159V1962v,Venus,https://vangoghmuseum.nl/en/collection/d0159V1962v,https://vangoghmuseum.nl/asset/download/d0159V1962v,True,"{
     ""title"": ""Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -3598,7 +3598,7 @@ d0159V1962v,Venus,https://vangoghmuseum.nl/en/collection/d0159V1962v,https://van
   ...
   [199 218 226]
   [198 217 225]
-  [197 216 224]]]"
+  [197 216 224]]]","(800, 600, 3)"
 d0160V1962v,Idol and Sketches of Venus,https://vangoghmuseum.nl/en/collection/d0160V1962v,https://vangoghmuseum.nl/asset/download/d0160V1962v,True,"{
     ""title"": ""Idol and Sketches of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -3670,7 +3670,7 @@ d0160V1962v,Idol and Sketches of Venus,https://vangoghmuseum.nl/en/collection/d0
   ...
   [193 204 212]
   [193 204 212]
-  [193 204 212]]]"
+  [193 204 212]]]","(800, 606, 3)"
 d0180V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0180V1962r,https://vangoghmuseum.nl/asset/download/d0180V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -3742,7 +3742,7 @@ d0180V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0180V1962r,ht
   ...
   [133 171 201]
   [133 171 201]
-  [134 172 202]]]"
+  [134 172 202]]]","(800, 587, 3)"
 d0180V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0180V1962v,https://vangoghmuseum.nl/asset/download/d0180V1962v,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -3814,7 +3814,7 @@ d0180V1962v,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0180V1962v,ht
   ...
   [131 165 194]
   [130 164 193]
-  [130 164 193]]]"
+  [130 164 193]]]","(800, 588, 3)"
 d0190V1962r,Standing Male Nude and Sitting Figure (after Bargue),https://vangoghmuseum.nl/en/collection/d0190V1962r,https://vangoghmuseum.nl/asset/download/d0190V1962r,True,"{
     ""title"": ""Standing Male Nude and Sitting Figure (after Bargue)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Auvers-sur-Oise, June 1890"",
@@ -3884,7 +3884,7 @@ d0190V1962r,Standing Male Nude and Sitting Figure (after Bargue),https://vangogh
   ...
   [187 212 222]
   [194 219 229]
-  [195 220 230]]]"
+  [195 220 230]]]","(800, 487, 3)"
 d0212V1962v,Sitting Male Nude (after Bargue),https://vangoghmuseum.nl/en/collection/d0212V1962v,https://vangoghmuseum.nl/asset/download/d0212V1962v,True,"{
     ""title"": ""Sitting Male Nude (after Bargue)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Auvers-sur-Oise, June 1890"",
@@ -3954,7 +3954,7 @@ d0212V1962v,Sitting Male Nude (after Bargue),https://vangoghmuseum.nl/en/collect
   ...
   [172 203 226]
   [171 202 225]
-  [171 202 225]]]"
+  [171 202 225]]]","(800, 482, 3)"
 d0303V1972v,Fragment of a Venus,https://vangoghmuseum.nl/en/collection/d0303V1972v,https://vangoghmuseum.nl/asset/download/d0303V1972v,True,"{
     ""title"": ""Fragment of a Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -4025,7 +4025,7 @@ d0303V1972v,Fragment of a Venus,https://vangoghmuseum.nl/en/collection/d0303V197
   ...
   [174 196 208]
   [163 185 196]
-  [170 192 203]]]"
+  [170 192 203]]]","(800, 673, 3)"
 d0399V1962,Venus,https://vangoghmuseum.nl/en/collection/d0399V1962,https://vangoghmuseum.nl/asset/download/d0399V1962,True,"{
     ""title"": ""Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -4097,7 +4097,7 @@ d0399V1962,Venus,https://vangoghmuseum.nl/en/collection/d0399V1962,https://vango
   ...
   [216 228 234]
   [217 229 235]
-  [217 229 235]]]"
+  [217 229 235]]]","(800, 620, 3)"
 d0401V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0401V1962,https://vangoghmuseum.nl/asset/download/d0401V1962,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -4169,7 +4169,7 @@ d0401V1962,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0401V1962,http
   ...
   [206 224 235]
   [206 224 235]
-  [207 225 236]]]"
+  [207 225 236]]]","(800, 600, 3)"
 d0402V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0402V1962r,https://vangoghmuseum.nl/asset/download/d0402V1962r,True,"{
     ""title"": ""Torso of Venus"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -4241,7 +4241,7 @@ d0402V1962r,Torso of Venus,https://vangoghmuseum.nl/en/collection/d0402V1962r,ht
   ...
   [172 198 215]
   [173 199 216]
-  [173 199 216]]]"
+  [173 199 216]]]","(800, 509, 3)"
 d0402V1962v,Venus de Milo,https://vangoghmuseum.nl/en/collection/d0402V1962v,https://vangoghmuseum.nl/asset/download/d0402V1962v,True,"{
     ""title"": ""Venus de Milo"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Paris, March-May 1886"",
@@ -4312,7 +4312,7 @@ d0402V1962v,Venus de Milo,https://vangoghmuseum.nl/en/collection/d0402V1962v,htt
   ...
   [169 194 214]
   [168 192 214]
-  [166 190 212]]]"
+  [166 190 212]]]","(800, 508, 3)"
 d1125S2005,The Daughter of Jacob Meyer (after Bargue after Holbein),https://vangoghmuseum.nl/en/collection/d1125S2005,https://vangoghmuseum.nl/asset/download/d1125S2005,True,"{
     ""title"": ""The Daughter of Jacob Meyer (after Bargue after Holbein)"",
     ""creator-info"": ""Vincent van Gogh (1853 - 1890), Brussels, October 1880-April 1881"",
@@ -4383,4 +4383,4 @@ d1125S2005,The Daughter of Jacob Meyer (after Bargue after Holbein),https://vang
   ...
   [154 173 188]
   [152 171 186]
-  [153 172 187]]]"
+  [153 172 187]]]","(800, 570, 3)"
