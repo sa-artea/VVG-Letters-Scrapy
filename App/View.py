@@ -78,8 +78,8 @@ sourceFolder = "Source"
 # app subfoder
 dataFolder = "Data"
 # idex csv file
-# indexFile = "VanGoghGallery_small.csv"
-indexFile = "VanGoghGallery_large.csv"
+indexFile = "VanGoghGallery_small.csv"
+# indexFile = "VanGoghGallery_large.csv"
 # indexFile = "VanGoghGallery_extensive.csv"
 
 # default template for the element/paint dict in gallery
@@ -304,7 +304,6 @@ class View(object):
             print("3) Load gallery data (loading from *.CSV)")
             # load preavious scraped data into model
             print("4) Check gallery data (reading current *.CSV)")
-
             # recovers the basic data from the gallery query
             print("5) Get Gallery's elements description (DESCRIPTION)")
 
@@ -316,7 +315,7 @@ class View(object):
             print("10) Get Gallery's elements related work (RELATED_WORKS)")
             print("11) Transform images into matrix (IMG_DATA, IMG_SHAPE)")
             print("12) Export DataFrame to JSON Files (from CSV to Local dir)")
-            print("99) Full auto script for steps [3, 5, 6, 8, 9, 10, 11, 12]")
+            print("99) Full auto script for steps [3, 5, 8, 9, 10, 11, 12]")
             print("0) EXIT (last option)")
             # finish program
 
@@ -551,13 +550,6 @@ class View(object):
                                     galleryFolder,
                                     sourceFolder,
                                     paintsFolder)
-
-                    # shape_data = gc.exportShape(
-                    #                 id_col,
-                    #                 imgf,
-                    #                 galleryFolder,
-                    #                 sourceFolder,
-                    #                 paintsFolder)
 
                     ans = gc.updateData(img_col, img_data)
                     ans = gc.updateData(shape_col, shape_data)

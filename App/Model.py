@@ -18,22 +18,24 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-# ___________________________________________________
+# ===============================
 # native python libraries
-# ___________________________________________________
-# from Apps.Scrapy.controller import DEFAULT_FRAME_SCHEMA
+# ===============================
 import os
 import copy
+import sys
+import csv
 
-# ___________________________________________________
+# ===============================
 # extension python libraries
-# ___________________________________________________
+# ===============================
 import pandas as pd
+import numpy as np
 import cv2
 
-# ___________________________________________________
+# ===============================
 # developed python libraries
-# ___________________________________________________
+# ===============================
 import Config
 from Lib.Utils import Error as Error
 from Lib.Recovery.Content import Page
@@ -88,11 +90,16 @@ class Gallery(object):
     # =========================================
     # class variables
     # =========================================
-
     webGallery = str()
     galleryPath = str()
     schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
     dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
+
+    # =========================================
+    # class configuration
+    # =========================================
+    # np.set_printoptions(threshold=sys.maxsize)
+    # csv.field_size_limit(sys.maxsize)
 
     # =========================================
     # functions to create a new gallery
@@ -310,8 +317,14 @@ class Gallery(object):
         try:
             # pandas function to save dataframe in CSV file
             galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
-            self.dataFrame.to_csv(galleryFilePath, sep=",",
-                                  index=False, encoding="utf-8", mode="w")
+            self.dataFrame.to_csv(
+                            galleryFilePath,
+                            sep=",",
+                            index=False,
+                            encoding="utf-8",
+                            mode="w",
+                            quoting=csv.QUOTE_ALL
+                            )
 
         # exception handling
         except Exception as exp:
@@ -333,7 +346,12 @@ class Gallery(object):
             # read an existing CSV fileto update the dataframe
             galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
             self.dataFrame = pd.read_csv(
-                galleryFilePath, sep=",", encoding="utf-8", engine="python")
+                                galleryFilePath,
+                                sep=",",
+                                encoding="utf-8",
+                                engine="python",
+                                quoting=csv.QUOTE_ALL
+                                )
 
         # exception handling
         except Exception as exp:
@@ -361,11 +379,54 @@ class Gallery(object):
             imgfn = os.path.join(fname, fn)
             # reading all data from image
 
-            ans1 = cv2.imread(imgfn, cv2.IMREAD_COLOR)
+            # ans1 = cv2.imread(imgfn, cv2.IMREAD_COLOR)
+            ans1 = cv2.imread(imgfn, cv2.IMREAD_GRAYSCALE)
             ans2 = ans1.shape
-            # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
-            # returning answer
+            # img_reshape = None
+
+            # ans1 = ans1.flatten()
+            # ans1 = list(ans1)
+            ans1 = ans1.tolist()#.reshape(-1)
+            ans1 = self.listToString(ans1)
+            # separator = ", "
+            # ans1 = separator.join(ans1)
+            # # ans1 = str().join(ans1, separator="|")
+            # ans1 = str(ans1) #, encoding="utf-8")
+            ans2 = list(ans2)
+            # temp = ans2[0]*ans2[1]#*ans2[2]
+            # # temp2 = ans1.tolist()
+            # print(str(len(ans1)), str(ans2), temp)  # , len(temp2))
+
+            # # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
+            # # returning answer
             return ans1, ans2
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def listToString(self, inList, sep=" "):
+        """[summary]
+
+        Args:
+            inList (list): 1D list for to transform to string
+            sep (str, optional): separator special character. Defaults is ",".
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (str): retunrs the list as an string with sep as separators
+        """
+        try:
+            ans = str()
+
+            for elm in inList:
+                tstr = str(float(elm))+sep
+                ans = ans + tstr
+
+            # # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:

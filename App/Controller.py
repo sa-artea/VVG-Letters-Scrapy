@@ -361,6 +361,7 @@ class Controller (object):
 
                 tempSoup = self.scrapElement(url, div, attrs, **kwargs)
                 temp = self.getPageDescription(tempSoup, elem)
+                # print(temp)
 
                 # compose answer
                 ans.append(temp)
@@ -445,6 +446,7 @@ class Controller (object):
 
                 tempSoup = self.scrapElement(url, div, attrs, **kwargs)
                 temp = self.getObjectData(tempSoup, elem)
+                # print(temp)
 
                 # compose answer
                 ans.append(temp)
@@ -489,6 +491,7 @@ class Controller (object):
 
                 # extracting the search tags from the soup
                 temp = self.getSearchTags(tempSoup, elem, rootUrl)
+                # print(temp)
 
                 # compose answer
                 ans.append(temp)
@@ -541,6 +544,7 @@ class Controller (object):
                     # extracting the search tags from the soup
                     temp = self.getRelatedWork(tempSoup, elem, rootUrl)
 
+                # print(temp)
                 # compose answer
                 ans.append(temp)
                 time.sleep(DEFAULT_SLEEP_TIME)
@@ -758,6 +762,7 @@ class Controller (object):
 
             # returning answer
             ans1 = copy.deepcopy(ans1)
+            ans2 = copy.deepcopy(ans2)
             return ans1, ans2
 
         # exception handling
@@ -1122,6 +1127,7 @@ class Controller (object):
             ans = str(ans)
             ans = re.sub(r" \s+", "", ans)
             ans = re.sub(r"\n", "", ans)
+            ans = re.sub(r"'", "", ans)
 
             # returning answer
             return ans
@@ -1421,14 +1427,19 @@ class Controller (object):
             ans = ans.decode("utf-8")
             ans = str(ans)
 
-            # removing conflicting characters
-            ans = re.sub(r" \s+", "", ans)
-            ans = re.sub(r"\n", "", ans)
-            ans = re.sub(r"[^\w\s]", "", ans)
+            # removing extra spaces
+            ans = re.sub(r" \s+", " ", ans)
+            # removing newlines
+            ans = re.sub(r"\n", ". ", ans)
+            # remove pesky single quote
+            ans = re.sub(r"'", "", ans)
+            # ans = re.sub(r"[^\w\s]", "", ans)
+            # HTML weird leftovers
+            ans = re.sub(r"None{1,3}", " ", ans)
 
             # final cast and rechecking
             ans = str(ans)
-            ans = re.sub(r"\W", " ", ans)
+            # ans = re.sub(r"\W", " ", ans)
             ans = re.sub(r" \s+", " ", ans)
 
             # return answer
