@@ -23,16 +23,22 @@ particular data column.
 8. Scrap the search tags related to each gallery's objects.
 9. Scrap the museum's Collection-Data related to each gallery's objects.
 10. Scrap the related work of each of the gallery's objects.
-11. Transform each available image into a numpy array with CV2.
+11. Transform each available image into a numpy array with CV2. #TODO
 12. Export all available data from the dataframe to JSON files in the local directory.
 13. Full automatic script to execute a sequence of steps [3, 5, 6, 8, 9, 10, 11,
-    12] FIXME!!!
+    12] #TODO
 
 Originaly developed for the final project for the tittle of Digital humanities
 Msc. degree between 2019 - 2021.
 
 The code was refactored and commented for the official and final presentation
 for the 2020/2021 project of the Uniandes Digital Humanities graduate program.
+
+---
+
+## **Development Enviroment**
+
+#TODO
 
 ---
 
