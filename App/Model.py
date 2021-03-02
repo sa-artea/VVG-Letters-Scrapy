@@ -23,14 +23,13 @@
 # ===============================
 import os
 import copy
-import sys
 import csv
 
 # ===============================
 # extension python libraries
 # ===============================
 import pandas as pd
-import numpy as np
+# import numpy as np
 import cv2
 
 # ===============================
@@ -386,7 +385,7 @@ class Gallery(object):
 
             # ans1 = ans1.flatten()
             # ans1 = list(ans1)
-            ans1 = ans1.tolist()#.reshape(-1)
+            ans1 = ans1.tolist()
             ans1 = self.listToString(ans1)
             # separator = ", "
             # ans1 = separator.join(ans1)

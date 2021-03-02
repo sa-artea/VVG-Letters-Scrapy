@@ -78,8 +78,8 @@ sourceFolder = "Source"
 # app subfoder
 dataFolder = "Data"
 # idex csv file
-indexFile = "VanGoghGallery_small.csv"
-# indexFile = "VanGoghGallery_large.csv"
+# indexFile = "VanGoghGallery_small.csv"
+indexFile = "VanGoghGallery_large.csv"
 # indexFile = "VanGoghGallery_extensive.csv"
 
 # default template for the element/paint dict in gallery
