@@ -26,17 +26,15 @@ import time
 # ___________________________________________________
 import requests
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
 
 # ___________________________________________________
 # Local application imports
 # ___________________________________________________
-import Config
-from Lib.Utils import Error as Error
-assert Config
-assert Error
+import Conf
+from Lib.Utils import Err as Err
+assert Conf
+assert Err
 
 # ___________________________________________________
 # Global variables

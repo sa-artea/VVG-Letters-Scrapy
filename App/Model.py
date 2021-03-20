@@ -35,12 +35,12 @@ import cv2
 # ===============================
 # developed python libraries
 # ===============================
-import Config
-from Lib.Utils import Error as Error
+import Conf
+from Lib.Utils import Err as Err
 from Lib.Recovery.Content import Page
 assert Page
-assert Error
-assert Config
+assert Err
+assert Conf
 
 # default template for the element/paint dict in gallery
 DEFAULT_FRAME_SCHEMA = [
@@ -386,7 +386,7 @@ class Gallery(object):
             # ans1 = ans1.flatten()
             # ans1 = list(ans1)
             ans1 = ans1.tolist()
-            ans1 = self.listToString(ans1)
+            # ans1 = self.listToString(ans1)
             # separator = ", "
             # ans1 = separator.join(ans1)
             # # ans1 = str().join(ans1, separator="|")
@@ -399,33 +399,6 @@ class Gallery(object):
             # # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
             # # returning answer
             return ans1, ans2
-
-        # exception handling
-        except Exception as exp:
-            raise exp
-
-    def listToString(self, inList, sep=" "):
-        """[summary]
-
-        Args:
-            inList (list): 1D list for to transform to string
-            sep (str, optional): separator special character. Defaults is ",".
-
-        Raises:
-            exp: raise a generic exception if something goes wrong
-
-        Returns:
-            ans (str): retunrs the list as an string with sep as separators
-        """
-        try:
-            ans = str()
-
-            for elm in inList:
-                tstr = str(float(elm))+sep
-                ans = ans + tstr
-
-            # # returning answer
-            return ans
 
         # exception handling
         except Exception as exp:

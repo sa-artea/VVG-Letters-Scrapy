@@ -39,10 +39,10 @@ import unicodedata
 # ___________________________________________________
 # developed python libraries
 # ___________________________________________________
-import Config
+import Conf
 from App.Model import Gallery
 from Lib.Recovery.Content import Page as Page
-assert Config
+assert Conf
 assert Gallery
 
 """
@@ -631,6 +631,7 @@ class Controller (object):
             raise exp
 
     def getSearchTags(self, elemSoup, searchElem, rootUrl):
+        # TODO: separate into other class in future versions
         """
         process the scraped data from the beatifulSoup object and saves the
         relevant information into a JSON files
@@ -770,6 +771,7 @@ class Controller (object):
             raise exp
 
     def getObjectData(self, elemSoup, objElem):
+        # TODO: separate into other class in future versions
         """
         process the scraped data from the beatifulSoup object and saves the
         object data into a JSON files
@@ -827,6 +829,7 @@ class Controller (object):
             raise exp
 
     def getRelatedWork(self, elemSoup, relwElem, rootUrl):
+        # TODO: separate into other class in future versions
         """
         process the scraped data from the beatifulSoup object and saves the
         related work information into a JSON files
@@ -910,6 +913,7 @@ class Controller (object):
             raise exp
 
     def getPicture(self, downloadUrl, galleryF, *args, **kwargs):
+        # TODO: separate into other class in future versions
         """
         save the element image file in a local dirpath folder
 
@@ -1102,6 +1106,7 @@ class Controller (object):
             raise exp
 
     def getPageTittle(self, elemSoup, titleElem):
+        # TODO: separate into other class in future versions
         """
         get the page's tittle from the beatifulSoup object
 
@@ -1137,6 +1142,7 @@ class Controller (object):
             raise exp
 
     def getPageDescription(self, elemSoup, desElem):
+        # TODO: separate into other class in future versions
         """
         get the page's description from the beatifulSoup object
 

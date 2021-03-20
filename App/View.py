@@ -17,29 +17,30 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-# ___________________________________________________
+# =======================================================
 # native python libraries
-# ___________________________________________________
+# =======================================================
 import sys
 import re
 import os
+import configparser
 import copy
-# ___________________________________________________
+# =======================================================
 # extension python libraries
-# ___________________________________________________
+# =======================================================
 # NONE IN VIEW
 
-# ___________________________________________________
+# =======================================================
 # developed python libraries
-# ___________________________________________________
+# =======================================================
 # from Lib.Recovery.Pages import page as page
 # from Lib.Utils import error as error
-import Config
+import Conf
 from App.Controller import Controller
 from App.Model import Gallery
 assert Controller
 assert Gallery
-assert Config
+assert Conf
 
 """
 The view is in charge of the interaction with the user
@@ -47,40 +48,56 @@ selecting the options to scrap the web and load the data
 into the CSV files.
 """
 
-# ___________________________________________________
+# =======================================================
 #  data input
-# ___________________________________________________
+# =======================================================
 
-# URL for the webpage to recover the paintings
-# url with small query for small tests
-# vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=study"
+cfgFolder = "Config"
+cfgFile = "default-config.ini"
+cfgfp = os.path.join(cfgFolder, cfgFile)
+cfgData = configparser.ConfigParser()
+cfgData.read(cfgfp, encoding="utf-8")
 
-# url query for VVG large consult excluding the written part of the letters
-vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Artist=Vincent+van+Gogh&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
+# url query for VVG gallery request
+vvg_search = cfgData.get("Requests", "small")
+# vvg_search = cfgData.get("Requests", "large")
+# vvg_search = cfgData.get("Requests", "extensive")
 
-# url with complete query with many artists related with VVG
-# vvg_search = "https://www.vangoghmuseum.nl/en/collection?q=&Type=painting%2Cdrawing%2Csketch%2Cprint%2Cstudy"
+print("=================== Config INI Gallery Search ===================")
+print(str(vvg_search) + "\n\n")
 
 # root URL of the gallery
-vvg_url = "https://vangoghmuseum.nl"
+vvg_url = cfgData.get("Requests", "root")
 
-# local root dirpath where the data will be save
-vincent_localpath = "C:\\Users\\Felipe\\Universidad de los andes\\CoIArt - General\\04 - Data\\01 - Vincent\\Source\\"
+# local root dirpath where the data CHANGE IN .INI!!!!
+vincent_localpath = cfgData.get("Paths", "localPath")
 
 # real rootpath to work with
 galleryFolder = os.path.normpath(vincent_localpath)
+print("================== Config INI Local Path Gallery ==================")
+print(galleryFolder)
+print(os.path.isdir(vincent_localpath))
 
 # subdirs in the local root path needed to process data
-paintsFolder = "Paints"
-lettersFolder = "Letters"
+paintsFolder = cfgData.get("Paths", "paintsFolder")
+lettersFolder = cfgData.get("Paths", "lettersFolder")
 # scrapped subfolder
-sourceFolder = "Source"
+sourceFolder = cfgData.get("Paths", "sourceFolder")
 # app subfoder
-dataFolder = "Data"
-# idex csv file
-# indexFile = "VanGoghGallery_small.csv"
-indexFile = "VanGoghGallery_large.csv"
-# indexFile = "VanGoghGallery_extensive.csv"
+dataFolder = cfgData.get("Paths", "dataFolder")
+
+# cresting the export file for the data
+bfn = cfgData.get("ExportFiles", "basicfile")
+fext = cfgData.get("ExportFiles", "fext")
+
+# change according to the request in the .INI!!!!
+fsize = cfgData.get("ExportFiles", "small")
+# fnsize = cfgData.get("ExportFiles", "large")
+# fnsize = cfgData.get("ExportFiles", "extensive")
+
+exportFile = bfn + fsize + "." + fext
+print("================== Config INI Export File Name ==================")
+print(str(exportFile) + "\n\n")
 
 # default template for the element/paint dict in gallery
 VINCENT_DF_COLS = [
@@ -118,9 +135,9 @@ VINCENT_DF_COLS = [
     "IMG_SHAPE",
 ]
 
-# ______________________________________________________
+# =======================================================
 #  data input for scraping the html and creating index
-# ______________________________________________________
+# =======================================================
 # html tags for the general object
 index_div = "a"
 index_attrs = {
@@ -160,11 +177,13 @@ url_attrs = {
 WC = VINCENT_DF_COLS[VINCENT_DF_COLS.index(
     "ID"):VINCENT_DF_COLS.index("COLLECTION_URL")+1]
 start_index_columns = copy.deepcopy(WC)
+
+print("================== Config INI DataFrame Schema ==================")
 print(start_index_columns)
 
-# ______________________________________________________
+# =======================================================
 #  data input for scraping the html of each element
-# ______________________________________________________
+# =======================================================
 
 # html tags for scrapping gallery element description
 desc_div = "section"
@@ -209,9 +228,9 @@ rwork_elem = "article"
 # img file extension to work in the gallery elements
 imgf = "jpg"
 
-# ___________________________________________________
+# =======================================================
 #  Functions to print webpage recovered data
-# ___________________________________________________
+# =======================================================
 # dummy vars for the index of the dataframe
 donwload_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("DOWNLOAD_URL")]
 haspic_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("HAS_PICTURE")]
@@ -224,7 +243,7 @@ shape_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_SHAPE")]
 # column names for creating the JSON in the folders
 json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
     "DESCRIPTION"):VINCENT_DF_COLS.index("RELATED_WORKS")+1])
-print(json_index_cols)
+print(json_index_cols, "\n\n")
 
 # list with steps for dataframe automatic generator
 AUTO_LIST = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
@@ -235,9 +254,9 @@ class View(object):
     the View is the console interface for the program, connect to the Model()
     with the Controller()
     """
-    # ___________________________________________
+    # =======================================================
     # class variables
-    # ___________________________________________
+    # =======================================================
     galleryControl = Controller()
     galleryModel = Gallery()
     galleryPath = str()
@@ -339,7 +358,7 @@ class View(object):
 
             # setting up local dir for saving data
             self.galleryPath = self.galleryControl.SetUpLocal(gf, sf, pf)
-            print("============== Configuring the Gallery View ==============")
+            print("============== Creating the Gallery View ==============")
             print("View localdir: " + str(self.galleryPath))
             print("View gallery URL: " + str(self.webGallery))
             print("\n")
@@ -424,7 +443,7 @@ class View(object):
                     print("Saving gallery Model into CSV file...")
                     print("...\n")
 
-                    gc.saveGallery(indexFile, dataFolder)
+                    gc.saveGallery(exportFile, dataFolder)
 
                     print("=================== REPORT ===================")
                     ans = gc.checkGallery()
@@ -434,7 +453,7 @@ class View(object):
                     print("Loading Gallery's CSV file into Model...")
                     print("...\n")
 
-                    gc.loadGallery(indexFile, dataFolder)
+                    gc.loadGallery(exportFile, dataFolder)
                     gc.createLocalFolders(gc.galleryPath, id_col)
 
                     print("=================== REPORT ===================")
