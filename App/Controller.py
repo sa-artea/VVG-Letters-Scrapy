@@ -18,9 +18,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-# ___________________________________________________
+# =========================================
 # native python libraries
-# ___________________________________________________
+# =========================================
 import re
 import os
 import copy
@@ -30,15 +30,15 @@ import requests
 import validators
 import time
 
-# ___________________________________________________
+# =========================================
 # extension python libraries
-# ___________________________________________________
+# =========================================
 from urllib.parse import urlparse
 import unicodedata
 
-# ___________________________________________________
+# =========================================
 # developed python libraries
-# ___________________________________________________
+# =========================================
 import Conf
 from App.Model import Gallery
 from Lib.Recovery.Content import Page as Page
@@ -631,7 +631,7 @@ class Controller (object):
             raise exp
 
     def getSearchTags(self, elemSoup, searchElem, rootUrl):
-        # TODO: separate into other class in future versions
+        # FIXME: remove after implement the Topic() class
         """
         process the scraped data from the beatifulSoup object and saves the
         relevant information into a JSON files
@@ -771,7 +771,7 @@ class Controller (object):
             raise exp
 
     def getObjectData(self, elemSoup, objElem):
-        # TODO: separate into other class in future versions
+        # FIXME: remove after implement the Topic() class
         """
         process the scraped data from the beatifulSoup object and saves the
         object data into a JSON files
@@ -829,7 +829,7 @@ class Controller (object):
             raise exp
 
     def getRelatedWork(self, elemSoup, relwElem, rootUrl):
-        # TODO: separate into other class in future versions
+        # FIXME: remove after implement the Topic() class
         """
         process the scraped data from the beatifulSoup object and saves the
         related work information into a JSON files
@@ -913,7 +913,7 @@ class Controller (object):
             raise exp
 
     def getPicture(self, downloadUrl, galleryF, *args, **kwargs):
-        # TODO: separate into other class in future versions
+        # FIXME: remove after implement the Topic() class
         """
         save the element image file in a local dirpath folder
 
@@ -974,6 +974,7 @@ class Controller (object):
             raise exp
 
     def getID(self, gallerySoup, idElem):
+        # FIXME: remove after implement the Topic() class
         """
         get the unique identifier (ID) of the gallery element and assign it to
         the dataframe record
@@ -1069,6 +1070,7 @@ class Controller (object):
             raise exp
 
     def getTitle(self, gallerySoup, titleElem):
+        # FIXME: remove after implement the Topic() class
         """
         get the element titles from the gallery main page
 
@@ -1106,7 +1108,7 @@ class Controller (object):
             raise exp
 
     def getPageTittle(self, elemSoup, titleElem):
-        # TODO: separate into other class in future versions
+        # FIXME: remove after implement the Topic() class
         """
         get the page's tittle from the beatifulSoup object
 
@@ -1142,7 +1144,7 @@ class Controller (object):
             raise exp
 
     def getPageDescription(self, elemSoup, desElem):
-        # TODO: separate into other class in future versions
+        # FIXME: remove after implement the Topic() class
         """
         get the page's description from the beatifulSoup object
 
@@ -1408,6 +1410,7 @@ class Controller (object):
             raise exp
 
     def cleanText(self, text):
+        # FIXME: remove after implement the Topic() class
         """
         clean text from HTML, remove all
 
@@ -1439,7 +1442,6 @@ class Controller (object):
             ans = re.sub(r"\n", ". ", ans)
             # remove pesky single quote
             ans = re.sub(r"'", "", ans)
-            # ans = re.sub(r"[^\w\s]", "", ans)
             # HTML weird leftovers
             ans = re.sub(r"None{1,3}", " ", ans)
 

@@ -38,6 +38,8 @@ import cv2
 import Conf
 from Lib.Utils import Err as Err
 from Lib.Recovery.Content import Page
+from Lib.Recovery.Cleaner import Topic
+assert Topic
 assert Page
 assert Err
 assert Conf
@@ -76,9 +78,9 @@ DEFAULT_FRAME_SCHEMA = [
 ]
 
 
-# -----------------------------------------------------
+# ================================================
 # API for the scrapping the gallery of paintings
-# -----------------------------------------------------
+# ================================================
 class Gallery(object):
     """
     this class implement the gallery of the model, containing all its elements
