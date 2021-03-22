@@ -52,15 +52,38 @@ functions as well as functions to merge the results from different
 elements in the models or various models.
 """
 
-# global config variables
-cfgFolder = "Config"
-cfgSchema = "df-schema.ini"
-
-# loading config schema into the program
-dataSchema = Conf.configGlobal(cfgFolder, cfgSchema)
-
 # default template for the element/paint dict in gallery
-DEFAULT_FRAME_SCHEMA = eval(dataSchema.get("DEFAULT", "columns"))
+DEFAULT_FRAME_SCHEMA = [
+    # ID element in the gallery and local folder name
+    "ID",
+
+    # tittle of the element in the gallery
+    "TITLE",
+
+    # recovered element (paint) URL
+    "COLLECTION_URL",
+
+    # direct image URL/link for the image in the gallery
+    "DOWNLOAD_URL",
+
+    # boolean if there is a picture file in the local folder
+    "HAS_PICTURE",
+
+    # JSON with the description of the element
+    "DESCRIPTION",
+
+    # JSON with the collection tags of the element
+    "SEARCH_TAGS",
+
+    # JSON with the museum object data of the element
+    "OBJ_DATA",
+
+    # JSON with the related work text and URLs of the element
+    "RELATED_WORKS",
+
+    # numpy RGW matrix created from original image
+    "IMG_DATA",
+]
 
 # defaul waiting time for scrapping data, this helps not to get blocked
 DEFAULT_SLEEP_TIME = 3.0

@@ -23,8 +23,8 @@
 import sys
 import re
 import os
-import configparser
 import copy
+
 # =======================================================
 # extension python libraries
 # =======================================================
@@ -33,8 +33,6 @@ import copy
 # =======================================================
 # developed python libraries
 # =======================================================
-# from Lib.Recovery.Pages import page as page
-# from Lib.Utils import error as error
 import Conf
 from App.Controller import Controller
 from App.Model import Gallery
@@ -49,28 +47,27 @@ into the CSV files.
 """
 
 # =======================================================
-#  data input
+#  Global data config
 # =======================================================
 
 cfgFolder = "Config"
-cfgFile = "default-config.ini"
-cfgfp = os.path.join(cfgFolder, cfgFile)
-cfgData = configparser.ConfigParser()
-cfgData.read(cfgfp, encoding="utf-8")
+cfgApp = "app-config.ini"
+cfgSchema = "df-schema.ini"
+dataApp = Conf.configGlobal(cfgFolder, cfgApp)
 
 # url query for VVG gallery request
-vvg_search = cfgData.get("Requests", "small")
-# vvg_search = cfgData.get("Requests", "large")
-# vvg_search = cfgData.get("Requests", "extensive")
+vvg_search = dataApp.get("Requests", "small")
+# vvg_search = dataApp.get("Requests", "large")
+# vvg_search = dataApp.get("Requests", "extensive")
 
 print("=================== Config INI Gallery Search ===================")
 print(str(vvg_search) + "\n\n")
 
 # root URL of the gallery
-vvg_url = cfgData.get("Requests", "root")
+vvg_url = dataApp.get("Requests", "root")
 
 # local root dirpath where the data CHANGE IN .INI!!!!
-vincent_localpath = cfgData.get("Paths", "localPath")
+vincent_localpath = dataApp.get("Paths", "localPath")
 
 # real rootpath to work with
 galleryFolder = os.path.normpath(vincent_localpath)
@@ -79,65 +76,53 @@ print(galleryFolder)
 print(os.path.isdir(vincent_localpath))
 
 # subdirs in the local root path needed to process data
-paintsFolder = cfgData.get("Paths", "paintsFolder")
-lettersFolder = cfgData.get("Paths", "lettersFolder")
+paintsFolder = dataApp.get("Paths", "paintsFolder")
+lettersFolder = dataApp.get("Paths", "lettersFolder")
+
 # scrapped subfolder
-sourceFolder = cfgData.get("Paths", "sourceFolder")
+sourceFolder = dataApp.get("Paths", "sourceFolder")
+
 # app subfoder
-dataFolder = cfgData.get("Paths", "dataFolder")
+dataFolder = dataApp.get("Paths", "dataFolder")
 
 # cresting the export file for the data
-bfn = cfgData.get("ExportFiles", "basicfile")
-fext = cfgData.get("ExportFiles", "fext")
+bfn = dataApp.get("ExportFiles", "basicfile")
+fext = dataApp.get("ExportFiles", "fext")
 
 # change according to the request in the .INI!!!!
-fsize = cfgData.get("ExportFiles", "small")
-# fnsize = cfgData.get("ExportFiles", "large")
-# fnsize = cfgData.get("ExportFiles", "extensive")
+fsize = dataApp.get("ExportFiles", "small")
+# fnsize = dataApp.get("ExportFiles", "large")
+# fnsize = dataApp.get("ExportFiles", "extensive")
 
 exportFile = bfn + fsize + "." + fext
 print("================== Config INI Export File Name ==================")
 print(str(exportFile) + "\n\n")
 
-# default template for the element/paint dict in gallery
-VINCENT_DF_COLS = [
-    # ID element in the gallery and local folder name
-    "ID",
+# loading config schema into the program
+dataSchema = Conf.configGlobal(cfgFolder, cfgSchema)
 
-    # tittle of the element in the gallery
-    "TITLE",
+# setting schema for the element/paint gallery dataframe
+VINCENT_DF_COLS = eval(dataSchema.get("DEFAULT", "columns"))
 
-    # recovered element (paint) URL
-    "COLLECTION_URL",
+# column names for creating a new index and model in the program
+WC = VINCENT_DF_COLS[VINCENT_DF_COLS.index(
+    "ID"):VINCENT_DF_COLS.index("COLLECTION_URL")+1]
+start_index_columns = copy.deepcopy(WC)
 
-    # direct image URL/link for the image in the gallery
-    "DOWNLOAD_URL",
+print("================== Columns for a new DF-Schema ==================")
+print(start_index_columns, "\n")
 
-    # boolean if there is a picture file in the local folder
-    "HAS_PICTURE",
+# column names for creating the JSON in the folders
+json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
+    "DESCRIPTION"):VINCENT_DF_COLS.index("RELATED_WORKS")+1])
 
-    # JSON with the description of the element
-    "DESCRIPTION",
-
-    # JSON with the collection tags of the element
-    "SEARCH_TAGS",
-
-    # JSON with the museum object data of the element
-    "OBJ_DATA",
-
-    # JSON with the related work text and URLs of the element
-    "RELATED_WORKS",
-
-    # numpy RGW matrix created from original image
-    "IMG_DATA",
-
-    # numpy array shape for the RGW matrix
-    "IMG_SHAPE",
-]
+print("================= JSON Columns in the DF-Schema =================")
+print(json_index_cols, "\n")
 
 # =======================================================
-#  data input for scraping the html and creating index
+#  data input to start creating index and scraping
 # =======================================================
+
 # html tags for the general object
 index_div = "a"
 index_attrs = {
@@ -172,14 +157,6 @@ url_elem = "href"
 url_attrs = {
     "class": "collection-art-object-wrapper",
 }
-
-# column names for creating a new index and model in the program
-WC = VINCENT_DF_COLS[VINCENT_DF_COLS.index(
-    "ID"):VINCENT_DF_COLS.index("COLLECTION_URL")+1]
-start_index_columns = copy.deepcopy(WC)
-
-print("================== Config INI DataFrame Schema ==================")
-print(start_index_columns)
 
 # =======================================================
 #  data input for scraping the html of each element
@@ -240,11 +217,6 @@ rwork_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("RELATED_WORKS")]
 img_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_DATA")]
 shape_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_SHAPE")]
 
-# column names for creating the JSON in the folders
-json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
-    "DESCRIPTION"):VINCENT_DF_COLS.index("RELATED_WORKS")+1])
-print(json_index_cols, "\n\n")
-
 # list with steps for dataframe automatic generator
 AUTO_LIST = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
 
@@ -261,6 +233,14 @@ class View(object):
     galleryModel = Gallery()
     galleryPath = str()
     webGallery = str()
+
+    # query input variables
+    qDivs = None
+    qAttrs = None
+    qElements = None
+    qCleanups = None
+
+    # automatic query input variables
     autoStepList = AUTO_LIST
     autoStep = 0
     inputs = -1
@@ -281,6 +261,12 @@ class View(object):
             # generic creation
             self.galleryModel = Gallery()
             self.galleryControl = Controller()
+            self.galleryPath = str()
+            self.webGallery = str()
+            self.qDivs = None
+            self.qAttrs = None
+            self.qElements = None
+            self.qCleanups = None
             self.autoStepList = AUTO_LIST
             self.autoStep = 0
             self.inputs = -1
@@ -418,25 +404,26 @@ class View(object):
                     # starting the gallery index (gain) from scratch
                     gain = gc.scrapIndex(wg, 5, id_div, id_attrs)
                     id_data = gc.getID(gain, id_elem)
-                    print("Gallery's IDs was processed...")
+                    print("Gallery IDs were processed...")
 
                     gain = gc.scrapAgain(title_div, title_attrs)
                     title_data = gc.getTitle(gain, title_elem)
-                    print("Gallery's Titles was processed...")
+                    print("Gallery Titles were processed...")
 
                     gain = gc.scrapAgain(id_div, id_attrs)
                     link_data = gc.getURL(gain, vvg_url, id_elem)
-                    print("Gallery's collection URLs was processed...")
+                    print("Gallery collection URLs were processed...")
 
                     index_data = (id_data, title_data, link_data)
 
                     ans = gc.newDataFrame(start_index_columns, index_data)
-                    print("New Gallery's Model was created...")
+                    print("New Gallery Model was created...")
 
                     gc.createLocalFolders(gc.galleryPath, id_col)
                     print("Local Gallery folders were created...")
 
                     print("=================== REPORT ===================")
+                    ans = gc.checkGallery()
                     print(ans)
 
                 elif int(inp) == 2:
@@ -616,7 +603,6 @@ class View(object):
 
 
 if __name__ == "__main__":
-
     """
     creating the View() object and running it
     """
