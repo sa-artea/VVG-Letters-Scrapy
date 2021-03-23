@@ -533,12 +533,12 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def downloadPictures(self, dlUrlData, galleryF, *args, **kwarg):
+    def downloadPictures(self, dlUrlColn, galleryF, *args, **kwarg):
         """
         download the picture files from a list of available url in the gallery
 
         Args:
-            dlUrlData (str): list of downloadable known URLs
+            dlUrlColn (str): column name of known download URLs
             galleryF (str): name of the main gallery folder
 
         Raises:
@@ -550,20 +550,19 @@ class Controller (object):
         """
         try:
             # getting the element url in the gallery
-            urls = list(dlUrlData)
+            # urls = list(dlUrlCol)
             ans = list()
+            urls = self.gallery.getData(dlUrlColn)
 
             for url in urls:
 
                 # the url is valir, it can be null or na or none
                 if validators.url(str(url)) is True:
-
                     temp = self.getPicture(url, galleryF, *args, **kwarg)
                     ans.append(temp)
 
                 # invalid url
                 else:
-
                     temp = False
                     ans.append(temp)
 
@@ -920,6 +919,7 @@ class Controller (object):
                 picFile = downReq.headers.__getitem__("Content-Disposition")
                 picFile = str(picFile)
                 picFile = picFile.split(";")[1].strip().strip("filename=")
+                print(picFile)
 
                 # parsing the URL to choose the local folder to save the file
                 elemf = urlparse(downloadUrl)

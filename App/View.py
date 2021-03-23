@@ -178,12 +178,12 @@ print(json_index_cols, "\n")
 # }
 # pic_elem = "href"
 
-# html tags for search annotations in the gallery elements.
-search_div = "section"
-search_attrs = {
-    "class": "artobject-page-collection-links",
-}
-search_elem = "a"  # ["li", "a"] # ["ul", "li"]
+# # html tags for search annotations in the gallery elements.
+# search_div = "section"
+# search_attrs = {
+#     "class": "artobject-page-collection-links",
+# }
+# search_elem = "a"  # ["li", "a"] # ["ul", "li"]
 
 # # html tags for object data in the gallery elements.
 # obj_div = "dl"
@@ -421,8 +421,6 @@ class View(object):
                     # ifs for different types
                     if t in (dict, list, tuple, None):
                         temp = eval(temp)
-                        print("OJO!!!...")
-                        print(temp)
                     elif t is int:
                         temp = int(temp)
                     elif t is float:
@@ -687,6 +685,7 @@ class View(object):
         1, it download the actual image from each gallery element
 
         Args:
+            dl_col (str, optional): df-schema column name of the DOWNLOAD_URL
             haspic_col (str, optional): df-schema column name of the
             HAS_PICTURE
 
@@ -700,12 +699,10 @@ class View(object):
             ans = False
             gc = self.galleryControl
             gp = self.galleryPath
-            urlpic_data = gc.getData(args[0])
             haspic_data = gc.downloadPictures(
-                                urlpic_data,
+                                args[0],
                                 gp)
-
-            ans = gc.updateData(args[0], haspic_data)
+            ans = gc.updateData(args[1], haspic_data)
             return ans
         # exception handling
         except Exception as exp:
@@ -719,7 +716,7 @@ class View(object):
         Args:
             search_col (str, optional): df-schema column name of SEARCH TAGS
             curl_col (str, optional): df-schema column name of the COLLECTION
-            vvg_url (str, optional): web gallery URL search for the collection
+            vvg_url (str, optional): web gallery root URL for the collection
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -953,7 +950,7 @@ class View(object):
 
                 elif int(inp) == 7:
                     print("Downloading Gallery's picture (HAS_PICTURE)")
-                    ans = self.optSeven(haspic_col)
+                    ans = self.optSeven(dl_col, haspic_col)
                     self.printReport(ans)
                     self.optFour()
 
@@ -997,16 +994,15 @@ class View(object):
                     self.optFour()
 
                 elif int(inp) == 99:
-                    # TODO NEED TO IMPLEMENT THIS PART!!!!
-                    # list with steps for dataframe automatic generator
+                    # list with steps for dataframe automatic generation
                     # (3, 4, 5, 6, 7, 2, 8, 2, 9, 2, 10, 2)
                     print("Auto executing options 5 to 10!!!...")
                     ans = self.optFive(desc_col, curl_col)
                     ans = self.optTwo(expf, dataf)
                     ans = self.optSix(dl_col, curl_col, vvg_url)
-                    ans = self.optSeven(haspic_col)
+                    ans = self.optSeven(dl_col, haspic_col)
                     ans = self.optTwo(expf, dataf)
-                    ans = self.optEight(search_col, curl_col, vvg_url)
+                    ans = self.optEight(search_col, vvg_url)
                     ans = self.optTwo(expf, dataf)
                     ans = self.optNine(obj_col, curl_col)
                     ans = self.optTwo(expf, dataf)
