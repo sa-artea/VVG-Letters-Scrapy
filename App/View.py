@@ -53,6 +53,7 @@ into the CSV files.
 cfgFolder = "Config"
 cfgApp = "app-config.ini"
 cfgSchema = "df-schema.ini"
+cfgWebTags = "html-tags.ini"
 dataApp = Conf.configGlobal(cfgFolder, cfgApp)
 
 # url query for VVG gallery request
@@ -102,19 +103,19 @@ print(str(exportFile) + "\n\n")
 dataSchema = Conf.configGlobal(cfgFolder, cfgSchema)
 
 # setting schema for the element/paint gallery dataframe
-VINCENT_DF_COLS = eval(dataSchema.get("DEFAULT", "columns"))
+VVG_DF_COLS = eval(dataSchema.get("DEFAULT", "columns"))
 
 # column names for creating a new index and model in the program
-WC = VINCENT_DF_COLS[VINCENT_DF_COLS.index(
-    "ID"):VINCENT_DF_COLS.index("COLLECTION_URL")+1]
+WC = VVG_DF_COLS[VVG_DF_COLS.index(
+    "ID"):VVG_DF_COLS.index("COLLECTION_URL")+1]
 start_index_columns = copy.deepcopy(WC)
 
 print("================== Columns for a new DF-Schema ==================")
 print(start_index_columns, "\n")
 
 # column names for creating the JSON in the folders
-json_index_cols = copy.deepcopy(VINCENT_DF_COLS[VINCENT_DF_COLS.index(
-    "DESCRIPTION"):VINCENT_DF_COLS.index("RELATED_WORKS")+1])
+json_index_cols = copy.deepcopy(VVG_DF_COLS[VVG_DF_COLS.index(
+    "DESCRIPTION"):VVG_DF_COLS.index("RELATED_WORKS")+1])
 
 print("================= JSON Columns in the DF-Schema =================")
 print(json_index_cols, "\n")
@@ -123,62 +124,58 @@ print(json_index_cols, "\n")
 #  data input to start creating index and scraping
 # =======================================================
 
-# html tags for the general object
-index_div = "a"
-index_attrs = {
-    "class": "collection-art-object-wrapper"
-}
+# # html tags for the general object
+# index_div = "a"
+# index_attrs = {
+#     "class": "collection-art-object-wrapper"
+# }
 
-# working variable for the program
-curl_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("COLLECTION_URL")]
+# # working variable for the program
 
-# html tags for the unique ID in the collection
-id_div = "a"
-id_elem = "href"
-id_attrs = {
-    "class": "collection-art-object-wrapper",
-    "href": re.compile("^/en/collection/"),
-}
+# # html tags for the unique ID in the collection
+# id_div = "a"
+# id_elem = "href"
+# id_attrs = {
+#     "class": "collection-art-object-wrapper",
+#     "href": re.compile("^/en/collection/"),
+# }
 
-# working variable for the program
-id_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("ID")]
+# # working variable for the program
 
-#  html tags for the title of the element
-title_div = "a"
-title_elem = "title"
-title_attrs = {
-    "class": "collection-art-object-wrapper",
-    # "title": re.compile("."),
-}
+# #  html tags for the title of the element
+# title_div = "a"
+# title_elem = "title"
+# title_attrs = {
+#     "class": "collection-art-object-wrapper",
+# }
 
-#  html tags for the url of the element
-url_div = "a"
-url_elem = "href"
-url_attrs = {
-    "class": "collection-art-object-wrapper",
-}
+# #  html tags for the url of the element
+# url_div = "a"
+# url_elem = "href"
+# url_attrs = {
+#     "class": "collection-art-object-wrapper",
+# }
 
 # =======================================================
 #  data input for scraping the html of each element
 # =======================================================
 
-# html tags for scrapping gallery element description
-desc_div = "section"
-desc_attrs = {
-    "class": re.compile("art-object-page-content-"),
-}
-desc_elem = ["h1", "p", "a"]
+# # html tags for scrapping gallery element description
+# desc_div = "section"
+# desc_attrs = {
+#     "class": re.compile("art-object-page-content-"),
+# }
+# desc_elem = ["h1", "p", "a"]
 
 # working variable for the program
-desc_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("DESCRIPTION")]
 
-# html tags for scrapping and downloding the image
-pic_div = "a"
-pic_attrs = {
-    "class": "btn-icon art-object-header-bar-button",
-    "href": re.compile("^/asset/download/"),
-}
-pic_elem = "href"
+# # html tags for scrapping and downloding the image
+# pic_div = "a"
+# pic_attrs = {
+#     "class": "btn-icon art-object-header-bar-button",
+#     "href": re.compile("^/asset/download/"),
+# }
+# pic_elem = "href"
 
 # html tags for search annotations in the gallery elements.
 search_div = "section"
@@ -206,16 +203,21 @@ rwork_elem = "article"
 imgf = "jpg"
 
 # =======================================================
-#  Functions to print webpage recovered data
+#  data input to start creating index and scraping
 # =======================================================
+
 # dummy vars for the index of the dataframe
-donwload_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("DOWNLOAD_URL")]
-haspic_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("HAS_PICTURE")]
-search_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("SEARCH_TAGS")]
-objd_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("OBJ_DATA")]
-rwork_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("RELATED_WORKS")]
-img_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_DATA")]
-shape_col = VINCENT_DF_COLS[VINCENT_DF_COLS.index("IMG_SHAPE")]
+id_col = str(VVG_DF_COLS[VVG_DF_COLS.index("ID")])
+title_col = str(VVG_DF_COLS[VVG_DF_COLS.index("TITLE")])
+curl_col = str(VVG_DF_COLS[VVG_DF_COLS.index("COLLECTION_URL")])
+donwload_col = str(VVG_DF_COLS[VVG_DF_COLS.index("DOWNLOAD_URL")])
+haspic_col = str(VVG_DF_COLS[VVG_DF_COLS.index("HAS_PICTURE")])
+desc_col = str(VVG_DF_COLS[VVG_DF_COLS.index("DESCRIPTION")])
+search_col = str(VVG_DF_COLS[VVG_DF_COLS.index("SEARCH_TAGS")])
+obj_col = str(VVG_DF_COLS[VVG_DF_COLS.index("OBJ_DATA")])
+rwork_col = str(VVG_DF_COLS[VVG_DF_COLS.index("RELATED_WORKS")])
+img_col = str(VVG_DF_COLS[VVG_DF_COLS.index("IMG_DATA")])
+shape_col = str(VVG_DF_COLS[VVG_DF_COLS.index("IMG_SHAPE")])
 
 # list with steps for dataframe automatic generator
 AUTO_LIST = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
@@ -226,15 +228,18 @@ class View(object):
     the View is the console interface for the program, connect to the Model()
     with the Controller()
     """
-    # =======================================================
+    # ====================================================
     # class variables
-    # =======================================================
+    # ====================================================
     galleryControl = Controller()
     galleryModel = Gallery()
     galleryPath = str()
     webGallery = str()
 
-    # query input variables
+    # config file for scraped html tags
+    scrapyCfg = None
+
+    # query input for scrap html
     qDivs = None
     qAttrs = None
     qElements = None
@@ -252,6 +257,7 @@ class View(object):
         Args:
             webGallery (str, optional): URL of the museum gallery
             galleryPath (str, optional): the local directory to save the data
+            scrapyCfg (str, optional): costume INI file with HTML tags to scrap
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -263,6 +269,7 @@ class View(object):
             self.galleryControl = Controller()
             self.galleryPath = str()
             self.webGallery = str()
+            self.scrapyCfg = Conf.configGlobal(cfgFolder, cfgWebTags)
             self.qDivs = None
             self.qAttrs = None
             self.qElements = None
@@ -281,11 +288,14 @@ class View(object):
                     if i == 1:
                         self.galleryPath = args[i]
 
-                gw = self.webGallery
-                lg = self.galleryPath
+                    if i == 2:
+                        self.scrapyCfg = Conf.configGlobal(args[i])
+
+                wg = self.webGallery
+                gp = self.galleryPath
                 mod = self.galleryModel
-                self.galleryModel = Gallery(gw, lg)
-                self.galleryControl = Controller(gw, lg, model=mod)
+                self.galleryModel = Gallery(wg, gp)
+                self.galleryControl = Controller(wg, gp, model=mod)
 
         # exception handling
         except Exception as exp:
@@ -300,7 +310,7 @@ class View(object):
         """
 
         try:
-            print("======================== WELCOME ========================")
+            print("\n====================== WELCOME ======================\n")
             # create a new index based in the root url
             print("1) Start gallery index (scrap ID, TITLE & COLLECTION_URL)")
             # save in files all the scrapped data
@@ -350,11 +360,11 @@ class View(object):
             print("\n")
 
             # creating the gallery model
-            gw = self.webGallery
-            lg = self.galleryPath
-            VDFC = VINCENT_DF_COLS
+            wg = self.webGallery
+            gp = self.galleryPath
+            VDFC = VVG_DF_COLS
 
-            self.galleryModel = Gallery(gw, lg, schema=VDFC)
+            self.galleryModel = Gallery(wg, gp, schema=VDFC)
             print("============== Creating Gallery Model ==============")
             print("Model localdir: " + str(self.galleryModel.galleryPath))
             print("Model gallery URL: " + str(self.galleryModel.webGallery))
@@ -363,7 +373,7 @@ class View(object):
             gm = self.galleryModel
 
             # creating the gallery controller
-            self.galleryControl = Controller(gw, lg, gm, schema=VDFC)
+            self.galleryControl = Controller(wg, gp, gm, schema=VDFC)
             print("============== Crating Gallery Controller ==============")
             print("Controller localdir: " +
                   str(self.galleryControl.galleryPath))
@@ -375,6 +385,68 @@ class View(object):
         except Exception as exp:
             print(exp)
             self.setup()
+
+    def getTags(self, column, *args, **kwargs):
+        """
+        gets the HTML tags from a config file needed by beatifulsoup to 
+        create the dataframe column with the same name
+
+        Args:
+            column (str): name of the column to get the HTML tags
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list with the 4 HTML tags in the following order:
+                - divs: main HTML tag to look for in the scrap
+                - attrs: optional HTML tags to look for with the main tag
+                - elements: main HTML tag to recover in the scrap
+                - cleanup: optional HTML tags for clean up scraped data
+        """
+        try:
+            # default ans for the method
+            ans = (None, None, None, None)
+            cfg = self.scrapyCfg
+
+            # checking config file
+            if cfg.has_section(column):
+
+                # prepping all to process config file
+                ans = list()
+                # get all keys in an option
+                keys = cfg.options(column)
+                # get datatype from first key
+                types = cfg.get(column, keys[0])
+                # eval() the type list and removing the first key
+                types = eval(types)
+                keys.pop(0)
+
+                # iterating the column keys and types
+                for k, t in zip(keys, types):
+                    # getting column, option value
+                    temp = cfg.get(column, k)
+
+                    # ifs for different types
+                    if t in (dict, list, tuple, None):
+                        temp = eval(temp)
+                    elif t is int:
+                        temp = int(temp)
+                    elif t is float:
+                        temp = float(temp)
+                    elif t is str:
+                        temp = str(temp)
+                    ans.append(temp)
+
+                return ans
+
+            else:
+                return ans
+
+        # exception handling
+        except Exception as exp:
+            print(exp)
+            # self.readTags()
 
     def run(self):
         """
@@ -391,6 +463,7 @@ class View(object):
                 inp = self.inputs
                 gc = self.galleryControl
                 wg = self.webGallery
+                gp = self.galleryPath
 
                 # known if the is auto or manual input
                 if inp < 0:
@@ -399,27 +472,28 @@ class View(object):
                 # starting gallery object to scrap data
                 if int(inp) == 1:
                     print("Starting a new Gallery (ID, TITLE, COLLECTION_URL)")
-                    print("...\n")
+                    print("...")
 
                     # starting the gallery index (gain) from scratch
-                    gain = gc.scrapIndex(wg, 5, id_div, id_attrs)
-                    id_data = gc.getID(gain, id_elem)
+                    id_ins = self.getTags(id_col)
+                    gain = gc.scrapIndex(wg, 5.0, id_ins[0], id_ins[1])
+                    id_data = gc.getID(gain, id_ins[2])
                     print("Gallery IDs were processed...")
 
-                    gain = gc.scrapAgain(title_div, title_attrs)
-                    title_data = gc.getTitle(gain, title_elem)
+                    ti_ins = self.getTags(title_col)
+                    gain = gc.scrapAgain(ti_ins[0], ti_ins[1])
+                    title_data = gc.getTitle(gain, ti_ins[2])
                     print("Gallery Titles were processed...")
 
-                    gain = gc.scrapAgain(id_div, id_attrs)
-                    link_data = gc.getURL(gain, vvg_url, id_elem)
+                    url_ins = self.getTags(curl_col)
+                    gain = gc.scrapAgain(url_ins[0], url_ins[1])
+                    url_data = gc.getURL(gain, vvg_url, url_ins[2])
                     print("Gallery collection URLs were processed...")
 
-                    index_data = (id_data, title_data, link_data)
-
+                    index_data = (id_data, title_data, url_data)
                     ans = gc.newDataFrame(start_index_columns, index_data)
                     print("New Gallery Model was created...")
-
-                    gc.createLocalFolders(gc.galleryPath, id_col)
+                    gc.createLocalFolders(gp, id_col)
                     print("Local Gallery folders were created...")
 
                     print("=================== REPORT ===================")
@@ -428,8 +502,6 @@ class View(object):
 
                 elif int(inp) == 2:
                     print("Saving gallery Model into CSV file...")
-                    print("...\n")
-
                     gc.saveGallery(exportFile, dataFolder)
 
                     print("=================== REPORT ===================")
@@ -438,32 +510,26 @@ class View(object):
 
                 elif int(inp) == 3:
                     print("Loading Gallery's CSV file into Model...")
-                    print("...\n")
-
                     gc.loadGallery(exportFile, dataFolder)
-                    gc.createLocalFolders(gc.galleryPath, id_col)
+                    gc.createLocalFolders(gp, id_col)
 
                     print("=================== REPORT ===================")
-                    ans = gc.checkGallery()
-                    print(ans)
+                    gc.checkGallery()
 
                 elif int(inp) == 4:
                     print("Checking Gallery Model status (dataframe from CSV)")
-                    print("...\n")
-
                     print("=================== REPORT ===================")
                     ans = gc.checkGallery()
                     print(ans)
 
                 elif int(inp) == 5:
                     print("Recovering elements descripion (DESCRIPTION)")
-                    print("...\n")
-
+                    opt_ins = self.getTags(desc_col)
                     descrip_data = gc.scrapPageDescription(
                                         curl_col,
-                                        desc_div,
-                                        desc_attrs,
-                                        desc_elem,
+                                        opt_ins[0],
+                                        opt_ins[1],
+                                        opt_ins[2],
                                         multiple=True)
 
                     ans = gc.updateData(desc_col, descrip_data)
@@ -472,14 +538,13 @@ class View(object):
 
                 elif int(inp) == 6:
                     print("Recovering pictures download urls (DOWNLOAD_URL)")
-                    print("...\n")
-
+                    opt_ins = self.getTags(donwload_col)
                     urlpic_data = gc.scrapPagePicture(
                                         curl_col,
                                         vvg_url,
-                                        pic_div,
-                                        pic_attrs,
-                                        pic_elem,
+                                        opt_ins[0],
+                                        opt_ins[1],
+                                        opt_ins[2],
                                         multiple=False)
 
                     ans = gc.updateData(donwload_col, urlpic_data)
@@ -488,12 +553,10 @@ class View(object):
 
                 elif int(inp) == 7:
                     print("Downloading Gallery's picture (HAS_PICTURE)")
-                    print("...\n")
-
                     urlpic_data = gc.getData(donwload_col)
                     haspic_data = gc.downloadPictures(
                                         urlpic_data,
-                                        gc.galleryPath)
+                                        gp)
 
                     ans = gc.updateData(haspic_col, haspic_data)
                     print("=================== REPORT ===================")
@@ -501,14 +564,13 @@ class View(object):
 
                 elif int(inp) == 8:
                     print("Recovering Gallery's search tags (SEARCH_TAGS)")
-                    print("...\n")
-
+                    opt_ins = self.getTags(search_col)
                     search_data = gc.scrapPageSearchTags(
                                         curl_col,
                                         vvg_url,
-                                        search_div,
-                                        search_attrs,
-                                        search_elem,
+                                        opt_ins[0],
+                                        opt_ins[1],
+                                        opt_ins[2],
                                         multiple=True)
 
                     ans = gc.updateData(search_col, search_data)
@@ -517,29 +579,27 @@ class View(object):
 
                 elif int(inp) == 9:
                     print("Recovering Gallery's object-data (OBJ_DATA)")
-                    print("...\n")
-
+                    opt_ins = self.getTags(obj_col)
                     object_data = gc.scrapPageObjData(
                                         curl_col,
-                                        obj_div,
-                                        obj_attrs,
-                                        obj_elem,
+                                        opt_ins[0],
+                                        opt_ins[1],
+                                        opt_ins[2],
                                         multiple=False)
 
-                    ans = gc.updateData(objd_col, object_data)
+                    ans = gc.updateData(obj_col, object_data)
                     print("=================== REPORT ===================")
                     print(ans)
 
                 elif int(inp) == 10:
                     print("Recovering Gallery's related work (RELATED_WORKS)")
-                    print("...\n")
-
+                    opt_ins = self.getTags(rwork_col)
                     rwork_data = gc.scrapPageRelWork(
                                         curl_col,
                                         vvg_url,
-                                        rwork_div,
-                                        rwork_attrs,
-                                        rwork_elem,
+                                        opt_ins[0],
+                                        opt_ins[1],
+                                        opt_ins[2],
                                         multiple=True)
 
                     ans = gc.updateData(rwork_col, rwork_data)
@@ -548,8 +608,6 @@ class View(object):
 
                 elif int(inp) == 11:
                     print("Transforming local images into np.ndarray + shape")
-                    print("...\n")
-
                     img_data, shape_data = gc.exportImages(
                                     id_col,
                                     imgf,
@@ -564,8 +622,6 @@ class View(object):
 
                 elif int(inp) == 12:
                     print("Exporting pandas-df to JSON in local gallery")
-                    print("...\n")
-
                     # JSON export for the following columns:
                     # - desccription
                     # - search tags
@@ -573,7 +629,7 @@ class View(object):
                     # - related work
                     for temp_cname in json_index_cols:
                         gc.exportToJSON(
-                            gc.galleryPath,
+                            gp,
                             id_col,
                             temp_cname,
                             temp_cname.lower())
