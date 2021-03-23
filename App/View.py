@@ -86,6 +86,7 @@ srcf = dataApp.get("Paths", "sourceFolder")
 
 # app subfoder
 dataf = dataApp.get("Paths", "dataFolder")
+imgf = dataApp.get("Paths", "imageFolder")
 
 # cresting the export file for the data
 bfn = dataApp.get("ExportFiles", "basicfile")
@@ -120,88 +121,6 @@ json_index_cols = copy.deepcopy(VVG_DF_COLS[VVG_DF_COLS.index(
 
 print("================= JSON Columns in the DF-Schema =================")
 print(json_index_cols, "\n")
-
-# =======================================================
-#  data input to start creating index and scraping
-# =======================================================
-
-# # html tags for the general object
-# index_div = "a"
-# index_attrs = {
-#     "class": "collection-art-object-wrapper"
-# }
-
-# # working variable for the program
-
-# # html tags for the unique ID in the collection
-# id_div = "a"
-# id_elem = "href"
-# id_attrs = {
-#     "class": "collection-art-object-wrapper",
-#     "href": re.compile("^/en/collection/"),
-# }
-
-# # working variable for the program
-
-# #  html tags for the title of the element
-# title_div = "a"
-# title_elem = "title"
-# title_attrs = {
-#     "class": "collection-art-object-wrapper",
-# }
-
-# #  html tags for the url of the element
-# url_div = "a"
-# url_elem = "href"
-# url_attrs = {
-#     "class": "collection-art-object-wrapper",
-# }
-
-# =======================================================
-#  data input for scraping the html of each element
-# =======================================================
-
-# # html tags for scrapping gallery element description
-# desc_div = "section"
-# desc_attrs = {
-#     "class": re.compile("art-object-page-content-"),
-# }
-# desc_elem = ["h1", "p", "a"]
-
-# working variable for the program
-
-# # html tags for scrapping and downloding the image
-# pic_div = "a"
-# pic_attrs = {
-#     "class": "btn-icon art-object-header-bar-button",
-#     "href": re.compile("^/asset/download/"),
-# }
-# pic_elem = "href"
-
-# # html tags for search annotations in the gallery elements.
-# search_div = "section"
-# search_attrs = {
-#     "class": "artobject-page-collection-links",
-# }
-# search_elem = "a"  # ["li", "a"] # ["ul", "li"]
-
-# # html tags for object data in the gallery elements.
-# obj_div = "dl"
-# obj_attrs = {
-#     "class": "definition-list",
-#     # "string": "Object data",
-# }
-# obj_elem = ["dt", "dd"]
-
-# # html tags for related work in the gallery elements.
-# rwork_div = "div"
-# rwork_attrs = {
-#     "class": "teaser-row content-row grid-row",
-# }
-# rwork_elem = "article"
-
-# img file extension to work in the gallery elements
-imgef = "jpg"
 
 # =======================================================
 #  data input to start creating index and scraping
@@ -457,7 +376,7 @@ class View(object):
         """
         try:
             # default ans for the method
-            ans = (None, None)
+            ans = (None, None, None)
             cfg = self.scrapyCfg
 
             # checking config file
@@ -479,8 +398,8 @@ class View(object):
                     temp = cfg.get(column, k)
 
                     # ifs for different types
-                    if t is int:
-                        temp = int(temp)
+                    if t in (dict, list, tuple, None):
+                        temp = eval(temp)
                     elif t is str:
                         temp = str(temp)
                     ans.append(temp)
@@ -825,7 +744,10 @@ class View(object):
         try:
             ans = False
             gc = self.galleryControl
-            opt_ins = self.getImgTags(args[0])
+            opt_ins = self.getWebTags(args[0])
+            opt_img = self.getImgTags(args[1])
+            print(opt_img)
+            print(opt_ins)
             img_data, shape_data = gc.exportImages(
                 args[2],
                 opt_ins[0],
@@ -833,8 +755,8 @@ class View(object):
                 args[4], # srcf,
                 args[5]) # paintf)
 
-            ans = gc.updateData(args[0], img_data)
-            ans = gc.updateData(args[1], shape_data)
+            # ans = gc.updateData(args[0], img_data)
+            # ans = gc.updateData(args[1], shape_data)
             return ans
 
         # exception handling
@@ -980,9 +902,9 @@ class View(object):
                 elif int(inp) == 11:
                     # FIXME: need to correct bugs in this part
                     print("Transforming local images into RGB, B&W + shape")
-                    ans = self.optEleven(img_col,
-                                         shape_col,
-                                         id_col)
+                    ans = self.optEleven(id_col,
+                                         img_col,
+                                         shape_col)
                     self.printReport(ans)
                     self.optFour()
 

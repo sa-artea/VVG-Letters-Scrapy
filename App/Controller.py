@@ -663,28 +663,35 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def exportImages(self, indexCol, imgf, *args, **kwargs):
+    def exportImages(self, indexCol, infext, *args, **kwargs):
         """
         reads the gallery's element id folder, get the image file and  export
         them an RGBA to a numpy matrix
 
         Args:
-            indexCol (str): name of the column in the dataframe with the
-            gallery index with unique IDs for each elements (same as the local
-            folder's names)
-            imgf (str): relevant image's extension to process
+            indexCol (str): name of the column in the gallery
+            dataframe with the unique IDs for each elements (same as
+            the local folder's names)
+            infext (str): relevant image's extension to process
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (list): the list of the related work recovered from the
-            gallery elements
+            ans_img (list): the list dictionaries wit the relative localpath
+            file for each gallery element
+            (ej.: {"rgb": "/Data/Img/s0004V1962r-rgb.jpg",
+                    "bw": "/Data/Img/s0004V1962r-b&w.jpg"
+                    })
+            ans_shape (list): the list of dictionaries with the numpy shape
+            of each gallery element
+            (ej.: {"rgb": (450, 280, 3),
+                    "bw": (450, 280)})
         """
         try:
             # working variables
-            ans1 = list()
-            ans2 = list()
+            ans_img = list()
+            ans_shape = list()
             indexData = self.getData(indexCol)
             rootDir = self.galleryPath
 
@@ -694,53 +701,54 @@ class Controller (object):
                 timgfn = os.path.join(rootDir, tid)
 
                 # recovering image
-                timg, tshape = self.getImage(timgfn, imgf, *args, **kwargs)
-                ans1.append(timg)
-                ans2.append(tshape)
+                timg, tshape = self.getImage(timgfn, infext, *args, **kwargs)
+                ans_img.append(timg)
+                ans_shape.append(tshape)
 
             # return answer list
-            return ans1, ans2
+            return ans_img, ans_shape
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getImage(self, fname, imgf, *args, **kwargs):
+    def getImage(self, fname, infext, *args, **kwargs):
         """
         get the image using a folder dirpath and the name of the file
 
         Args:
             fname (str): Gallery's root dirpath in local drive
-            imgf (str): image's file format, ie.: ".jpg"
+            infext (str): image's file format, ie.: "jpg"
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans1 (np.array): list with the numpy matrix of the image's RGB data
-            ans2 (np.array.shape): list with the image's numpy shape
+            ans_img (dict): the relative path of the RGB and B&W files
+            ans_shape (dict): the shape the RGB and B&W files
         """
 
         try:
             # default answer
-            ans1 = None
-            ans2 = None
+            ans_img = None
+            ans_shape = None
             flist = os.listdir(fname)
+            gl = self.gallery
             fn = ""
 
             # finding the propper file
             for tf in flist:
-                if tf.endswith(imgf):
+                if tf.endswith(infext):
                     fn = tf
 
             # if the file exists
             if fn != "":
-                ans1, ans2 = self.gallery.imgToData(fname, fn, *args, **kwargs)
+                ans_img, ans_shape = gl.imgToData(fname, fn, *args, **kwargs)
 
             # returning answer
-            ans1 = copy.deepcopy(ans1)
-            ans2 = copy.deepcopy(ans2)
-            return ans1, ans2
+            ans_img = copy.deepcopy(ans_img)
+            ans_shape = copy.deepcopy(ans_shape)
+            return ans_img, ans_shape
 
         # exception handling
         except Exception as exp:
