@@ -72,7 +72,8 @@ DEFAULT_SHORT_SLEEP_TIME = 0.2
 
 class Controller (object):
     """
-    Controller class, comunicate the View() and the Model()
+    Controller class, comunicate the View() and the Model(), it also manage
+    file Input/Output
     """
 
     # =========================================
@@ -80,7 +81,8 @@ class Controller (object):
     # =========================================
     webGallery = str()
     galleryPath = str()
-    modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
+    imagesPath = str()
+    schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
     gallery = Gallery()
     wpage = Page()
 
@@ -91,9 +93,16 @@ class Controller (object):
         Args:
             webGallery (str): URL for the gallery to scrap data
             galleryPath (str): local dirpath for the gallery data
-            modelStruct (list): array with the column names for the model
+            schema (list): array with the column names for the model
             gallery (Gallery): object with the gallery dataframe model
-            wpage (Page): the current webpage the controller is scrapping
+            # wpage (Page): the current webpage the controller is scrapping
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            Controller (Model): return a new Controller() object        
+        
         """
 
         try:
@@ -101,7 +110,8 @@ class Controller (object):
             # Controller default values
             self.webGallery = str()
             self.galleryPath = str()
-            self.modelStruct = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
+            self.imagesPath = str()
+            self.schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
             self.gallery = Gallery()
             self.wpage = Page()
 
@@ -120,7 +130,7 @@ class Controller (object):
 
                     # painting list containing the data of the gallery
                     if i == 2:
-                        self.gallery = args[i]
+                        self.imagesPath = args[i]
 
             # if there are dict decrators in the creator
             if len(kwargs) > 0:
@@ -132,20 +142,20 @@ class Controller (object):
                         self.schema = copy.deepcopy(kwargs[key])
 
                     # setting the max size of the gallery
-                    if key == "size":
-                        self.maxPaints = kwargs[key]
+                    if key == "model":
+                        self.gallery = kwargs[key]
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def SetUpLocal(self, galleryF, *args):
+    def SetUpLocal(self, *args):
         """
         set up local gallery filepath accorrding to the root gallery folder and
         other subfolders
 
         Args:
-            galleryF (str): name of the main gallery folder
+            rootfolder (str, optional): name of the main gallery folder
             subfolders (list, optional): array with the subfolders names to the
             gallery folder conforming the absolute dirpath
 
@@ -159,18 +169,14 @@ class Controller (object):
 
             # answer with realpath local subfoders
             workPath = str()
+            workPath = os.path.join(*args)
 
-            if len(args) > 0:
+            # if the path doesnt exists you create it
+            if not os.path.exists(workPath):
 
-                for i in range(int(len(args))):
-                    workPath = os.path.join(galleryF, args[i])
+                os.makedirs(workPath)
 
-                # if the path doesnt exists you create it
-                if not os.path.exists(workPath):
-
-                    os.makedirs(workPath)
-
-                return workPath
+            return workPath
 
         # exception handling
         except Exception as exp:
@@ -182,6 +188,7 @@ class Controller (object):
 
         Args:
             galleryF (str): name of the main gallery folder
+            coln (str): name of the column from to create the folder
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -211,7 +218,8 @@ class Controller (object):
 
     def scrapIndex(self, galleryUrl, sleepTime, div, attrs):
         """
-        scrap the gallery index for all the elements within it
+        controller inteface to scrap the gallery index and recover
+        all the elements in it
 
         Args:
             galleryUrl (str): URL for the gallery to scrap data
@@ -227,16 +235,8 @@ class Controller (object):
             ans (bs-obj): div and attrs filtered beatifulsoup object
         """
         try:
-
-            # reset working web page
-            self.wpage = Page()
-            ans = None
-
-            # getting the basic element list from gallery online index
-            self.wpage.getCollection(galleryUrl, sleepTime)
-            ans = self.wpage.findInReq(div, attributes=attrs)
-
-            # returning answer
+            mg = self.gallery
+            ans = mg.scrapIndex(galleryUrl, sleepTime, div, attrs)
             return ans
 
         # exception handling
@@ -245,8 +245,8 @@ class Controller (object):
 
     def scrapAgain(self, div, attrs):
         """
-        using the previous index scraped results, search for new information to
-        complement the dataframe index
+        controller interface to use the scrapIndex() results, to
+        scrap for new information and complete the dataframe index
 
         Args:
             div (str): HTML <div> keyword to search and scrap
@@ -259,8 +259,8 @@ class Controller (object):
             ans (bs-obj): div and attrs filtered beatifulsoup object
         """
         try:
-            ans = None
-            ans = self.wpage.findInReq(div, attributes=attrs)
+            mg = self.gallery
+            ans = mg.scrapAgain(div, attrs)
             # returning answer
             return ans
 
@@ -270,8 +270,8 @@ class Controller (object):
 
     def scrapElement(self, elemUrl, div, attrs, **kwargs):
         """
-        scrap all elements within a link based on its <div> html mark and other
-        attributes/decoratos
+        controller interface to scrap elements within a link based
+        on the <div>, html marks and other attributes or decoratos
 
         Args:
             elemUrl (str): gallery's element url
@@ -282,25 +282,12 @@ class Controller (object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (bs-obj): div and attrs filtered beatifulsoup object
+            ans (bs-obj): HTML divs as a beatifulsoup object
         """
         try:
 
-            # reset working web page
-            self.wpage = Page()
-
-            # get the body of the element url
-            reqStatus = self.wpage.getBody(elemUrl)
-            ans = None
-
-            if reqStatus == 200:
-                # find element inside the html body
-                ans = self.wpage.findInReq(
-                        div,
-                        attributes=attrs,
-                        multiple=kwargs.get("multiple")
-                        )
-
+            mg = self.gallery
+            ans = mg.scrapElement(elemUrl, div, attrs, **kwargs)
             # returning answer
             return ans
 

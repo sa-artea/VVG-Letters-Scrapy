@@ -154,14 +154,14 @@ class View(object):
     galleryControl = Controller()
     galleryModel = Gallery()
     galleryPath = str()
+    imagesPath = str()
     webGallery = str()
+    schema = VVG_DF_COLS
 
     # config file for scraped html tags
     scrapyCfg = None
 
-    # automatic query input variables
-    autoStepList = AUTO_LIST
-    autoStep = 0
+    # input variables
     inputs = -1
 
     def __init__(self, *args, **kwargs):
@@ -182,10 +182,10 @@ class View(object):
             self.galleryModel = Gallery()
             self.galleryControl = Controller()
             self.galleryPath = str()
+            self.imagesPath = str()
             self.webGallery = str()
+            self.schema = copy.deepcopy(VVG_DF_COLS)
             self.scrapyCfg = Conf.configGlobal(cfgFolder, cfgWebTags)
-            self.autoStepList = AUTO_LIST
-            self.autoStep = 0
             self.inputs = -1
 
             # if args parameters are input in the creator
@@ -199,13 +199,20 @@ class View(object):
                         self.galleryPath = args[i]
 
                     if i == 2:
+                        self.imagesPath = args[i]
+
+                    if i == 3:
                         self.scrapyCfg = Conf.configGlobal(args[i])
 
                 wg = self.webGallery
                 gp = self.galleryPath
+                ip = self.imagesPath
+                self.galleryModel = Gallery(wg, gp, ip)
                 mod = self.galleryModel
-                self.galleryModel = Gallery(wg, gp)
-                self.galleryControl = Controller(wg, gp, model=mod)
+                sch = self.schema
+                self.galleryControl = Controller(wg, gp, ip,
+                                                 model=mod,
+                                                 schema=sch)
 
         # exception handling
         except Exception as exp:
@@ -238,7 +245,7 @@ class View(object):
             print("8) Get Gallery's elements search-tags (SEARCH_TAGS)")
             print("9) Get Gallery's elements collection-data (OBJ_DATA)")
             print("10) Get Gallery's elements related work (RELATED_WORKS)")
-            print("11) Transform images into matrix (IMG_DATA, IMG_SHAPE)")
+            print("11) Process Gallery's images (IMG_DATA, IMG_SHAPE)")
             print("12) Export DataFrame to JSON Files (from CSV to Local dir)")
             print("99) Auto script for options (3, 5, 6, 7, 8, 9, 10, 11, 12)")
             print("0) EXIT (last option)")
@@ -261,33 +268,45 @@ class View(object):
             gf = galleryf
             sf = srcf
             pf = paintf
+            cf = os.getcwd()
+            df = dataf
+            igf = imgf
 
             # setting up local dir for saving data
             self.galleryPath = self.galleryControl.SetUpLocal(gf, sf, pf)
+            self.imagesPath = self.galleryControl.SetUpLocal(cf, df, igf)
             print("============== Creating the Gallery View ==============")
-            print("View localdir: " + str(self.galleryPath))
-            print("View gallery URL: " + str(self.webGallery))
+            print("View gallery localpath: " + str(self.galleryPath))
+            print("View images localpath: " + str(self.imagesPath))
+            print("View gallery Web URL: " + str(self.webGallery))
             print("\n")
 
             # creating the gallery model
             wg = self.webGallery
             gp = self.galleryPath
+            ip = self.imagesPath
             VDFC = VVG_DF_COLS
 
-            self.galleryModel = Gallery(wg, gp, schema=VDFC)
+            self.galleryModel = Gallery(wg, gp, ip, schema=VDFC)
             print("============== Creating Gallery Model ==============")
-            print("Model localdir: " + str(self.galleryModel.galleryPath))
-            print("Model gallery URL: " + str(self.galleryModel.webGallery))
+            print("Model gallery localpath: " +
+                  str(self.galleryModel.galleryPath))
+            print("Model images localpath: " +
+                  str(self.galleryModel.imagesPath))
+            print("Model gallery Web URL: " +
+                  str(self.galleryModel.webGallery))
             print("\n")
 
             gm = self.galleryModel
 
             # creating the gallery controller
-            self.galleryControl = Controller(wg, gp, gm, schema=VDFC)
+            self.galleryControl = Controller(wg, gp, ip, model=gm, schema=VDFC)
             print("============ Crating Gallery Controller ============")
-            print("Controller localdir: " +
+            print("Controller gallery localpath: " +
                   str(self.galleryControl.galleryPath))
-            print("Controller remote gallery URL: " +
+            print("Controller images localpath: " +
+                  str(self.galleryControl.imagesPath))
+            print("Controller Web gallery URL: " +
                   str(self.galleryControl.webGallery))
             print("\n")
 
@@ -744,19 +763,36 @@ class View(object):
         try:
             ans = False
             gc = self.galleryControl
+            wg = self.webGallery
+            gp = self.galleryPath
+            ip = self.imagesPath
+
             opt_ins = self.getWebTags(args[0])
             opt_img = self.getImgTags(args[1])
             print(opt_img)
             print(opt_ins)
-            img_data, shape_data = gc.exportImages(
-                args[2],
-                opt_ins[0],
-                args[3], # galleryf,
-                args[4], # srcf,
-                args[5]) # paintf)
+
+            # create the local data/img folders
+            print(ip)
+            print(id_col)
+            gc.createLocalFolders(ip, id_col)
+
+            # export the images in RGB and B&W
+            # TODO: AQUI VOY!!!!!
+            img_data, shape_data = gc.exportImages()
+            # update the CSV columns with the data
+
+            # START OF OLD CODE =============
+            # img_data, shape_data = gc.exportImages(
+            #     args[2],
+            #     opt_ins[0],
+            #     args[3], # galleryf,
+            #     args[4], # srcf,
+            #     args[5]) # paintf)
 
             # ans = gc.updateData(args[0], img_data)
             # ans = gc.updateData(args[1], shape_data)
+            # END OF OLD CODE =============
             return ans
 
         # exception handling

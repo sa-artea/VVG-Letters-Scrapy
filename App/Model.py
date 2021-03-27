@@ -70,14 +70,10 @@ class Gallery(object):
     # =========================================
     webGallery = str()
     galleryPath = str()
+    imagesPath = str()
     schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
     dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
-
-    # =========================================
-    # class configuration
-    # =========================================
-    # np.set_printoptions(threshold=sys.maxsize)
-    # csv.field_size_limit(sys.maxsize)
+    wpage = Page()
 
     # =========================================
     # functions to create a new gallery
@@ -87,14 +83,12 @@ class Gallery(object):
         creator of the class gallery()
 
         Args:
-            webGallery (str, optional): url of the page I want to recover.
-            Defaults to str().
-            galleryPath ([type]): [description]
-            schema (list, optional): dictionary for the data template of the
-            elements in the gallery.
-            dataFrame (dataFrame, optional): element dataframe (ie.: paintings)
-            in the gallery, you can pass an existing df to the creator. Default
-            is empty.
+            webGallery (str): URL for the gallery to scrap data
+            galleryPath (str): local dirpath for the gallery data
+            schema (list): array with the column names for the model
+            dataFrame (dataFrame, optional): panda df with data (ie.: paints)
+            in the gallery, you can pass an existing df, Default is empty
+            wpage (Page): the current webpage the controller is scrapping
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -107,8 +101,10 @@ class Gallery(object):
             # default creator attributes
             self.webGallery = str()
             self.galleryPath = str()
+            self.imagesPath = str()
             self.schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
             self.dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
+            self.wpage = Page()
 
             # when arguments are pass as parameters
             if len(args) > 0:
@@ -121,8 +117,12 @@ class Gallery(object):
                     if args.index(arg) == 1:
                         self.galleryPath = arg
 
-                    # dataframes containing the data of the gallery
+                    # local dirpath to save the images
                     if args.index(arg) == 2:
+                        self.imagesPath = arg
+
+                    # dataframes containing the data of the gallery
+                    if args.index(arg) == 3:
                         self.dataFrame = arg
 
             # if there are dict decrators in the creator
@@ -133,6 +133,103 @@ class Gallery(object):
                     # updating schema in the model
                     if key == "schema":
                         self.schema = copy.deepcopy(kwargs[key])
+                        self.dataFrame = pd.DataFrame(columns=self.schema)
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def scrapIndex(self, galleryUrl, sleepTime, div, attrs):
+        """
+        Scrap the gallery index and recover all the elements in it
+
+        Args:
+            galleryUrl (str): URL for the gallery to scrap data
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            the search and scrap
+            sleepTime (float): waiting time between requests
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bs-obj): div and attrs filtered beatifulsoup object
+        """
+        try:
+            # reset working web page
+            self.wpage = Page()
+            ans = None
+
+            # getting the basic element list from gallery online index
+            self.wpage.getCollection(galleryUrl, sleepTime)
+            ans = self.wpage.findInReq(div, attributes=attrs)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def scrapAgain(self, div, attrs):
+        """
+        Using the scrapIndex() results, scrap for new information
+        to complete the dataframe index
+
+        Args:
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bs-obj): div and attrs filtered beatifulsoup object
+        """
+        try:
+            ans = None
+            ans = self.wpage.findInReq(div, attributes=attrs)
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def scrapElement(self, elemUrl, div, attrs, **kwargs):
+        """
+        controller interface to scrap elements within a link based
+        on the <div>, html marks and other attributes or decoratos
+
+        Args:
+            elemUrl (str): gallery's element url
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bs-obj): HTML divs as a beatifulsoup object
+        """
+        try:
+
+            # reset working web page
+            self.wpage = Page()
+
+            # get the body of the element url
+            reqStatus = self.wpage.getBody(elemUrl)
+            ans = None
+
+            if reqStatus == 200:
+                # find element inside the html body
+                ans = self.wpage.findInReq(
+                                    div,
+                                    attributes=attrs,
+                                    multiple=kwargs.get("multiple"))
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
