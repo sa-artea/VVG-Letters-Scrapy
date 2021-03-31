@@ -726,21 +726,15 @@ class Controller (object):
 
                 # recovering source images
                 srcfn = gm.getSourceImages(srcf, sfext)
-                # print("source")
-                # print(srcfn)
+
                 # setting target images
                 tgtfn = gm.setTargetImages(srcfn, tgtf, tfext, tsufix)
-                # print("target")
-                # print(tgtfn)
+
                 # exporting images
                 tans = gm.exportImages(srcfn, tgtfn, tsufix)
-                # print("exports")
-                # print(tans)
 
                 # compose answer
                 tans = self.toJSON(tans)
-                # print("JSON")
-                # print(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
@@ -790,18 +784,12 @@ class Controller (object):
 
                 # recovering source images
                 tgtfn = gm.getSourceImages(tgtf, tfext)
-                # print("source")
-                # print(tgtfn)
 
                 # exporting shapes
                 tans = gm.exportShapes(tgtfn, tsufix)
-                # print("exports")
-                # print(tans)
 
                 # compose answer
                 tans = self.toJSON(tans)
-                # print("JSON")
-                # print(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 

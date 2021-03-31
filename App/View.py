@@ -58,8 +58,8 @@ cfgWebTags = "html-tags.ini"
 dataApp = Conf.configGlobal(cfgFolder, cfgApp)
 
 # url query for VVG gallery request
-vvg_search = dataApp.get("Requests", "small")
-# vvg_search = dataApp.get("Requests", "large")
+# vvg_search = dataApp.get("Requests", "small")
+vvg_search = dataApp.get("Requests", "large")
 # vvg_search = dataApp.get("Requests", "extensive")
 
 print("=================== Config INI Gallery Search ===================")
@@ -93,9 +93,9 @@ bfn = dataApp.get("ExportFiles", "basicfile")
 fext = dataApp.get("ExportFiles", "fext")
 
 # change according to the request in the .INI!!!!
-fsize = dataApp.get("ExportFiles", "small")
-# fnsize = dataApp.get("ExportFiles", "large")
-# fnsize = dataApp.get("ExportFiles", "extensive")
+# fsize = dataApp.get("ExportFiles", "small")
+fsize = dataApp.get("ExportFiles", "large")
+# fsize = dataApp.get("ExportFiles", "extensive")
 
 expf = bfn + fsize + "." + fext
 print("================== Config INI Export File Name ==================")
