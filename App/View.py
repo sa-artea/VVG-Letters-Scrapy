@@ -139,9 +139,6 @@ rwork_col = str(VVG_DF_COLS[VVG_DF_COLS.index("RELATED_WORKS")])
 img_col = str(VVG_DF_COLS[VVG_DF_COLS.index("IMG_DATA")])
 shape_col = str(VVG_DF_COLS[VVG_DF_COLS.index("IMG_SHAPE")])
 
-# list with steps for dataframe automatic generator
-AUTO_LIST = (3, 4, 5, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 12)
-
 
 class View(object):
     """
@@ -315,7 +312,7 @@ class View(object):
             print(exp)
             self.setup()
 
-    def getWebTags(self, column, *args, **kwargs):
+    def getWebTags(self, column):
         """
         gets the HTML tags from a config file needed by beatifulsoup to
         create the dataframe column with the same name
@@ -376,7 +373,7 @@ class View(object):
         except Exception as exp:
             raise exp
 
-    def getImgTags(self, column, *args, **kwargs):
+    def getImgTags(self, column):
         """
         gets the image tags from a config file needed to process the files
         to Black & White (B&W) and in color (RGB)
@@ -438,10 +435,10 @@ class View(object):
         gallery URLs to further scrap data from
 
         Args:
-            id_col (str, optional): df-schema column name of the ID
-            title_col (str, optional): df-schema column name of the TITLE
-            curl_col (str, optional): df-schema column name of the COLLECTION
-            vvg_url (str, optional): web gallery URL search for the collection
+            id_col (str): df-schema ID column name
+            title_col (str): df-schema TITLE column name
+            curl_col (str): df-schema COLLECTION column name
+            vvg_url (str): gallery URL search for the collection
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -450,32 +447,32 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
+
             gc = self.galleryControl
             wg = self.webGallery
             gp = self.galleryPath
 
             # starting the gallery index (gain) from scratch
-            id_ins = self.getWebTags(args[0])
-            gain = gc.scrapIndex(wg, 5.0, id_ins[0], id_ins[1])
-            id_data = gc.getIndexID(gain, id_ins[2], id_ins[3])
+            id_in = self.getWebTags(args[0])
+            gain = gc.scrapIndex(wg, 5.0, id_in[0], id_in[1])
+            id_data = gc.getIndexID(gain, id_in[2], id_in[3])
             print("Gallery IDs were processed...")
 
-            ti_ins = self.getWebTags(args[1])
-            gain = gc.scrapAgain(ti_ins[0], ti_ins[1])
-            title_data = gc.getIndexTitle(gain, ti_ins[2])
+            ti_in = self.getWebTags(args[1])
+            gain = gc.scrapAgain(ti_in[0], ti_in[1])
+            title_data = gc.getIndexTitle(gain, ti_in[2])
             print("Gallery Titles were processed...")
 
-            url_ins = self.getWebTags(args[2])
-            gain = gc.scrapAgain(url_ins[0], url_ins[1])
-            url_data = gc.getIndexURL(gain, args[3], url_ins[2])
+            url_in = self.getWebTags(args[2])
+            gain = gc.scrapAgain(url_in[0], url_in[1])
+            url_data = gc.getIndexURL(gain, args[3], url_in[2])
             print("Gallery collection URLs were processed...")
 
             index_data = (id_data, title_data, url_data)
-            index_start_cols = copy.deepcopy(args)
-            ans = gc.newDataFrame(index_start_cols, index_data)
+            index_cols = copy.deepcopy(args)
+            ans = gc.newDataFrame(index_cols, index_data)
             print("New Gallery Model was created...")
-            gc.createLocalFolders(gp, id_col)
+            gc.createLocalFolders(gp, args[0])
             print("Local Gallery folders were created...")
             return ans
 
@@ -499,7 +496,6 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
             ans = gc.saveGallery(args[0], args[1])
             return ans
@@ -527,8 +523,9 @@ class View(object):
         try:
             gc = self.galleryControl
             gp = self.galleryPath
-            gc.loadGallery(args[0], args[1])
+            ans = gc.loadGallery(args[0], args[1])
             gc.createLocalFolders(gp, args[2])
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -565,15 +562,14 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
-            opt_ins = self.getWebTags(args[0])
+            opt_in = self.getWebTags(args[0])
             descrip_data = gc.scrapDescriptions(
                 args[1],
-                opt_ins[0],
-                opt_ins[1],
-                opt_ins[2],
-                opt_ins[3],
+                opt_in[0],
+                opt_in[1],
+                opt_in[2],
+                opt_in[3],
                 multiple=True)
 
             ans = gc.updateData(args[0], descrip_data)
@@ -600,15 +596,14 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
-            opt_ins = self.getWebTags(args[0])
+            opt_in = self.getWebTags(args[0])
             urlpic_data = gc.scrapPaintLinks(
                 args[1],
                 args[2],
-                opt_ins[0],
-                opt_ins[1],
-                opt_ins[2],
+                opt_in[0],
+                opt_in[1],
+                opt_in[2],
                 multiple=False)
 
             ans = gc.updateData(args[0], urlpic_data)
@@ -635,18 +630,18 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
             gp = self.galleryPath
-            opt_ins = self.getWebTags(args[1])
+            opt_in = self.getWebTags(args[1])
             haspic_data = gc.downloadPaints(
                                 args[0],
                                 gp,
-                                opt_ins[0],
-                                opt_ins[1],
-                                opt_ins[2],
-                                opt_ins[3],
+                                opt_in[0],
+                                opt_in[1],
+                                opt_in[2],
+                                opt_in[3],
                                 multiple=False)
+
             ans = gc.updateData(args[1], haspic_data)
             return ans
         # exception handling
@@ -670,16 +665,15 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
-            opt_ins = self.getWebTags(args[0])
+            opt_in = self.getWebTags(args[0])
             search_data = gc.scrapSearchTags(
                                 args[1],
                                 args[2],
-                                opt_ins[0],
-                                opt_ins[1],
-                                opt_ins[2],
-                                opt_ins[3],
+                                opt_in[0],
+                                opt_in[1],
+                                opt_in[2],
+                                opt_in[3],
                                 multiple=True)
 
             ans = gc.updateData(args[0], search_data)
@@ -705,14 +699,13 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
-            opt_ins = self.getWebTags(args[0])
+            opt_in = self.getWebTags(args[0])
             object_data = gc.scrapObjsData(
                                 args[1],
-                                opt_ins[0],
-                                opt_ins[1],
-                                opt_ins[2],
+                                opt_in[0],
+                                opt_in[1],
+                                opt_in[2],
                                 multiple=False)
 
             ans = gc.updateData(args[0], object_data)
@@ -739,16 +732,15 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            ans = False
             gc = self.galleryControl
-            opt_ins = self.getWebTags(args[0])
-            rwork_data = gc.scrapPageRelWork(
+            opt_in = self.getWebTags(args[0])
+            rwork_data = gc.scrapRelatedWork(
                                 args[1],
                                 args[2],
-                                opt_ins[0],
-                                opt_ins[1],
-                                opt_ins[2],
-                                opt_ins[3],
+                                opt_in[0],
+                                opt_in[1],
+                                opt_in[2],
+                                opt_in[3],
                                 multiple=True)
 
             ans = gc.updateData(args[0], rwork_data)
@@ -760,7 +752,8 @@ class View(object):
 
     def optEleven(self, *args):
         """
-        Option 11,
+        Option 11, based on the results of option 1, it scrap the
+        object-data of each gallery element in the gallery
 
             img_col,
             shape_col,
@@ -772,36 +765,37 @@ class View(object):
         try:
             ans = False
             gc = self.galleryControl
-            wg = self.webGallery
-            gp = self.galleryPath
             ip = self.imagesPath
 
-            opt_ins = self.getWebTags(args[0])
+            # opt_in = self.getWebTags(args[0])
+            id_col = args[0]
             opt_img = self.getImgTags(args[1])
-            print(opt_img)
-            print(opt_ins)
+            opt_shape = self.getImgTags(args[2])
 
             # create the local data/img folders
-            print(ip)
-            print(id_col)
+            print("Configuring local data image folders...")
             gc.createLocalFolders(ip, id_col)
 
             # export the images in RGB and B&W
-            # TODO: AQUI VOY!!!!!
-            # img_data, shape_data = gc.exportImages()
+            print("Exporting RGB and B&W images...")
+            src_imgf = opt_img[0]
+            tgt_imgf = opt_img[1]
+            tgt_sufix = opt_img[2]
+            img_data = gc.exportPaints(id_col,
+                                       src_imgf,
+                                       tgt_imgf,
+                                       tgt_sufix)
+
+            print("Getting RGB and B&W shapes...")
+            shape_imgf = opt_shape[0]
+            shape_size = opt_shape[1]
+            shape_data = gc.exportShapes(id_col,
+                                         shape_imgf,
+                                         shape_size)
+
             # update the CSV columns with the data
-
-            # START OF OLD CODE =============
-            # img_data, shape_data = gc.exportImages(
-            #     args[2],
-            #     opt_ins[0],
-            #     args[3], # galleryf,
-            #     args[4], # srcf,
-            #     args[5]) # paintf)
-
-            # ans = gc.updateData(args[0], img_data)
-            # ans = gc.updateData(args[1], shape_data)
-            # END OF OLD CODE =============
+            ans = gc.updateData(args[1], img_data)
+            ans = gc.updateData(args[2], shape_data)
             return ans
 
         # exception handling
@@ -810,8 +804,8 @@ class View(object):
 
     def optTwelve(self, *args):
         """
-        Option 12, export all scraped JSON
-        columns into JSON file in the designated local folders
+        Option 12, export all scraped columns into JSON file in the
+        designated local folders
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -862,7 +856,6 @@ class View(object):
 
             while True:
                 self.menu()
-                # self.inputs = input('Select an option to continue\n')
                 inp = self.inputs
 
                 # known if the is auto or manual input
@@ -873,25 +866,19 @@ class View(object):
                 if int(inp) == 1:
                     print("Starting a new Gallery (ID, TITLE, COLLECTION_URL)")
                     print("...")
-                    ans = self.optOne(id_col,
-                                      title_col,
-                                      curl_col,
-                                      vvg_url)
+                    ans = self.optOne(id_col, title_col, curl_col, vvg_url)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 2:
                     print("Saving gallery Model into CSV file...")
-                    ans = self.optTwo(expf,
-                                      dataf)
+                    ans = self.optTwo(expf, dataf)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 3:
                     print("Loading Gallery's CSV file into Model...")
-                    ans = self.optThree(expf,
-                                        dataf,
-                                        id_col)
+                    ans = self.optThree(expf, dataf, id_col)
                     self.printReport(ans)
                     self.optFour()
 
@@ -902,16 +889,13 @@ class View(object):
 
                 elif int(inp) == 5:
                     print("Recovering elements description (DESCRIPTION)")
-                    ans = self.optFive(desc_col,
-                                       curl_col)
+                    ans = self.optFive(desc_col, curl_col)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 6:
                     print("Recovering pictures download urls (DOWNLOAD_URL)")
-                    ans = self.optSix(dl_col,
-                                      curl_col,
-                                      vvg_url)
+                    ans = self.optSix(dl_col, curl_col, vvg_url)
                     self.printReport(ans)
                     self.optFour()
 
@@ -923,58 +907,61 @@ class View(object):
 
                 elif int(inp) == 8:
                     print("Recovering Gallery's search tags (SEARCH_TAGS)")
-                    ans = self.optEight(search_col,
-                                        curl_col,
-                                        vvg_url)
+                    ans = self.optEight(search_col, curl_col, vvg_url)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 9:
                     print("Recovering Gallery's object-data (OBJ_DATA)")
-                    ans = self.optNine(obj_col,
-                                       curl_col)
+                    ans = self.optNine(obj_col, curl_col)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 10:
                     print("Recovering Gallery's related work (RELATED_WORKS)")
-                    ans = self.optTen(rwork_col,
-                                      curl_col,
-                                      vvg_url)
+                    ans = self.optTen(rwork_col, curl_col, vvg_url)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 11:
-                    # FIXME: need to correct bugs in this part
-                    print("Transforming local images into RGB, B&W + shape")
-                    ans = self.optEleven(id_col,
-                                         img_col,
-                                         shape_col)
+                    print("Exporting local images into RGB, B&W + shape")
+                    ans = self.optEleven(id_col, img_col, shape_col)
                     self.printReport(ans)
                     self.optFour()
 
                 elif int(inp) == 12:
                     print("Exporting pandas-df to JSON in local gallery")
-                    self.optTwelve(id_col,
-                                   json_index_cols)
+                    self.optTwelve(id_col, json_index_cols)
                     self.printReport(True)
                     self.optFour()
 
                 elif int(inp) == 99:
                     # list with steps for dataframe automatic generation
-                    # (3, 4, 5, 6, 7, 2, 8, 2, 9, 2, 10, 2)
+                    # (3, 4, 5, 6, 7, 2, 8, 2, 9, 2, 10, 2, 11, 2, 12)
                     print("Auto executing options 5 to 10!!!...")
                     ans = self.optFive(desc_col, curl_col)
                     ans = self.optTwo(expf, dataf)
+                    print("step 5 completed...")
                     ans = self.optSix(dl_col, curl_col, vvg_url)
                     ans = self.optSeven(dl_col, haspic_col)
                     ans = self.optTwo(expf, dataf)
+                    print("step 6 completed...")
+                    print("step 7 completed...")
                     ans = self.optEight(search_col, vvg_url)
                     ans = self.optTwo(expf, dataf)
+                    print("step 8 completed...")
                     ans = self.optNine(obj_col, curl_col)
                     ans = self.optTwo(expf, dataf)
+                    print("step 9 completed...")
                     ans = self.optTen(rwork_col, curl_col, vvg_url)
                     ans = self.optTwo(expf, dataf)
+                    print("step 10 completed...")
+                    ans = self.optEleven(id_col, img_col, shape_col)
+                    ans = self.optTwo(expf, dataf)
+                    print("step 11 completed...")
+                    self.optTwelve(id_col, json_index_cols)
+                    ans = self.optTwo(expf, dataf)
+                    print("step 12 completed...")
 
                     self.printReport(ans)
                     self.optFour()

@@ -24,14 +24,12 @@
 import os
 import copy
 import json
-import validators
 import time
 
 # =========================================
 # extension python libraries
 # =========================================
-import urllib
-import unicodedata
+import validators
 
 # =========================================
 # developed python libraries
@@ -41,7 +39,6 @@ from App.Model import Gallery
 from Lib.Recovery.Content import Page as Page
 assert Conf
 assert Gallery
-assert json
 
 """
 The controller mediates between the view and the model, there are
@@ -280,7 +277,6 @@ class Controller (object):
             raise exp
 
     def getIndexID(self, gsoup, ide, clean):
-        # FIXME: remove after implement the Topic() class
         """
         get the unique identifier (ID) of the gallery elements (paints) and
         list them to introduce them itto the dataframe
@@ -335,7 +331,6 @@ class Controller (object):
             raise exp
 
     def getIndexTitle(self, gsoup, etitle):
-        # FIXME: remove after implement the Topic() class
         """
         Get the element titles from the gallery main page
 
@@ -628,13 +623,13 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def scrapPageRelWork(self, *args, **kwargs):
+    def scrapRelatedWork(self, *args, **kwargs):
         """
         able to scrap the related work data from the webpage using the
         dataframe's column name, the HTML divs and other decorators in the url
 
         Args:
-            coln (str): column name in the dataframe to save the scraped data
+            coln (str): ID column name of the gallery dataframe
             rurl (str): root URL of the domain to complete the related work
             div (str): HTML <div> keyword to search and scrap
             attrs (dict): decorative attributes in the <div> keyword to refine
@@ -687,92 +682,131 @@ class Controller (object):
         except Exception as exp:
             raise exp
 
-    def exportImages(self, indexCol, infext, *args, **kwargs):
+    def exportPaints(self, *args):
         """
-        reads the gallery's element id folder, get the image file and  export
-        them an RGBA to a numpy matrix
+        Export the images from a source folder into a target folder,
+        the target images are in color and in grayscale
 
         Args:
-            indexCol (str): name of the column in the gallery
-            dataframe with the unique IDs for each elements (same as
-            the local folder's names)
-            infext (str): relevant image's extension to process
+            coln (str): ID column name of the gallery dataframe
+            sfext (str): source image file extension, ie.: "jpg"
+            tfext (dict): target image file extension, ie.: "jpg"
+            tsufix (dict): target image file sufix, ie.: "-rgb"
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans_img (list): the list dictionaries wit the relative localpath
+            ans (list): the list of dict with the relative localpath
             file for each gallery element
             (ej.: {"rgb": "/Data/Img/s0004V1962r-rgb.jpg",
                     "bw": "/Data/Img/s0004V1962r-b&w.jpg"
                     })
-            ans_shape (list): the list of dictionaries with the numpy shape
-            of each gallery element
-            (ej.: {"rgb": (450, 280, 3),
-                    "bw": (450, 280)})
         """
         try:
+            # default answer
+            ans = list()
             # working variables
-            ans_img = list()
-            ans_shape = list()
-            indexData = self.getData(indexCol)
-            rootDir = self.galleryPath
+            coln = args[0]
+            sfext = args[1]
+            tfext = args[2]
+            tsufix = args[3]
 
-            # iterating 2 list at the same time
-            for tid in indexData:
+            # getting index data
+            indata = self.getData(coln)
+            gm = self.gallery
+            gp = self.galleryPath
+            ip = self.imagesPath
 
-                timgfn = os.path.join(rootDir, tid)
+            # iterating over the index data
+            for tid in indata:
+                # config source and target folders
+                srcf = os.path.join(gp, tid)
+                tgtf = os.path.join(ip, tid)
 
-                # recovering image
-                timg, tshape = self.getImage(timgfn, infext, *args, **kwargs)
-                ans_img.append(timg)
-                ans_shape.append(tshape)
+                # recovering source images
+                srcfn = gm.getSourceImages(srcf, sfext)
+                # print("source")
+                # print(srcfn)
+                # setting target images
+                tgtfn = gm.setTargetImages(srcfn, tgtf, tfext, tsufix)
+                # print("target")
+                # print(tgtfn)
+                # exporting images
+                tans = gm.exportImages(srcfn, tgtfn, tsufix)
+                # print("exports")
+                # print(tans)
+
+                # compose answer
+                tans = self.toJSON(tans)
+                # print("JSON")
+                # print(tans)
+                ans.append(tans)
+                time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
             # return answer list
-            return ans_img, ans_shape
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getImage(self, fname, infext, *args, **kwargs):
+    def exportShapes(self, *args):
         """
-        get the image using a folder dirpath and the name of the file
+        Export the image shapes from the exported images in the target folder
 
         Args:
-            fname (str): Gallery's root dirpath in local drive
-            infext (str): image's file format, ie.: "jpg"
+            coln (str): ID column name of the gallery dataframe
+            sfext (str): source image file extension, ie.: "jpg"
+            tfext (dict): target image file extension, ie.: "jpg"
+            tsufix (dict): target image file sufix, ie.: "-rgb"
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans_img (dict): the relative path of the RGB and B&W files
-            ans_shape (dict): the shape the RGB and B&W files
+            ans (list) the list of dict with the shape of each
+            gallery element
+            (ej.: {"rgb": (450, 280, 3),
+                    "bw": (450, 280)})
         """
-
         try:
             # default answer
-            ans_img = None
-            ans_shape = None
-            flist = os.listdir(fname)
-            gl = self.gallery
-            fn = ""
+            ans = list()
+            # working variables
+            coln = args[0]
+            tfext = args[1]
+            tsufix = args[2]
 
-            # finding the propper file
-            for tf in flist:
-                if tf.endswith(infext):
-                    fn = tf
+            # getting index data
+            indata = self.getData(coln)
+            gm = self.gallery
+            ip = self.imagesPath
 
-            # if the file exists
-            if fn != "":
-                ans_img, ans_shape = gl.imgToData(fname, fn, *args, **kwargs)
+            # iterating over the index data
+            for tid in indata:
+                # config source and target folders
+                tgtf = os.path.join(ip, tid)
 
-            # returning answer
-            ans_img = copy.deepcopy(ans_img)
-            ans_shape = copy.deepcopy(ans_shape)
-            return ans_img, ans_shape
+                # recovering source images
+                tgtfn = gm.getSourceImages(tgtf, tfext)
+                # print("source")
+                # print(tgtfn)
+
+                # exporting shapes
+                tans = gm.exportShapes(tgtfn, tsufix)
+                # print("exports")
+                # print(tans)
+
+                # compose answer
+                tans = self.toJSON(tans)
+                # print("JSON")
+                # print(tans)
+                ans.append(tans)
+                time.sleep(DEFAULT_SHORT_SLEEP_TIME)
+
+            # return answer list
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -783,13 +817,13 @@ class Controller (object):
         get the data based in the column name of the model's dataframe
 
         Args:
-            coln (str): column name in the dataframe to save the scraped data
+            coln (str): column name of the gallery dataframe to get
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (list): return the list with the column name data
+            ans (list): data from the column name
         """
         try:
             # getting the element url in the gallery
@@ -820,7 +854,8 @@ class Controller (object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (dataframe.info()): pandas description of dataframe
+            ans (bool): true if the function created a new df-frame,
+            false otherwise
         """
         try:
             gm = self.gallery
@@ -870,7 +905,8 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            gm.saveGallery(fname, folder)
+            ans = gm.saveGallery(fname, folder)
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -889,7 +925,8 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            gm.loadGallery(fname, folder)
+            ans = gm.loadGallery(fname, folder)
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -907,8 +944,8 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.checkGallery()
-            return ans
+            gm.checkGallery()
+            # return ans
 
         # exception handling
         except Exception as exp:

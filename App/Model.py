@@ -209,26 +209,26 @@ class Gallery(object):
         names and new data.
 
         Args:
-            columns (list): list of names of the columns you want to add in the
-            dataframe
-            data (list:list or pandas/numpy matrix): data of each column you
-            want to add in the dataframe
+            columns (list): list of column names to create the new dataframe
+            data (list:list, pandas/numpy matrix): data for the columns the
+            new dataframe
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (dataframe.info()): new pandas dataframe description
+            ans (bool): true if the function created a new df-frame,
+            false otherwise
         """
         try:
-            # self.schema = cols
+            ans = False
             self.dataFrame = pd.DataFrame(columns=self.schema)
 
             for col, td in zip(cols, data):
 
                 self.dataFrame[col] = td
+                ans = True
 
-            ans = self.dataFrame.info()
             return ans
 
         # exception handling
@@ -236,7 +236,7 @@ class Gallery(object):
             raise exp
 
     def getIndexID(self, gsoup, ide, clean):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         get the unique identifier (ID) of the gallery elements (paints) and
         list them to introduce them itto the dataframe
@@ -268,7 +268,7 @@ class Gallery(object):
             raise exp
 
     def getIndexURL(self, gsoup, rurl, urle):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         get the list of the elements inside the gallery index based on the root
         domain url and html div tags
@@ -303,7 +303,7 @@ class Gallery(object):
             raise exp
 
     def getIndexTitle(self, gsoup, etitle):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         get the element titles from the gallery main page
 
@@ -453,7 +453,7 @@ class Gallery(object):
             raise exp
 
     def getImgFile(self, gfolder, dlUrl, pfn):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         save the paint file from the asset URL in the local folder path
 
@@ -520,8 +520,10 @@ class Gallery(object):
             ans (dataframe.info()): updated pandas dataframe description
         """
         try:
+            ans = False
             self.dataFrame[column] = data
-            ans = self.dataFrame.info()
+            if self.dataFrame[column] is not None:
+                ans = True
             return ans
 
         # exception handling
@@ -566,8 +568,8 @@ class Gallery(object):
             ans (dataframe.info()): pandas dataframe description
         """
         try:
-            ans = self.dataFrame.info()
-            return ans
+            self.dataFrame.info()
+            # return ans
 
         # exception handling
         except Exception as exp:
@@ -619,8 +621,9 @@ class Gallery(object):
         """
         try:
             # pandas function to save dataframe in CSV file
+            ans = False
             galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
-            self.dataFrame.to_csv(
+            tdata = self.dataFrame.to_csv(
                             galleryFilePath,
                             sep=",",
                             index=False,
@@ -628,6 +631,9 @@ class Gallery(object):
                             mode="w",
                             quoting=csv.QUOTE_ALL
                             )
+            if tdata is None:
+                ans = True
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -647,6 +653,7 @@ class Gallery(object):
         """
         try:
             # read an existing CSV fileto update the dataframe
+            ans = False
             galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
             self.dataFrame = pd.read_csv(
                                 galleryFilePath,
@@ -655,54 +662,227 @@ class Gallery(object):
                                 engine="python",
                                 quoting=csv.QUOTE_ALL
                                 )
+            if self.dataFrame is not None:
+                ans = True
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def imgToData(self, fname, fn, *args, **kwargs):
+    def exportImages(self, sfpn, tfpn, tsufix):
         """
-        open the image file and creates an unaltered numpyarray from it
+        Export images from source files into target files with CV2
 
         Args:
-            fname (str): image file root folder location
-            fn (str): image's file name with extension ie.: .jpg
+            sfpn (list): local filepaths of source images
+            tfpn (list): local filepaths of target images
+            tsufix (dict): target image file sufix, ie.: "-rgb"
 
         Raises:
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans1 (np.array): image's numpy data matrix
-            ans2 (np.array.shape): image's numpy data shape
+            ans (dict): relative filepaths for the target images
         """
         try:
-            ans1 = None
-            ans2 = None
-            # joining folder name and filename
-            imgfn = os.path.join(fname, fn)
-            # reading all data from image
+            # default answer
+            ans = dict()
+            wans = dict()
+            for key in tsufix.keys():
+                wans[key] = str()
 
-            # ans1 = cv2.imread(imgfn, cv2.IMREAD_COLOR)
-            ans1 = cv2.imread(imgfn, cv2.IMREAD_GRAYSCALE)
-            ans2 = ans1.shape
-            # img_reshape = None
+            # checking if both list have images
+            if (len(sfpn) > 0) and (len(tfpn) > 0):
 
-            # ans1 = ans1.flatten()
-            # ans1 = list(ans1)
-            ans1 = ans1.tolist()
-            # ans1 = self.listToString(ans1)
-            # separator = ", "
-            # ans1 = separator.join(ans1)
-            # # ans1 = str().join(ans1, separator="|")
-            # ans1 = str(ans1) #, encoding="utf-8")
-            ans2 = list(ans2)
-            # temp = ans2[0]*ans2[1]#*ans2[2]
-            # # temp2 = ans1.tolist()
-            # print(str(len(ans1)), str(ans2), temp)  # , len(temp2))
+                # iterating in the source files
+                for sf in sfpn:
 
-            # # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
+                    # checking if the target files and the keys equal
+                    if len(tfpn) == len(tsufix.keys()):
+
+                        # iterating in the target files paths and keys
+                        for tf, key in zip(tfpn, tsufix.keys()):
+                            # default temporal variables
+                            complete = False
+                            tdf = None
+
+                            # checking if is RGB
+                            if any("rgb" in s for s in (tf, key)):
+                                # opening the source file
+                                tdf = cv2.imread(sf, cv2.IMREAD_UNCHANGED)
+                                # exporting/saving to RBG file
+                                complete = cv2.imwrite(tf, tdf)
+
+                            # checking if is B&W
+                            elif any("bw" in s for s in (tf, key)):
+                                # opening the source file
+                                tdf = cv2.imread(sf, cv2.IMREAD_GRAYSCALE)
+                                # convert = cv2.COLOR_BGR2GRAY
+                                # tdf = cv2.cvtColor(tdf, convert)
+                                # exporting/saving to B&W file
+                                complete = cv2.imwrite(tf, tdf)
+
+                            # updating answer dict
+                            if complete is True:
+                                # recovering the important relative path
+                                tf = os.path.normpath(tf)
+                                tf = tf.split(os.sep)
+                                ltf = len(tf)
+                                tf = tf[ltf-4:ltf]
+                                tf = os.path.join(*tf)
+                                td = {key: tf}
+                                wans.update(td)
+
+            # returning answer
+            ans = copy.deepcopy(wans)
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def exportShapes(self, tfpn, tsufix):
+        """
+        Export images from source files into target files with CV2
+
+        Args:
+            tfpn (list): local filepaths of target images
+            tsufix (dict): target image file sufix, ie.: "-rgb"
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): relative filepaths for the target images
+        """
+        try:
+            # default answer
+            ans = dict()
+            wans = dict()
+            for key in tsufix.keys():
+                wans[key] = str()
+
+            # checking if list have images
+            if len(tfpn) > 0:
+
+                # checking if the target files and the keys equal
+                if len(tfpn) == len(tsufix.keys()):
+
+                    # iterating in the target files paths and keys
+                    sortSufix = sorted(tsufix.keys(), reverse=False)
+                    for tf, key in zip(tfpn, sortSufix):
+                        tf = str(tf)
+                        # default temporal variables
+                        tdf = None
+                        complete = False
+                        tshape = list()
+                        # checking if it is RGB
+                        # if any("rgb" in s for s in (tf, key)):
+                        if "rgb" in tf:
+                            # opening file in RBG
+                            tdf = cv2.imread(tf, cv2.IMREAD_UNCHANGED)
+                            # exporting/saving to RBG shape
+                            tshape = list(tdf.shape)
+                            complete = True
+
+                        # checking if it is B&W
+                        # elif any("bw" in s for s in (tf, key)):
+                        if "bw" in tf:
+                            # opening file in B&W
+                            tdf = cv2.imread(tf, cv2.IMREAD_GRAYSCALE)
+                            # exporting/saving to B&W shape
+                            tshape = list(tdf.shape)
+                            complete = True
+
+                        # updating answer dict
+                        if complete is True:
+                            td = {key: tshape}
+                            wans.update(td)
+
             # # returning answer
-            return ans1, ans2
+            ans = copy.deepcopy(wans)
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getSourceImages(self, sfp, sfext):
+        """
+        Recover the images inside the localpath using the file extension
+
+        Args:
+            sfp (str): local folderpath of the source image to scan
+            sfext (str): source image file extension, ie.: "jpg"
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list of the source images local filepaths
+        """
+        try:
+            # default answer
+            ans = list()
+            files = os.listdir(sfp)
+
+            # cheking if there is files in folder
+            if len(files) > 0:
+                # finding the proper image extension file
+                for f in files:
+                    if f.endswith(sfext):
+                        fn = os.path.join(sfp, f)
+                        ans.append(fn)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def setTargetImages(self, sfpn, tfp, tfext, tsufix):
+        """
+        Creates the target images in the localpath using the file
+        extensions
+
+        Args:
+            sfpn (list): source local filepaths of images
+            tfp (str): target local folderpath to set the images
+            tfext (dict): target image file extension, ie.: "jpg"
+            tsufix (dict): target image file sufix, ie.: "-rgb"
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list of the target images local filepaths
+        """
+        try:
+            # default answer
+            ans = list()
+
+            # checking if source folder has viable files
+            if len(sfpn) > 0:
+
+                # checking source file list
+                for sf in sfpn:
+                    # recover the source file
+                    sfn = os.path.split(sf)
+                    sfn = sfn[len(sfn)-1]
+                    # strip from original file ext
+                    sfn = sfn.split(".")[0]
+
+                    # creating target files with sufix and extension
+                    for te, ts in zip(tfext.keys(), tsufix.keys()):
+                        # specific target filename + extension
+                        tfn = sfn + tsufix.get(ts) + "." + tfext.get(te)
+                        tfn = os.path.join(tfp, tfn)
+                        ans.append(tfn)
+
+            # returning answer
+            return ans
 
         # exception handling
         except Exception as exp:
@@ -811,8 +991,6 @@ class Gallery(object):
                         # updating answer dict
                         ans.update(copy.deepcopy(td))
 
-            # ans = self.toJSON(ans)
-
             # returning answer
             return ans
 
@@ -821,7 +999,7 @@ class Gallery(object):
             raise exp
 
     def cleanSearchTags(self, rurl, soup, elem, clean):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         Clean the page's search-tags from the beatifulSoup object
 
@@ -875,7 +1053,7 @@ class Gallery(object):
             raise exp
 
     def cleanObjData(self, soup, elem):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         Clean the page's object-data from the beatifulSoup object
 
@@ -926,7 +1104,7 @@ class Gallery(object):
             raise exp
 
     def cleanRelatedWork(self, rurl, soup, elem, clean):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         process the scraped data from the beatifulSoup object and saves the
         related work information into a JSON files
@@ -983,7 +1161,7 @@ class Gallery(object):
             raise exp
 
     def cleanDownloadURL(self, gsoup, rurl, urle):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         recovers the download URL for a gallery element
 
@@ -1014,7 +1192,7 @@ class Gallery(object):
             raise exp
 
     def cleanText(self, text):
-        # FIXME: remove after implement the Topic() class
+        # TODO: remove after implement the Topic() class
         """
         clean text from HTML, remove all inconvinient characters such as:
         extra spaces, extra end-of-line, and non utf-8 characters

@@ -1,15 +1,14 @@
-# Vincent Van Gogh Gallery Scrapper
+# Vincent van Gogh Gallery Scrapper
 
-This is a project to train a Machine Learning model based in the Vinvent Van
-Gogh collection data. In here the script scrap the Webpage, recovers all the
-possible data from Vincent, Including the paint description, its tag,
-collection's data, and related work.
+Tp train a Machine Learning model based in the Vincent van Gogh collection data.
+In here the script scrap the museum Webpage, recovers all the possible information
+from Vincent, Including the paints description, its search tags, collection's data,
+the image file, and related work.
 
-The script creates a local gallery from the Web request within an specific path
+This script creates a local gallery from the Web request within an specific path
 and creates a CSV file compiling all the data recovered from the online gallery.
 
-Each option in the menu complete the Gallery data. Each option scrap a
-particular data column.
+Each option in the menu complete the Gallery information scraping an specific column.
 
 1. Creates the gallery's index, recovering the ID, the title and the target URL to
    scrap the rest of the information.
@@ -18,18 +17,16 @@ particular data column.
 4. Check the current gallery's dataframe description.
 5. Scrap the basic description data for each gallery's objects.
 6. Recover the download link to the image of each gallery's objects.
-7. Sets the boolean flag to know if each of the object's image is available in
-   the local directory.
-8. Scrap the search tags related to each gallery's objects.
-9. Scrap the museum's Collection-Data related to each gallery's objects.
+7. Sets a boolean flag for each available image is available in the local directory.
+8. Scrap the search-tags related to each gallery's objects.
+9. Scrap the museum's Object-Data related to each gallery's objects.
 10. Scrap the related work of each of the gallery's objects.
-11. Transform each available image into a numpy array with CV2. #TODO
+11. Export each available image into RGB and B&W images.
 12. Export all available data from the dataframe to JSON files in the local directory.
-13. Full automatic script to execute a sequence of steps [3, 5, 6, 8, 9, 10, 11,
-    12] #TODO
+13. Full automatic execution from step 5 to step 12.
 
 Originaly developed for the final project for the tittle of Digital humanities
-Msc. degree between 2019 - 2021.
+Msc. degree between 2020 - 2021.
 
 The code was refactored and commented for the official and final presentation
 for the 2020/2021 project of the Uniandes Digital Humanities graduate program.
@@ -61,9 +58,9 @@ for the 2020/2021 project of the Uniandes Digital Humanities graduate program.
     controls the export process to JSON format and all the data cleaning functions.
 * _**\*\Data**_ is the folder containing the CSV files containing the gallery's
   scraped data.
-  * _**VanGoghGallery_large.csv**_ Gallery's large file with 964 register of Vincent Van
+  * _**vanGoghGallery_large.csv**_ Gallery's large file with 964 register of Vincent van
     Gogh work.
-  * _**VanGoghGallery_small.csv**_ Gallery's small file with 61 register of Vincent Van
+  * _**vanGoghGallery_small.csv**_ Gallery's small file with 61 register of Vincent van
     Gogh work. Useful for functional tests.
 
 * _**\*\Lib**_ is the main folder containing modules and classes useful for
