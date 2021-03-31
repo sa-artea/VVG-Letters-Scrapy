@@ -56,6 +56,7 @@ class Page(object):
     request = None
     sbody = None
     shead = None
+    content = None
     dialect = DEFAULT_HTML_PARSER
 
     def __init__(self, *args, **kwargs):
@@ -78,6 +79,7 @@ class Page(object):
             self.request = None
             self.sbody = None
             self.shead = None
+            self.content = None
 
             # when arguments are pass as parameters
             if len(args) > 0:
@@ -280,7 +282,8 @@ class Page(object):
             if len(args) == 0:
 
                 self.request = requests.get(self.url)
-                self.shead = BeautifulSoup(self.request.headers, self.dialect)
+                headers = self.request.headers
+                self.shead = dict(**headers)
                 ans = self.request.status_code
                 self.request.close()
                 return ans
@@ -290,7 +293,54 @@ class Page(object):
 
                 self.url = args[0]
                 self.request = requests.get(self.url)
-                self.shead = BeautifulSoup(self.request.headers, self.dialect)
+                headers = self.request.headers
+                self.shead = dict(**headers)
+
+                # for key in self.shead.keys():
+                #     print("--- key: value ---")
+                #     print(key, " : ", self.shead.get(key))
+                # print(type(self.shead))
+
+                ans = self.request.status_code
+                self.request.close()
+                return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getContent(self, *args):
+        """
+        Request the URL. if succesfull returns the REST page's status code
+        and updates the Content attribute of page() with the information
+        collected it
+
+        Args:
+            url (str, optional): page url to recover. Defaults to empty str.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (int): page's request status code (i.e: 200)
+        """
+        try:
+
+            # requesting the page with the existing url
+            if len(args) == 0:
+
+                self.request = requests.get(self.url)
+                self.content = self.request.content
+                ans = self.request.status_code
+                self.request.close()
+                return ans
+
+            # requesting the page with the url parameter
+            elif len(args) > 0:
+
+                self.url = args[0]
+                self.request = requests.get(self.url)
+                self.content = self.request.content
                 ans = self.request.status_code
                 self.request.close()
                 return ans

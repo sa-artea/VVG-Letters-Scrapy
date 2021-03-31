@@ -388,7 +388,7 @@ class View(object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            ans (list): list of 1 or2 image tags in the following order:
+            ans (list): list of 1 or 2 image tags in the following order:
                 - fext: file extension to save the file
                 - rgb: size of the shape np.array for color images
                 - bw: size of the shape np.array for b&w images
@@ -434,8 +434,8 @@ class View(object):
 
     def optOne(self, *args):
         """
-        execute the option 1 of the menu, it creates a new dataframe with
-        new IDs, Tittles and gallery URLs to further scrap data from
+        Option 1, it creates a new dataframe with new IDs, Tittles and
+        gallery URLs to further scrap data from
 
         Args:
             id_col (str, optional): df-schema column name of the ID
@@ -458,17 +458,17 @@ class View(object):
             # starting the gallery index (gain) from scratch
             id_ins = self.getWebTags(args[0])
             gain = gc.scrapIndex(wg, 5.0, id_ins[0], id_ins[1])
-            id_data = gc.getID(gain, id_ins[2])
+            id_data = gc.getIndexID(gain, id_ins[2], id_ins[3])
             print("Gallery IDs were processed...")
 
             ti_ins = self.getWebTags(args[1])
             gain = gc.scrapAgain(ti_ins[0], ti_ins[1])
-            title_data = gc.getTitle(gain, ti_ins[2])
+            title_data = gc.getIndexTitle(gain, ti_ins[2])
             print("Gallery Titles were processed...")
 
             url_ins = self.getWebTags(args[2])
             gain = gc.scrapAgain(url_ins[0], url_ins[1])
-            url_data = gc.getURL(gain, args[3], url_ins[2])
+            url_data = gc.getIndexURL(gain, args[3], url_ins[2])
             print("Gallery collection URLs were processed...")
 
             index_data = (id_data, title_data, url_data)
@@ -485,8 +485,8 @@ class View(object):
 
     def optTwo(self, *args):
         """
-        execute the option 2 of the menu, saves the in-memory data into CSV
-        and creates the local dirpath for the files if it doesnt exists
+        Option 2, saves the in-memory data into CSV and creates the
+        local dirpath for the files if it doesnt exists
 
         Args:
             expf (str, optional): export file name, Default CSV
@@ -510,8 +510,8 @@ class View(object):
 
     def optThree(self, *args):
         """
-        execute the option 3 of the menu, loads the in memory of the CSV data
-        and creates the local dirpath for the files if it doesnt exists
+        Option 3, loads the in memory of the CSV data and creates the
+        local dirpath for the files if it doesnt exists
 
         Args:
             id_col (str, optional): df-schema column name of the ID
@@ -536,7 +536,7 @@ class View(object):
 
     def optFour(self):
         """
-        execute the option 4 of the menu, checks the in memory dataframe
+        Option 4, checks the in memory dataframe
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -551,8 +551,8 @@ class View(object):
 
     def optFive(self, *args):
         """
-        execute the option 5 of the menu, based on the results of option
-        1, it scrap the description of each URL gallery element
+        Option 5, based on the results of option 1, it scrap the
+        description of each URL gallery element
 
         Args:
             desc_col (str, optional): df-schema column name of the DESCRIPTION
@@ -568,11 +568,12 @@ class View(object):
             ans = False
             gc = self.galleryControl
             opt_ins = self.getWebTags(args[0])
-            descrip_data = gc.scrapPageDescription(
+            descrip_data = gc.scrapDescriptions(
                 args[1],
                 opt_ins[0],
                 opt_ins[1],
                 opt_ins[2],
+                opt_ins[3],
                 multiple=True)
 
             ans = gc.updateData(args[0], descrip_data)
@@ -584,8 +585,8 @@ class View(object):
 
     def optSix(self, *args):
         """
-        execute the option 6 of the menu, based on the results of option
-        1, it scrap the image download URL each gallery element
+        Option 6, based on the results of option 1, it scrap the
+        image download URL each gallery element
 
         Args:
             dl_col (str, optional): df-schema column name of the DOWNLOAD_URL
@@ -602,7 +603,7 @@ class View(object):
             ans = False
             gc = self.galleryControl
             opt_ins = self.getWebTags(args[0])
-            urlpic_data = gc.scrapPagePicture(
+            urlpic_data = gc.scrapPaintLinks(
                 args[1],
                 args[2],
                 opt_ins[0],
@@ -619,8 +620,8 @@ class View(object):
 
     def optSeven(self, *args):
         """
-        execute the option 7 of the menu, based on the results of option
-        1, it download the actual image from each gallery element
+        Option 7, based on the results of option 1, it download the
+        actual image from each gallery element
 
         Args:
             dl_col (str, optional): df-schema column name of the DOWNLOAD_URL
@@ -637,9 +638,15 @@ class View(object):
             ans = False
             gc = self.galleryControl
             gp = self.galleryPath
-            haspic_data = gc.downloadPictures(
+            opt_ins = self.getWebTags(args[1])
+            haspic_data = gc.downloadPaints(
                                 args[0],
-                                gp)
+                                gp,
+                                opt_ins[0],
+                                opt_ins[1],
+                                opt_ins[2],
+                                opt_ins[3],
+                                multiple=False)
             ans = gc.updateData(args[1], haspic_data)
             return ans
         # exception handling
@@ -648,8 +655,8 @@ class View(object):
 
     def optEight(self, *args):
         """
-        execute the option 8 of the menu, based on the results of option
-        1, it scrap the search tags in each gallery element in the gallery
+        Option 8, based on the results of option 1, it scrap the search
+        tags in each gallery element in the gallery
 
         Args:
             search_col (str, optional): df-schema column name of SEARCH TAGS
@@ -666,12 +673,13 @@ class View(object):
             ans = False
             gc = self.galleryControl
             opt_ins = self.getWebTags(args[0])
-            search_data = gc.scrapPageSearchTags(
+            search_data = gc.scrapSearchTags(
                                 args[1],
                                 args[2],
                                 opt_ins[0],
                                 opt_ins[1],
                                 opt_ins[2],
+                                opt_ins[3],
                                 multiple=True)
 
             ans = gc.updateData(args[0], search_data)
@@ -683,8 +691,8 @@ class View(object):
 
     def optNine(self, *args):
         """
-        execute the option 9 of the menu, based on the results of option
-        1, it scrap the object-data of each gallery element in the gallery
+        Option 9, based on the results of option 1, it scrap the
+        object-data of each gallery element in the gallery
 
         Args:
             obj_col (str, optional): df-schema column name of OBJ_DATA
@@ -700,12 +708,12 @@ class View(object):
             ans = False
             gc = self.galleryControl
             opt_ins = self.getWebTags(args[0])
-            object_data = gc.scrapPageObjData(
-                args[1],
-                opt_ins[0],
-                opt_ins[1],
-                opt_ins[2],
-                multiple=False)
+            object_data = gc.scrapObjsData(
+                                args[1],
+                                opt_ins[0],
+                                opt_ins[1],
+                                opt_ins[2],
+                                multiple=False)
 
             ans = gc.updateData(args[0], object_data)
             return ans
@@ -716,8 +724,8 @@ class View(object):
 
     def optTen(self, *args):
         """
-        execute the option 10 of the menu, based on the results of option
-        1, it scrap the related work of each gallery element in the gallery
+        Option 10, based on the results of option 1, it scrap the
+        related work of each gallery element in the gallery
 
         Args:
             rwork_col (str, optional): df-schema column name for RELATED_WORKS
@@ -735,12 +743,13 @@ class View(object):
             gc = self.galleryControl
             opt_ins = self.getWebTags(args[0])
             rwork_data = gc.scrapPageRelWork(
-                args[1],
-                args[2],
-                opt_ins[0],
-                opt_ins[1],
-                opt_ins[2],
-                multiple=True)
+                                args[1],
+                                args[2],
+                                opt_ins[0],
+                                opt_ins[1],
+                                opt_ins[2],
+                                opt_ins[3],
+                                multiple=True)
 
             ans = gc.updateData(args[0], rwork_data)
             return ans
@@ -751,7 +760,7 @@ class View(object):
 
     def optEleven(self, *args):
         """
-        execute the option #TODO of the menu,
+        Option 11,
 
             img_col,
             shape_col,
@@ -779,7 +788,7 @@ class View(object):
 
             # export the images in RGB and B&W
             # TODO: AQUI VOY!!!!!
-            img_data, shape_data = gc.exportImages()
+            # img_data, shape_data = gc.exportImages()
             # update the CSV columns with the data
 
             # START OF OLD CODE =============
@@ -801,7 +810,7 @@ class View(object):
 
     def optTwelve(self, *args):
         """
-        execute the option 12 of the menu, export all scraped JSON
+        Option 12, export all scraped JSON
         columns into JSON file in the designated local folders
 
         Raises:

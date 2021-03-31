@@ -24,12 +24,14 @@
 import os
 import copy
 import csv
+import re
+import unicodedata
+import urllib
 
 # ===============================
 # extension python libraries
 # ===============================
 import pandas as pd
-# import numpy as np
 import cv2
 
 # ===============================
@@ -139,6 +141,10 @@ class Gallery(object):
         except Exception as exp:
             raise exp
 
+    # =========================================
+    # Index functions
+    # =========================================
+
     def scrapIndex(self, galleryUrl, sleepTime, div, attrs):
         """
         Scrap the gallery index and recover all the elements in it
@@ -197,44 +203,6 @@ class Gallery(object):
         except Exception as exp:
             raise exp
 
-    def scrapElement(self, elemUrl, div, attrs, **kwargs):
-        """
-        controller interface to scrap elements within a link based
-        on the <div>, html marks and other attributes or decoratos
-
-        Args:
-            elemUrl (str): gallery's element url
-            div (str): HTML <div> keyword to search and scrap
-            attrs (dict): decorative attributes in the <div> keyword to refine
-
-        Raises:
-            exp: raise a generic exception if something goes wrong
-
-        Returns:
-            ans (bs-obj): HTML divs as a beatifulsoup object
-        """
-        try:
-
-            # reset working web page
-            self.wpage = Page()
-
-            # get the body of the element url
-            reqStatus = self.wpage.getBody(elemUrl)
-            ans = None
-
-            if reqStatus == 200:
-                # find element inside the html body
-                ans = self.wpage.findInReq(
-                                    div,
-                                    attributes=attrs,
-                                    multiple=kwargs.get("multiple"))
-            # returning answer
-            return ans
-
-        # exception handling
-        except Exception as exp:
-            raise exp
-
     def createNewIndex(self, cols, data):
         """
         creates a new dataframe in the model based on the columns
@@ -261,6 +229,275 @@ class Gallery(object):
                 self.dataFrame[col] = td
 
             ans = self.dataFrame.info()
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getIndexID(self, gsoup, ide, clean):
+        # FIXME: remove after implement the Topic() class
+        """
+        get the unique identifier (ID) of the gallery elements (paints) and
+        list them to introduce them itto the dataframe
+
+        Args:
+            gsoup (bs-obj): list with gallery elements in Beatiful Soup format
+            ide (str): HTML <div> keyword to extract the element (paint) ID
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list with the elements (paints) IDs
+        """
+        try:
+
+            ans = list()
+
+            for element in gsoup:
+
+                tid = element.get(ide).replace(clean, "")
+                ans.append(tid)
+
+            # returning answer
+            return ans
+
+            # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getIndexURL(self, gsoup, rurl, urle):
+        # FIXME: remove after implement the Topic() class
+        """
+        get the list of the elements inside the gallery index based on the root
+        domain url and html div tags
+
+        Args:
+            gsoup (bs-obj): beatifulSoup object containing the gallery's
+            element list
+            rurl (str): root URL of the domain to complete the element url
+            urle (str): HTML <div> keyword to process the Page's scraped
+            gallery urls
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list with each of the gallery's unique urls
+        """
+        try:
+
+            ans = list()
+
+            for title in gsoup:
+
+                turl = urllib.parse.urljoin(rurl, title.get(urle))
+                ans.append(turl)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getIndexTitle(self, gsoup, etitle):
+        # FIXME: remove after implement the Topic() class
+        """
+        get the element titles from the gallery main page
+
+        Args:
+            gsoup (bs-obj): beatifulSoup object containing the gallery's
+            element list
+            etitle HTML <div> keyword to process the scraped data from
+            the gallery's soup to get the element titles
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): gallery element (paints) titles in string
+        """
+        try:
+
+            ans = list()
+            for element in gsoup:
+                # default unknown element name
+
+                title = "untitled"
+
+                # if we know the name of the element
+                if element.get(etitle) is not None:
+                    title = element.get(etitle)
+
+                # update the answer
+                ans.append(title)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    # =========================================
+    # Scrap columns functions in Index
+    # =========================================
+
+    def scrapElement(self, eurl, div, attrs, **kwargs):
+        """
+        scrap elements within a link based on the <div>, html marks
+        and other attributes or decoratos
+
+        Args:
+            eurl (str): gallery's element url
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bs-obj): HTML divs as a beatifulsoup object
+        """
+        try:
+
+            # reset working web page
+            self.wpage = Page()
+
+            # get the body of the element url
+            reqStatus = self.wpage.getBody(eurl)
+            ans = None
+
+            if reqStatus == 200:
+                # find element inside the html body
+                ans = self.wpage.findInReq(
+                    div,
+                    attributes=attrs,
+                    multiple=kwargs.get("multiple"))
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getImgName(self, eurl, div, attrs):
+        """
+        scrap elements within a link based on the <div>, html marks
+        and other attributes or decoratos
+
+        Args:
+            eurl (str): gallery's element url
+            div (str): HTML <div> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bs-obj): HTML divs as a beatifulsoup object
+        """
+        try:
+
+            # reset working web page
+            self.wpage = Page()
+
+            # get the headers and the content from the url
+            reqStatus = self.wpage.getHeader(eurl)
+            reqStatus = self.wpage.getContent()
+
+            ans = str()
+
+            if reqStatus == 200:
+                # find attribute inside the headers
+                if attrs.items() <= self.wpage.shead.items():
+                    headers = self.wpage.shead
+                    ans = headers.get(div)
+                    ans = str(ans)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanImgName(self, text, elem, clean):
+        """
+        scrap elements within a link based on the <div>, html marks
+        and other attributes or decoratos
+
+        Args:
+            text (str): text to be clean
+            elem (str): keyword to split the str and process
+            clean (str): keyword to clean in the text
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (str): clean file name with extension
+        """
+        try:
+
+            ans = None
+            ans = text.split(elem)[1].strip().strip(clean)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def getImgFile(self, gfolder, dlUrl, pfn):
+        # FIXME: remove after implement the Topic() class
+        """
+        save the paint file from the asset URL in the local folder path
+
+        Args:
+            gfolder (str): root local dirpath where the file is going to be
+            save
+            dlUrl (str): url address with the downlodable image file
+            pfn (str): filename to save the image
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bool): True if the file was downloaded in the local dirpath,
+            False if not
+        """
+        try:
+            # default answer
+            ans = False
+
+            # parsing the URL to choose the local folder to save the file
+            imgf = urllib.parse.urlparse(dlUrl)
+            imgf = imgf.path.split("/")[len(imgf.path.split("/"))-1]
+            fp = os.path.join(gfolder, imgf, pfn)
+
+            # if the file doesnt exists
+            if not os.path.exists(fp):
+
+                # saving file from content requests in bit form
+                data = self.wpage.content
+                with open(fp, "wb") as file:
+
+                    file.write(data)
+                    file.close()
+                    ans = True
+                    return ans
+
+            # if the file already exists
+            elif os.path.exists(fp):
+
+                ans = True
+                return ans
+
+            # returning answer
             return ans
 
         # exception handling
@@ -294,6 +531,7 @@ class Gallery(object):
     # =========================================
     # consult functions
     # =========================================
+
     def getData(self, column, *args, **kwargs):
         """
         gets the data from a given column name, returning a list
@@ -335,16 +573,6 @@ class Gallery(object):
         except Exception as exp:
             raise exp
 
-    def getColData(self, column):
-
-        try:
-
-            ans = list(self.dataFrame[column])
-            return ans
-
-        except Exception as exp:
-            raise exp
-
     # =========================================
     # update functions
     # =========================================
@@ -382,9 +610,9 @@ class Gallery(object):
         save the in memory dataframe into a CSV file with UTF-8 encoding
 
         Args:
-            fileName (str): file's name with .csv extension
-            dataFolder (file-object): valid dirpath str or an array with valid
-            folders.
+            fileName (str): file name with .csv extension
+            dataFolder (file-object): valid dirpath str or array with
+            valid folders.
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -410,9 +638,9 @@ class Gallery(object):
         loads the gallery from a CSV file in UTF-8 encoding
 
         Args:
-            fileName (str): file's name with .csv extension
-            dataFolder (file-object): valid dirpath str or an array with valid
-            folders.
+            fileName (str): file name with .csv extension
+            dataFolder (file-object): valid dirpath str or array with
+            valid folders.
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -475,6 +703,360 @@ class Gallery(object):
             # # ans = cv2.cvtColor(ans, cv2.COLOR_RGB2RGBA)
             # # returning answer
             return ans1, ans2
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    # =========================================
+    # clean scraped information functions
+    # =========================================
+
+    def cleanDescription(self, soup, elem, clean):
+        # TODO: remove after implement the Topic() class
+        """
+        Clean the page's description from the beatifulSoup object
+
+        Args:
+            soup (bs-obj): beatifulSoup object with the description data
+            elem (str): HTML <div> keyword to scrap the description data
+            clean (list): secondary <div> to clean the description data
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): Element (paint) clean description
+        """
+        try:
+            # get the title in the painting page
+            ans = dict()
+
+            # some pages dont follow the most commond diagram
+            if soup is not None:
+
+                if len(soup) > 0:
+
+                    # finding title <h1> in the soup
+                    value = soup[0].find(elem[0])
+                    # cleaning data
+                    key = value.attrs.get(clean[0])[0]
+                    key = str(key).replace(clean[1], "", 1)
+                    key = self.cleanText(key)
+
+                    value = str(value.string).strip()
+                    value = self.cleanText(value)
+
+                    # creating the dict to return to save as JSON
+                    td = {key: value}
+                    # updating answer dict
+                    ans.update(copy.deepcopy(td))
+
+                    # finding all description paragraphs <p> in the soup
+                    description = soup[0].findAll(elem[1])
+                    for element in description:
+
+                        key = element.attrs.get(clean[0])[0]
+                        key = str(key)
+                        key = key.replace(clean[1], "", 1)
+                        key = self.cleanText(key)
+
+                        value = str(element.string).strip()
+                        value = self.cleanText(value)
+
+                        # creating the dict to return to save as JSON
+                        td = {key: value}
+
+                        # updating answer dict
+                        ans.update(copy.deepcopy(td))
+
+                    # getting description text section
+                    key = soup[1]
+                    key = key.attrs.get(clean[0])[0]
+                    key = str(key)
+                    key = key.replace(clean[1], "", 1)
+                    key = self.cleanText(key)
+
+                    # getting section description text
+                    text = soup[1].find(elem[1])
+                    value = str()
+                    for txt in text:
+                        txt = txt.string
+                        txt = str(txt)
+                        value = value + txt
+
+                    # cleaning data
+                    value = str(value).strip()
+                    value = self.cleanText(value)
+
+                    # updating answer dict
+                    td = {key: value}
+                    ans.update(copy.deepcopy(td))
+
+                    # finding all the related links in the description
+                    links = soup[1].findAll(elem[2])
+                    for link in links:
+                        key = str(link.string)
+                        key = self.cleanText(key)
+
+                        # getting the link URL
+                        url = link.get("href")
+                        # reconstructing all the url from the page
+                        value = str(url)
+                        td = {key: value}
+
+                        # creating the dict to return to save as JSON
+                        td = {key: value}
+
+                        # updating answer dict
+                        ans.update(copy.deepcopy(td))
+
+            # ans = self.toJSON(ans)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanSearchTags(self, rurl, soup, elem, clean):
+        # FIXME: remove after implement the Topic() class
+        """
+        Clean the page's search-tags from the beatifulSoup object
+
+        Args:
+            rurl (str): root URL of the domain to complete the search-tags
+            soup (bs-obj): beatifulSoup object with the search-tags data
+            elem (str): HTML <div> keyword to scrap the search-tags data
+            clean (str): secondary <div> keyword to clean the data from
+            the scrap
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): Element (paint) clean search-tags
+        """
+        try:
+            # default answer
+            ans = dict()
+
+            # checking if searchtags exists
+            if soup is not None:
+
+                # checking is the correct collection search tags
+                if len(soup) > 0:
+
+                    # finding searhtags <a> in the sou
+                    tags = soup[0].findAll(elem)
+
+                    # processing the search tags
+                    if len(tags) > 0 and isinstance(tags, list) is True:
+
+                        for tag in tags:
+                            # cleaning data
+                            key = str(tag.string)
+                            key = self.cleanText(key)
+                            url = tag.get(clean)
+
+                            # reconstructing all the url from the page
+                            value = str(urllib.parse.urljoin(rurl, url))
+                            td = {key: value}
+
+                            # updating answer dict
+                            ans.update(copy.deepcopy(td))
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanObjData(self, soup, elem):
+        # FIXME: remove after implement the Topic() class
+        """
+        Clean the page's object-data from the beatifulSoup object
+
+        Args:
+            soup (bs-obj): beatifulSoup object with the object-data data
+            elem (str): HTML <div> keyword to scrap the object-data data
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): Element (paint) clean object-data
+        """
+        try:
+            # default answer
+            ans = dict()
+
+            # checking if object-data exists
+            if soup is not None:
+
+                # finding <dt> and <dd> from the soup
+                keys = soup.findAll(elem[0])
+                values = soup.findAll(elem[1])
+
+                # soup keys and values must have data
+                if len(keys) > 0 and len(values) > 0:
+
+                    # looping over the <dt> and <dd> data
+                    for key, value in zip(keys, values):
+
+                        # cleaning data for dictionary
+                        key = str(key.string)
+                        key = self.cleanText(key)
+
+                        value = str(value.string)
+                        value = self.cleanText(value)
+
+                        # temp dict for complete answer
+                        td = {key: value}
+                        # updating answer dict
+                        ans.update(copy.deepcopy(td))
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanRelatedWork(self, rurl, soup, elem, clean):
+        # FIXME: remove after implement the Topic() class
+        """
+        process the scraped data from the beatifulSoup object and saves the
+        related work information into a JSON files
+
+        Args:
+            rurl (str): domain root URL to complete the related-work link
+            soup (bs-obj): beatifulSoup object with the related-work data
+            elem (str): HTML <div> keyword to scrap the related-work data
+            clean (list): secondary <div> to clean the related-work data
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): Element (paint) clean related-work
+        """
+        try:
+            # default answer
+            ans = dict()
+
+            # checking if searchtags exists
+            if soup is not None:
+
+                # finding searhtags <article> in the sou
+                relworks = soup[0].findAll(elem)
+
+                # processing related work
+                i = 1
+                for rw in relworks:
+                    # cleaning data and getting all keys and values
+                    key = str(rw.find(clean[0]).string)
+                    key = self.cleanText(key)
+
+                    url = rw.find(clean[1])
+                    url = url.get(clean[2])
+                    value = str(urllib.parse.urljoin(rurl, url))
+
+                    # may names are similar in related work
+                    if key in ans.keys():
+
+                        # creating alternate key for the dict
+                        key = key + " " + str(i)
+                        i += 1
+
+                    # updating answer dict
+                    td = {key: value}
+                    ans.update(copy.deepcopy(td))
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanDownloadURL(self, gsoup, rurl, urle):
+        # FIXME: remove after implement the Topic() class
+        """
+        recovers the download URL for a gallery element
+
+        Args:
+            gsoup (bs-obj): beatifulSoup object with gallery element list
+            rurl (str): domain root URL to complete the gallery index
+            urle (str): HTML <div> keyword to scrap the gallery index
+            urls to download files
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (str): unique URL with the downloadable element's file
+        """
+        try:
+            ans = None
+
+            if gsoup is not None:
+                url = gsoup.get(urle)
+                ans = urllib.parse.urljoin(rurl, url)
+
+            # returning answer
+            return ans
+
+        # exception handling
+        except Exception as exp:
+            raise exp
+
+    def cleanText(self, text):
+        # FIXME: remove after implement the Topic() class
+        """
+        clean text from HTML, remove all inconvinient characters such as:
+        extra spaces, extra end-of-line, and non utf-8 characters
+
+        Args:
+            text (str): text to clean
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans(str): clean text
+        """
+        try:
+            # asigning text as ans
+            ans = str(text)
+
+            # attempt striping
+            ans = ans.strip()
+
+            # fix encoding
+            ans = unicodedata.normalize('NFD', ans)
+            ans = ans.encode('ascii', 'ignore')
+            ans = ans.decode("utf-8")
+            ans = str(ans)
+
+            # removing extra spaces
+            ans = re.sub(r" \s+", " ", ans)
+            # removing newlines
+            ans = re.sub(r"\n", ". ", ans)
+            # remove pesky single quote
+            ans = re.sub(r"'", "", ans)
+            # HTML weird leftovers
+            ans = re.sub(r"None{1,3}", " ", ans)
+
+            # final cast and rechecking
+            ans = str(ans)
+            # ans = re.sub(r"\W", " ", ans)
+            ans = re.sub(r" \s+", " ", ans)
+
+            # return answer
+            return ans
 
         # exception handling
         except Exception as exp:
