@@ -644,8 +644,7 @@ class View():
                                 opt_in[0],
                                 opt_in[1],
                                 opt_in[2],
-                                opt_in[3],
-                                multiple=False)
+                                opt_in[3])
 
             ans = gc.updata(args[1], haspic_data)
             return ans
@@ -925,7 +924,7 @@ class View():
                 elif int(inp) == 99:
                     # list of automatic steps
                     # (3, 4, 5, 6, 7, 2, 8, 2, 9, 2, 10, 2, 11, 2, 12)
-                    print("Auto executing options 5 to 10!!!...")
+                    print("Auto executing options 5 to 12!!!...")
                     ans = self.five(desc_col, curl_col)
                     ans = self.two(expf, dataf)
 
