@@ -38,7 +38,7 @@ import cv2
 # developed python libraries
 # ===============================
 import Conf
-from Lib.Utils import Err as Err
+from Lib.Utils import Err
 from Lib.Recovery.Content import Page
 from Lib.Recovery.Cleaner import Topic
 assert Topic
@@ -47,34 +47,34 @@ assert Err
 assert Conf
 
 # global config variables
-cfgFolder = "Config"
-cfgSchema = "df-schema.ini"
+CFG_FOLDER = "Config"
+CFG_SCHEMA = "df-schema.ini"
 
 # loading config schema into the program
-dataSchema = Conf.configGlobal(cfgFolder, cfgSchema)
+DATA_SCHEMA = Conf.configGlobal(CFG_FOLDER, CFG_SCHEMA)
 
 # default template for the element/paint dict in gallery
-DEFAULT_FRAME_SCHEMA = eval(dataSchema.get("DEFAULT", "columns"))
+DEFAULT_FRAME_SCHEMA = eval(DATA_SCHEMA.get("DEFAULT", "columns"))
 
 
 # ================================================
 # API for the scrapping the gallery of paintings
 # ================================================
-class Gallery(object):
+class Gallery():
     """
-    this class implement the gallery of the model, containing all its elements
-    (ie.: painintgs) contains all gallery data in memory and helps create the
-    dataFrame for it.
+    this class implement the gallery of the model, containing all its
+    elements (ie.: painintgs) contains all gallery data in memory and
+    helps create the data_frame for it.
     """
 
     # =========================================
     # class variables
     # =========================================
-    webGallery = str()
-    galleryPath = str()
-    imagesPath = str()
+    webg_path = str()
+    localg_path = str()
+    imgd_path = str()
     schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-    dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
+    data_frame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
     wpage = Page()
 
     # =========================================
@@ -85,10 +85,10 @@ class Gallery(object):
         creator of the class gallery()
 
         Args:
-            webGallery (str): URL for the gallery to scrap data
-            galleryPath (str): local dirpath for the gallery data
+            webg_path (str): URL for the gallery to scrap data
+            localg_path (str): local dirpath for the gallery data
             schema (list): array with the column names for the model
-            dataFrame (dataFrame, optional): panda df with data (ie.: paints)
+            data_frame (data_frame, optional): panda df with data (ie.: paints)
             in the gallery, you can pass an existing df, Default is empty
             wpage (Page): the current webpage the controller is scrapping
 
@@ -101,11 +101,11 @@ class Gallery(object):
         try:
 
             # default creator attributes
-            self.webGallery = str()
-            self.galleryPath = str()
-            self.imagesPath = str()
+            self.webg_path = str()
+            self.localg_path = str()
+            self.imgd_path = str()
             self.schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
-            self.dataFrame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
+            self.data_frame = pd.DataFrame(columns=DEFAULT_FRAME_SCHEMA)
             self.wpage = Page()
 
             # when arguments are pass as parameters
@@ -113,19 +113,19 @@ class Gallery(object):
                 for arg in args:
                     # URL of the remote gallery to scrap
                     if args.index(arg) == 0:
-                        self.webGallery = arg
+                        self.webg_path = arg
 
                     # local dirpath to save the gallery CSV
                     if args.index(arg) == 1:
-                        self.galleryPath = arg
+                        self.localg_path = arg
 
                     # local dirpath to save the images
                     if args.index(arg) == 2:
-                        self.imagesPath = arg
+                        self.imgd_path = arg
 
                     # dataframes containing the data of the gallery
                     if args.index(arg) == 3:
-                        self.dataFrame = arg
+                        self.data_frame = arg
 
             # if there are dict decrators in the creator
             if len(kwargs) > 0:
@@ -135,26 +135,26 @@ class Gallery(object):
                     # updating schema in the model
                     if key == "schema":
                         self.schema = copy.deepcopy(kwargs[key])
-                        self.dataFrame = pd.DataFrame(columns=self.schema)
+                        self.data_frame = pd.DataFrame(columns=self.schema)
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: __init__")
 
     # =========================================
     # Index functions
     # =========================================
 
-    def scrapIndex(self, galleryUrl, sleepTime, div, attrs):
+    def scrapidx(self, gurl, stime, div, attrs):
         """
         Scrap the gallery index and recover all the elements in it
 
         Args:
-            galleryUrl (str): URL for the gallery to scrap data
+            gurl (str): gallery URL to scrap data
             div (str): HTML <div> keyword to search and scrap
             attrs (dict): decorative attributes in the <div> keyword to refine
             the search and scrap
-            sleepTime (float): waiting time between requests
+            stime (float): waiting time between requests
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -168,19 +168,19 @@ class Gallery(object):
             ans = None
 
             # getting the basic element list from gallery online index
-            self.wpage.getCollection(galleryUrl, sleepTime)
-            ans = self.wpage.findInReq(div, attributes=attrs)
+            self.wpage.get_collection(gurl, stime)
+            ans = self.wpage.findin(div, attributes=attrs)
 
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: scrapidx")
 
-    def scrapAgain(self, div, attrs):
+    def scrapagn(self, div, attrs):
         """
-        Using the scrapIndex() results, scrap for new information
+        Using the scrapidx() results, scrap for new information
         to complete the dataframe index
 
         Args:
@@ -195,15 +195,15 @@ class Gallery(object):
         """
         try:
             ans = None
-            ans = self.wpage.findInReq(div, attributes=attrs)
+            ans = self.wpage.findin(div, attributes=attrs)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: scrapagn")
 
-    def createNewIndex(self, cols, data):
+    def newidx(self, cols, data):
         """
         creates a new dataframe in the model based on the columns
         names and new data.
@@ -222,20 +222,20 @@ class Gallery(object):
         """
         try:
             ans = False
-            self.dataFrame = pd.DataFrame(columns=self.schema)
+            self.data_frame = pd.DataFrame(columns=self.schema)
 
             for col, td in zip(cols, data):
 
-                self.dataFrame[col] = td
+                self.data_frame[col] = td
                 ans = True
 
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: newidx")
 
-    def getIndexID(self, gsoup, ide, clean):
+    def get_idxid(self, gsoup, ide, clean):
         # TODO: remove after implement the Topic() class
         """
         get the unique identifier (ID) of the gallery elements (paints) and
@@ -265,9 +265,9 @@ class Gallery(object):
 
             # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: get_idxid")
 
-    def getIndexURL(self, gsoup, rurl, urle):
+    def get_idxurl(self, gsoup, rurl, urle):
         # TODO: remove after implement the Topic() class
         """
         get the list of the elements inside the gallery index based on the root
@@ -300,9 +300,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: get_idxurl")
 
-    def getIndexTitle(self, gsoup, etitle):
+    def get_idxtitle(self, gsoup, etitle):
         # TODO: remove after implement the Topic() class
         """
         get the element titles from the gallery main page
@@ -339,13 +339,13 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: get_idxtitle")
 
     # =========================================
     # Scrap columns functions in Index
     # =========================================
 
-    def scrapElement(self, eurl, div, attrs, **kwargs):
+    def scrape(self, eurl, div, attrs, **kwargs):
         """
         scrap elements within a link based on the <div>, html marks
         and other attributes or decoratos
@@ -367,12 +367,12 @@ class Gallery(object):
             self.wpage = Page()
 
             # get the body of the element url
-            reqStatus = self.wpage.getBody(eurl)
+            rstatus = self.wpage.get_body(eurl)
             ans = None
 
-            if reqStatus == 200:
+            if rstatus == 200:
                 # find element inside the html body
-                ans = self.wpage.findInReq(
+                ans = self.wpage.findin(
                     div,
                     attributes=attrs,
                     multiple=kwargs.get("multiple"))
@@ -381,9 +381,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: scrape")
 
-    def getImgName(self, eurl, div, attrs):
+    def get_imgfn(self, eurl, div, attrs):
         """
         scrap elements within a link based on the <div>, html marks
         and other attributes or decoratos
@@ -405,12 +405,12 @@ class Gallery(object):
             self.wpage = Page()
 
             # get the headers and the content from the url
-            reqStatus = self.wpage.getHeader(eurl)
-            reqStatus = self.wpage.getContent()
+            rstatus = self.wpage.get_header(eurl)
+            rstatus = self.wpage.get_content()
 
             ans = str()
 
-            if reqStatus == 200:
+            if rstatus == 200:
                 # find attribute inside the headers
                 if attrs.items() <= self.wpage.shead.items():
                     headers = self.wpage.shead
@@ -422,9 +422,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: XXXXX")
 
-    def cleanImgName(self, text, elem, clean):
+    def clean_imgfn(self, text, elem, clean):
         """
         scrap elements within a link based on the <div>, html marks
         and other attributes or decoratos
@@ -450,9 +450,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clean_imgfn")
 
-    def getImgFile(self, gfolder, dlUrl, pfn):
+    def get_imgf(self, gfolder, dlurl, pfn):
         # TODO: remove after implement the Topic() class
         """
         save the paint file from the asset URL in the local folder path
@@ -460,7 +460,7 @@ class Gallery(object):
         Args:
             gfolder (str): root local dirpath where the file is going to be
             save
-            dlUrl (str): url address with the downlodable image file
+            dlurl (str): url address with the downlodable image file
             pfn (str): filename to save the image
 
         Raises:
@@ -475,7 +475,7 @@ class Gallery(object):
             ans = False
 
             # parsing the URL to choose the local folder to save the file
-            imgf = urllib.parse.urlparse(dlUrl)
+            imgf = urllib.parse.urlparse(dlurl)
             imgf = imgf.path.split("/")[len(imgf.path.split("/"))-1]
             fp = os.path.join(gfolder, imgf, pfn)
 
@@ -502,9 +502,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: get_imgf")
 
-    def updateData(self, column, data):
+    def updata(self, column, data):
         """
         updates a single column with new data, the size of the data needs to be
         the same as the existing records
@@ -521,20 +521,20 @@ class Gallery(object):
         """
         try:
             ans = False
-            self.dataFrame[column] = data
-            if self.dataFrame[column] is not None:
+            self.data_frame[column] = data
+            if self.data_frame[column] is not None:
                 ans = True
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: updata")
 
     # =========================================
     # consult functions
     # =========================================
 
-    def getData(self, column, *args, **kwargs):
+    def getdata(self, column):
         """
         gets the data from a given column name, returning a list
 
@@ -549,15 +549,15 @@ class Gallery(object):
         """
         try:
 
-            ans = copy.deepcopy(self.dataFrame[column])
+            ans = copy.deepcopy(self.data_frame[column])
             ans = list(ans)
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: getdata")
 
-    def checkGallery(self):
+    def check_gallery(self):
         """
         checks the state of the model's dataframe
 
@@ -568,17 +568,17 @@ class Gallery(object):
             ans (dataframe.info()): pandas dataframe description
         """
         try:
-            self.dataFrame.info()
+            self.data_frame.info()
             # return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: check_gallery")
 
     # =========================================
     # update functions
     # =========================================
-    def updateIndex(self, column, data):
+    def upindex(self, column, data):
         """
         updates a single column according to its index/name in the dataframe
 
@@ -595,25 +595,25 @@ class Gallery(object):
         """
         try:
 
-            self.dataFrame[column] = data
-            ans = self.dataFrame.info()
+            self.data_frame[column] = data
+            ans = self.data_frame.info()
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: upindex")
 
     # =========================================
     # I/O functions
     # =========================================
 
-    def saveGallery(self, fileName, dataFolder):
+    def save_gallery(self, fn, dfolder):
         """
         save the in memory dataframe into a CSV file with UTF-8 encoding
 
         Args:
-            fileName (str): file name with .csv extension
-            dataFolder (file-object): valid dirpath str or array with
+            fn (str): file name with .csv extension
+            dfolder (file-object): valid dirpath str or array with
             valid folders.
 
         Raises:
@@ -622,9 +622,9 @@ class Gallery(object):
         try:
             # pandas function to save dataframe in CSV file
             ans = False
-            galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
-            tdata = self.dataFrame.to_csv(
-                            galleryFilePath,
+            gfp = os.path.join(os.getcwd(), dfolder, fn)
+            tdata = self.data_frame.to_csv(
+                            gfp,
                             sep=",",
                             index=False,
                             encoding="utf-8",
@@ -637,15 +637,15 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: save_gallery")
 
-    def loadGallery(self, fileName, dataFolder):
+    def load_gallery(self, fn, dfolder):
         """
         loads the gallery from a CSV file in UTF-8 encoding
 
         Args:
-            fileName (str): file name with .csv extension
-            dataFolder (file-object): valid dirpath str or array with
+            fn (str): file name with .csv extension
+            dfolder (file-object): valid dirpath str or array with
             valid folders.
 
         Raises:
@@ -654,23 +654,23 @@ class Gallery(object):
         try:
             # read an existing CSV fileto update the dataframe
             ans = False
-            galleryFilePath = os.path.join(os.getcwd(), dataFolder, fileName)
-            self.dataFrame = pd.read_csv(
-                                galleryFilePath,
+            gfp = os.path.join(os.getcwd(), dfolder, fn)
+            self.data_frame = pd.read_csv(
+                                gfp,
                                 sep=",",
                                 encoding="utf-8",
                                 engine="python",
                                 quoting=csv.QUOTE_ALL
                                 )
-            if self.dataFrame is not None:
+            if self.data_frame is not None:
                 ans = True
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: load_gallery")
 
-    def exportImages(self, sfpn, tfpn, tsufix):
+    def export_imgs(self, sfpn, tfpn, tsufix):
         """
         Export images from source files into target files with CV2
 
@@ -693,46 +693,49 @@ class Gallery(object):
                 wans[key] = str()
 
             # checking if both list have images
-            if (len(sfpn) > 0) and (len(tfpn) > 0):
+            eq1 = (len(sfpn) > 0) and (len(tfpn) > 0)
+            # checking if the target files and the keys equal
+            eq2 = (len(tfpn) == len(tsufix.keys()))
+
+            # evaluating both conditions
+            if eq1 and eq2:
 
                 # iterating in the source files
                 for sf in sfpn:
 
-                    # checking if the target files and the keys equal
-                    if len(tfpn) == len(tsufix.keys()):
+                    # iterating in the target files paths and keys
+                    for tf, key in zip(tfpn, tsufix.keys()):
+                        # default temporal variables
+                        complete = False
+                        tdf = None
 
-                        # iterating in the target files paths and keys
-                        for tf, key in zip(tfpn, tsufix.keys()):
-                            # default temporal variables
-                            complete = False
-                            tdf = None
+                        # checking if is RGB
+                        # if any("rgb" in s for s in (tf, key)):
+                        if "rgb" in tf:
+                            # opening the source file
+                            tdf = cv2.imread(sf, cv2.IMREAD_UNCHANGED)
+                            # exporting/saving to RBG file
+                            complete = cv2.imwrite(tf, tdf)
 
-                            # checking if is RGB
-                            if any("rgb" in s for s in (tf, key)):
-                                # opening the source file
-                                tdf = cv2.imread(sf, cv2.IMREAD_UNCHANGED)
-                                # exporting/saving to RBG file
-                                complete = cv2.imwrite(tf, tdf)
+                        # checking if is B&W
+                        # elif any("bw" in s for s in (tf, key)):
+                        elif "bw" in tf:
+                            # opening the source file
+                            tdf = cv2.imread(sf, cv2.IMREAD_GRAYSCALE)
+                            # convert = cv2.COLOR_BGR2GRAY
+                            # tdf = cv2.cvtColor(tdf, convert)
+                            # exporting/saving to B&W file
+                            complete = cv2.imwrite(tf, tdf)
 
-                            # checking if is B&W
-                            elif any("bw" in s for s in (tf, key)):
-                                # opening the source file
-                                tdf = cv2.imread(sf, cv2.IMREAD_GRAYSCALE)
-                                # convert = cv2.COLOR_BGR2GRAY
-                                # tdf = cv2.cvtColor(tdf, convert)
-                                # exporting/saving to B&W file
-                                complete = cv2.imwrite(tf, tdf)
-
-                            # updating answer dict
-                            if complete is True:
-                                # recovering the important relative path
-                                tf = os.path.normpath(tf)
-                                tf = tf.split(os.sep)
-                                ltf = len(tf)
-                                tf = tf[ltf-4:ltf]
-                                tf = os.path.join(*tf)
-                                td = {key: tf}
-                                wans.update(td)
+                        # updating answer dict
+                        if complete is True:
+                            # recovering the important relative path
+                            tf = os.path.normpath(tf)
+                            tf = tf.split(os.sep)
+                            tf = tf[len(tf)-4:len(tf)]
+                            tf = os.path.join(*tf)
+                            td = {key: tf}
+                            wans.update(td)
 
             # returning answer
             ans = copy.deepcopy(wans)
@@ -740,9 +743,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: export_imgs")
 
-    def exportShapes(self, tfpn, tsufix):
+    def export_shapes(self, tfpn, tsufix):
         """
         Export images from source files into target files with CV2
 
@@ -769,14 +772,15 @@ class Gallery(object):
                 # checking if the target files and the keys equal
                 if len(tfpn) == len(tsufix.keys()):
 
-                    # iterating in the target files paths and keys
-                    sortSufix = sorted(tsufix.keys(), reverse=False)
-                    for tf, key in zip(tfpn, sortSufix):
+                    # iterating ordered keys
+                    sort_sufix = sorted(tsufix.keys(), reverse=False)
+                    for tf, key in zip(tfpn, sort_sufix):
                         tf = str(tf)
                         # default temporal variables
                         tdf = None
                         complete = False
                         tshape = list()
+
                         # checking if it is RGB
                         # if any("rgb" in s for s in (tf, key)):
                         if "rgb" in tf:
@@ -806,9 +810,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: export_shapes")
 
-    def getSourceImages(self, sfp, sfext):
+    def get_srcimgs(self, sfp, sfext):
         """
         Recover the images inside the localpath using the file extension
 
@@ -840,9 +844,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: get_srcimgs")
 
-    def setTargetImages(self, sfpn, tfp, tfext, tsufix):
+    def set_tgtimgs(self, sfpn, tfp, tfext, tsufix):
         """
         Creates the target images in the localpath using the file
         extensions
@@ -886,13 +890,13 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: set_tgtimgs")
 
     # =========================================
     # clean scraped information functions
     # =========================================
 
-    def cleanDescription(self, soup, elem, clean):
+    def clean_description(self, soup, elem, clean):
         # TODO: remove after implement the Topic() class
         """
         Clean the page's description from the beatifulSoup object
@@ -922,10 +926,10 @@ class Gallery(object):
                     # cleaning data
                     key = value.attrs.get(clean[0])[0]
                     key = str(key).replace(clean[1], "", 1)
-                    key = self.cleanText(key)
+                    key = self.clrtext(key)
 
                     value = str(value.string).strip()
-                    value = self.cleanText(value)
+                    value = self.clrtext(value)
 
                     # creating the dict to return to save as JSON
                     td = {key: value}
@@ -939,10 +943,10 @@ class Gallery(object):
                         key = element.attrs.get(clean[0])[0]
                         key = str(key)
                         key = key.replace(clean[1], "", 1)
-                        key = self.cleanText(key)
+                        key = self.clrtext(key)
 
                         value = str(element.string).strip()
-                        value = self.cleanText(value)
+                        value = self.clrtext(value)
 
                         # creating the dict to return to save as JSON
                         td = {key: value}
@@ -955,7 +959,7 @@ class Gallery(object):
                     key = key.attrs.get(clean[0])[0]
                     key = str(key)
                     key = key.replace(clean[1], "", 1)
-                    key = self.cleanText(key)
+                    key = self.clrtext(key)
 
                     # getting section description text
                     text = soup[1].find(elem[1])
@@ -967,7 +971,7 @@ class Gallery(object):
 
                     # cleaning data
                     value = str(value).strip()
-                    value = self.cleanText(value)
+                    value = self.clrtext(value)
 
                     # updating answer dict
                     td = {key: value}
@@ -977,12 +981,12 @@ class Gallery(object):
                     links = soup[1].findAll(elem[2])
                     for link in links:
                         key = str(link.string)
-                        key = self.cleanText(key)
+                        key = self.clrtext(key)
 
                         # getting the link URL
-                        url = link.get("href")
+                        value = link.get(clean[2])
                         # reconstructing all the url from the page
-                        value = str(url)
+                        value = str(value)
                         td = {key: value}
 
                         # creating the dict to return to save as JSON
@@ -996,9 +1000,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clean_description")
 
-    def cleanSearchTags(self, rurl, soup, elem, clean):
+    def clean_searchtags(self, rurl, soup, elem, clean):
         # TODO: remove after implement the Topic() class
         """
         Clean the page's search-tags from the beatifulSoup object
@@ -1035,7 +1039,7 @@ class Gallery(object):
                         for tag in tags:
                             # cleaning data
                             key = str(tag.string)
-                            key = self.cleanText(key)
+                            key = self.clrtext(key)
                             url = tag.get(clean)
 
                             # reconstructing all the url from the page
@@ -1050,9 +1054,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clean_searchtags")
 
-    def cleanObjData(self, soup, elem):
+    def clean_objdata(self, soup, elem):
         # TODO: remove after implement the Topic() class
         """
         Clean the page's object-data from the beatifulSoup object
@@ -1086,10 +1090,10 @@ class Gallery(object):
 
                         # cleaning data for dictionary
                         key = str(key.string)
-                        key = self.cleanText(key)
+                        key = self.clrtext(key)
 
                         value = str(value.string)
-                        value = self.cleanText(value)
+                        value = self.clrtext(value)
 
                         # temp dict for complete answer
                         td = {key: value}
@@ -1101,9 +1105,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clean_objdata")
 
-    def cleanRelatedWork(self, rurl, soup, elem, clean):
+    def clean_relwork(self, rurl, soup, elem, clean):
         # TODO: remove after implement the Topic() class
         """
         process the scraped data from the beatifulSoup object and saves the
@@ -1136,7 +1140,7 @@ class Gallery(object):
                 for rw in relworks:
                     # cleaning data and getting all keys and values
                     key = str(rw.find(clean[0]).string)
-                    key = self.cleanText(key)
+                    key = self.clrtext(key)
 
                     url = rw.find(clean[1])
                     url = url.get(clean[2])
@@ -1158,9 +1162,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clean_relwork")
 
-    def cleanDownloadURL(self, gsoup, rurl, urle):
+    def clean_dlurl(self, gsoup, rurl, urle):
         # TODO: remove after implement the Topic() class
         """
         recovers the download URL for a gallery element
@@ -1189,9 +1193,9 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clean_dlurl")
 
-    def cleanText(self, text):
+    def clrtext(self, text):
         # TODO: remove after implement the Topic() class
         """
         clean text from HTML, remove all inconvinient characters such as:
@@ -1238,4 +1242,4 @@ class Gallery(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Gallery: clrtext")

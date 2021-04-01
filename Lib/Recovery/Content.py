@@ -33,7 +33,7 @@ from bs4 import BeautifulSoup
 # Local application imports
 # =========================================
 import Conf
-from Lib.Utils import Err as Err
+from Lib.Utils import Err
 assert Conf
 assert Err
 
@@ -43,7 +43,7 @@ assert Err
 DEFAULT_HTML_PARSER = "html.parser"
 
 
-class Page(object):
+class Page():
     """
     this module make a request of an URL and helps translate
     data into readable information for the dataframe
@@ -103,50 +103,49 @@ class Page(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: __init__")
 
-    def getCollection(self, galleryUrl, sleepTime):
+    def get_collection(self, gurl, stime):
         """
         Gets an URL and a wait time to update the BeautifulSoup
         object in the class attribute. only works with a page with an infinite
         scroll option
 
         Args:
-            galleryUrl (str): url of the main gallery to parse.
-            sleepTime (float): waiting time between HTML request with selenium.
+            gurl (str): url of the main gallery to parse.
+            stime (float): waiting time between HTML request with selenium.
 
         Raises:
             exp: raise a generic exception if something goes wrong
         """
         try:
-
             # create the driver for the scrapping of the webpage
             self.request = webdriver.Firefox()
             self.request.implicitly_wait(30)
-            self.request.get(galleryUrl)
+            self.request.get(gurl)
 
             # scrolling in the infinite gallery
-            self.scrollCollection(self.request, sleepTime)
+            self.scroll_collection(self.request, stime)
 
             # HTML from `<html>`
-            resquestBody = self.request.execute_script(
+            rbody = self.request.execute_script(
                 "return document.documentElement.innerHTML;")
 
             # HTML from `<body>`
-            resquestBody = self.request.execute_script(
+            rbody = self.request.execute_script(
                 "return document.body.innerHTML;")
 
             # Once scroll returns bs4 parsers the page_source
-            self.sbody = BeautifulSoup(resquestBody, self.dialect)
+            self.sbody = BeautifulSoup(rbody, self.dialect)
 
             # closing driver
             self.request.close()
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: get_collection")
 
-    def scrollCollection(self, browserDriver, sleepTime):
+    def scroll_collection(self, brdriver, stime):
         """
         private void function to scroll an infinte gallery of items in a web
         page with selenium driver
@@ -160,25 +159,24 @@ class Page(object):
         Raises:
             exp: raise a generic exception if something goes wrong
         """
-
         try:
 
-            scroll_pause_time = sleepTime
+            scroll_pause_time = stime
 
             # Get scroll height
-            last_height = browserDriver.execute_script(
+            last_height = brdriver.execute_script(
                 "return document.body.scrollHeight")
 
             while True:
                 # Scroll down to bottom
-                browserDriver.execute_script(
+                brdriver.execute_script(
                     "window.scrollTo(0, document.body.scrollHeight);")
 
                 # Wait to load page
                 time.sleep(scroll_pause_time)
 
                 # Calculate new scroll height and compare with last one
-                new_height = browserDriver.execute_script(
+                new_height = brdriver.execute_script(
                     "return document.body.scrollHeight")
                 if new_height == last_height:
                     # If heights are the same it will exit the function
@@ -187,11 +185,11 @@ class Page(object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: scroll_collection")
 
-    def findInReq(self, division, attributes=None, multiple=True):
+    def findin(self, division, attributes=None, multiple=True):
         """
-        This function find HTML tags inside a BeautifulSoup class attribute.
+        find HTML tags inside a BeautifulSoup class attribute.
 
         Args:
             division (str): HTML tag to find in soup ie.: "div", or
@@ -208,22 +206,21 @@ class Page(object):
             ans (bs-obj): filtered BeautifulSoup object
         """
         try:
+            ans = None
 
             if multiple is True:
-
                 ans = self.sbody.findAll(division, attrs=attributes)
-                return ans
 
             elif multiple is False:
-
                 ans = self.sbody.find(division, attrs=attributes)
-                return ans
+
+            return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: findin")
 
-    def getBody(self, *args):
+    def get_body(self, *args):
         """
         Request the URL. if succesfull returns the REST page's status code and
         updates the BODY attribute of page() with the information collected it
@@ -238,31 +235,30 @@ class Page(object):
             ans (int): page's request status code (i.e: 200)
         """
         try:
+            ans = None
 
             # requesting the page with the existing url
             if len(args) == 0:
-
                 self.request = requests.get(self.url)
                 self.sbody = BeautifulSoup(self.request.content, self.dialect)
                 ans = self.request.status_code
                 self.request.close()
-                return ans
 
             # requesting the page with the url parameter
             elif len(args) > 0:
-
                 self.url = args[0]
                 self.request = requests.get(self.url)
                 self.sbody = BeautifulSoup(self.request.content, self.dialect)
                 ans = self.request.status_code
                 self.request.close()
-                return ans
+
+            return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: get_body")
 
-    def getHeader(self, *args):
+    def get_header(self, *args):
         """
         Request the URL. if succesfull returns the REST page's status code and
         updates the HEAD attribute of page() with the information collected it
@@ -277,6 +273,7 @@ class Page(object):
             ans (int): page's request status code (i.e: 200)
         """
         try:
+            ans = None
 
             # requesting the page with the existing url
             if len(args) == 0:
@@ -286,7 +283,6 @@ class Page(object):
                 self.shead = dict(**headers)
                 ans = self.request.status_code
                 self.request.close()
-                return ans
 
             # requesting the page with the url parameter
             elif len(args) > 0:
@@ -303,13 +299,14 @@ class Page(object):
 
                 ans = self.request.status_code
                 self.request.close()
-                return ans
+
+            return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: get_header")
 
-    def getContent(self, *args):
+    def get_content(self, *args):
         """
         Request the URL. if succesfull returns the REST page's status code
         and updates the Content attribute of page() with the information
@@ -325,6 +322,7 @@ class Page(object):
             ans (int): page's request status code (i.e: 200)
         """
         try:
+            ans = None
 
             # requesting the page with the existing url
             if len(args) == 0:
@@ -333,7 +331,6 @@ class Page(object):
                 self.content = self.request.content
                 ans = self.request.status_code
                 self.request.close()
-                return ans
 
             # requesting the page with the url parameter
             elif len(args) > 0:
@@ -343,8 +340,9 @@ class Page(object):
                 self.content = self.request.content
                 ans = self.request.status_code
                 self.request.close()
-                return ans
+
+            return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Page: get_content")

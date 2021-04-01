@@ -18,10 +18,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
 def reraise(excp, *args):
     """
     generic function used to reraise errors in different parts of the app
     """
-    excp.args = args + excp.args
+    excp.args = args + "\t" + excp.args
     raise excp.with_traceback(excp.__traceback__)

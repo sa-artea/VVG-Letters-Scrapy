@@ -36,26 +36,20 @@ import validators
 # =========================================
 import Conf
 from App.Model import Gallery
-from Lib.Recovery.Content import Page as Page
+from Lib.Recovery.Content import Page
+from Lib.Utils import Err
 assert Conf
 assert Gallery
 
-"""
-The controller mediates between the view and the model, there are
-some operations implemented in this class, specially the load and save
-functions as well as functions to merge the results from different
-elements in the models or various models.
-"""
-
 # global config variables
-cfgFolder = "Config"
-cfgSchema = "df-schema.ini"
+CFG_FOLDER = "Config"
+CFG_SCHEMA = "df-schema.ini"
 
 # loading config schema into the program
-dataSchema = Conf.configGlobal(cfgFolder, cfgSchema)
+DATA_SCHEMA = Conf.configGlobal(CFG_FOLDER, CFG_SCHEMA)
 
 # default template for the element/paint dict in gallery
-DEFAULT_FRAME_SCHEMA = eval(dataSchema.get("DEFAULT", "columns"))
+DEFAULT_FRAME_SCHEMA = eval(DATA_SCHEMA.get("DEFAULT", "columns"))
 
 # defaul waiting time for scrapping data, this helps not to get blocked
 DEFAULT_SLEEP_TIME = 3.0
@@ -65,18 +59,23 @@ DEFAULT_SLEEP_TIME = 3.0
 DEFAULT_SHORT_SLEEP_TIME = 0.2
 
 
-class Controller (object):
+class Controller ():
     """
     Controller class, comunicate the View() and the Model(), it also
     manage file Input/Output
+
+    The controller mediates between the view and the model, there are
+    some operations implemented in this class, specially the load and
+    save functions as well as functions to merge the results from
+    different elements in the models or various models.
     """
 
     # =========================================
     # class variables
     # =========================================
-    webGallery = str()
-    galleryPath = str()
-    imagesPath = str()
+    webg_path = str()
+    localg_path = str()
+    imgd_path = str()
     schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
     gallery = Gallery()
     wpage = Page()
@@ -90,8 +89,8 @@ class Controller (object):
         Controller() class creator
 
         Args:
-            webGallery (str): URL for the gallery to scrap data
-            galleryPath (str): local dirpath for the gallery data
+            webg_path (str): URL for the gallery to scrap data
+            localg_path (str): local dirpath for the gallery data
             schema (list): array with the column names for the model
             gallery (Gallery): object with the gallery dataframe model
             # wpage (Page): the current webpage the controller is scrapping
@@ -105,9 +104,9 @@ class Controller (object):
 
         try:
             # Controller default values
-            self.webGallery = str()
-            self.galleryPath = str()
-            self.imagesPath = str()
+            self.webg_path = str()
+            self.localg_path = str()
+            self.imgd_path = str()
             self.schema = copy.deepcopy(DEFAULT_FRAME_SCHEMA)
             self.gallery = Gallery()
             self.wpage = Page()
@@ -119,15 +118,15 @@ class Controller (object):
 
                     # URL of the remote gallery to scrap
                     if i == 0:
-                        self.webGallery = args[i]
+                        self.webg_path = args[i]
 
                     # local dirpath to save the gallery CSV
                     if i == 1:
-                        self.galleryPath = args[i]
+                        self.localg_path = args[i]
 
                     # painting list containing the data of the gallery
                     if i == 2:
-                        self.imagesPath = args[i]
+                        self.imgd_path = args[i]
 
             # if there are dict decrators in the creator
             if len(kwargs) > 0:
@@ -144,13 +143,13 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: __init__")
 
     # =========================================
     # Config local folder functions
     # =========================================
 
-    def SetUpLocal(self, *args):
+    def setup_local(self, *args):
         """
         Set up local gallery filepath acording to the root gallery folder and
         other subfolders
@@ -164,26 +163,26 @@ class Controller (object):
             exp: raise a generic exception if something goes wrong
 
         Returns:
-            workPath (str): returns the local filepath to the gallery
+            wpath (str): returns the local filepath to the gallery
         """
         try:
 
             # answer with realpath local subfoders
-            workPath = str()
-            workPath = os.path.join(*args)
+            wpath = str()
+            wpath = os.path.join(*args)
 
             # if the path doesnt exists you create it
-            if not os.path.exists(workPath):
+            if not os.path.exists(wpath):
 
-                os.makedirs(workPath)
+                os.makedirs(wpath)
 
-            return workPath
+            return wpath
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: setup_local")
 
-    def createLocalFolders(self, *args, **kwargs):
+    def create_localfolders(self, *args):
         """
         Creates local subfolders with the gallery folder as root for them
 
@@ -199,18 +198,14 @@ class Controller (object):
             gfolder = args[0]
             coln = args[1]
 
-            # list of IDs as folder names for the local gallery
-            folders = self.getData(coln)
-
-            # looping trhough the possible folders in the local gallery
-            for folder in folders:
+            # looping throught ID list as folder names for the local gallery
+            for folder in self.getdata(coln):
 
                 # create the local folder path to create if necessary
                 tfp = os.path.join(gfolder, folder)
 
                 # if the local folder doesnt exists
                 if not os.path.exists(tfp):
-
                     os.makedirs(tfp)
 
                 # the local forlder already ecists
@@ -219,22 +214,22 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: create_localfolders")
 
     # =========================================
     # Index functions
     # =========================================
 
-    def scrapIndex(self, galleryUrl, sleepTime, div, attrs):
+    def scrapidx(self, gurl, stime, div, attrs):
         """
         Scrap the gallery, create a new index and recover all elements in it
 
         Args:
-            galleryUrl (str): URL for the gallery to scrap data
+            gurl (str): URL for the gallery to scrap data
             div (str): HTML <div> keyword to search and scrap
             attrs (dict): decorative attributes in the <div> keyword to refine
             the search and scrap
-            sleepTime (float): waiting time between requests
+            stime (float): waiting time between requests
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -244,17 +239,17 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.scrapIndex(galleryUrl, sleepTime, div, attrs)
+            ans = gm.scrapidx(gurl, stime, div, attrs)
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrapidx")
 
-    def scrapAgain(self, div, attrs):
+    def scrapagn(self, div, attrs):
         """
         Scrap for new information and complete the dataframe index after
-        executing the scrapIndex() function
+        executing the scrapidx() function
 
         Args:
             div (str): HTML <div> keyword to search and scrap
@@ -268,15 +263,15 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.scrapAgain(div, attrs)
+            ans = gm.scrapagn(div, attrs)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrapagn")
 
-    def getIndexID(self, gsoup, ide, clean):
+    def get_idxid(self, gsoup, ide, clean):
         """
         get the unique identifier (ID) of the gallery elements (paints) and
         list them to introduce them itto the dataframe
@@ -293,15 +288,15 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.getIndexID(gsoup, ide, clean)
+            ans = gm.get_idxid(gsoup, ide, clean)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: get_idxid")
 
-    def getIndexURL(self, gsoup, rurl, urle):
+    def get_idxurl(self, gsoup, rurl, urle):
         """
         Get the list of the elements inside the gallery index based on the root
         domain url and html div tags
@@ -322,15 +317,15 @@ class Controller (object):
         try:
 
             gm = self.gallery
-            ans = gm.getIndexURL(gsoup, rurl, urle)
+            ans = gm.get_idxurl(gsoup, rurl, urle)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: get_idxurl")
 
-    def getIndexTitle(self, gsoup, etitle):
+    def get_idxtitle(self, gsoup, etitle):
         """
         Get the element titles from the gallery main page
 
@@ -349,19 +344,19 @@ class Controller (object):
         try:
 
             gm = self.gallery
-            ans = gm.getIndexTitle(gsoup, etitle)
+            ans = gm.get_idxtitle(gsoup, etitle)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: get_idxtitle")
 
     # =========================================
     # Scrap columns functions from Index
     # =========================================
 
-    def scrapDescriptions(self, *args, **kwargs):
+    def scrap_descriptions(self, *args, **kwargs):
         """
         Scrap the elements (paints) description in the index using the
         ID column name, HTML divisions <divs>, decorative attributes,
@@ -393,15 +388,13 @@ class Controller (object):
             elem = args[3]
             clean = args[4]
 
-            urls = self.getData(coln)
+            for url in self.getdata(coln):
 
-            for url in urls:
-
-                tsoup = gm.scrapElement(url, div, attrs, **kwargs)
-                tans = gm.cleanDescription(tsoup, elem, clean)
+                tsoup = gm.scrape(url, div, attrs, **kwargs)
+                tans = gm.clean_description(tsoup, elem, clean)
 
                 # compose answer
-                tans = self.toJSON(tans)
+                tans = self.to_json(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
@@ -410,9 +403,9 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrap_descriptions")
 
-    def scrapPaintLinks(self, *args, **kwargs):
+    def scrap_paintlinks(self, *args, **kwargs):
         """
         scrap the data to download the painting file using the ID column name
         and the domain root URL
@@ -432,7 +425,7 @@ class Controller (object):
             ans (list): list of the URLs (HTTP) to download the elements
         """
         try:
-
+            # default answer
             ans = list()
             gm = self.gallery
             coln = args[0]
@@ -442,13 +435,11 @@ class Controller (object):
             elem = args[4]
 
             # getting the element url in the gallery
-            urls = self.getData(coln)
-
-            for url in urls:
+            for url in self.getdata(coln):
 
                 # scraping elements each gallery page
-                tsoup = gm.scrapElement(url, div, attrs, **kwargs)
-                tans = gm.cleanDownloadURL(tsoup, rurl, elem)
+                tsoup = gm.scrape(url, div, attrs, **kwargs)
+                tans = gm.clean_dlurl(tsoup, rurl, elem)
 
                 # compose answer
                 ans.append(tans)
@@ -459,15 +450,15 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrap_paintlinks")
 
-    def downloadPaints(self, *args, **kwargs):
+    def dlpaints(self, *args):
         """
         download the paint files from the list of available asset url
         in the gallery
 
         Args:
-            dlUrlColn (str): column name of known download URLs
+            dlurl_coln (str): column name of known download URLs
             gfolder (str): name of the main gallery folder
             div (str): HTML <div> search and scrap keyword
             attrs (dict): decorative <div> keywords to refine the scrap
@@ -485,26 +476,24 @@ class Controller (object):
             # getting the element url in the gallery
             ans = list()
             gm = self.gallery
-            dlUrlColn = args[0]
+            dlurl_coln = args[0]
             gf = args[1]
             div = args[2]
             attrs = args[3]
             elem = args[4]
             clean = args[5]
 
-            urls = self.getData(dlUrlColn)
-
-            for url in urls:
+            for url in self.getdata(dlurl_coln):
 
                 # the url is valid, it can be null or na or none
                 if validators.url(str(url)) is True:
 
                     # recovers the image file name
-                    tsoup = gm.getImgName(url, div, attrs)
+                    tsoup = gm.get_imgfn(url, div, attrs)
                     # clean the name to save
-                    timgf = gm.cleanImgName(tsoup, elem, clean)
+                    timgf = gm.clean_imgfn(tsoup, elem, clean)
                     # download and save the image in the local folder
-                    tans = gm.getImgFile(gf, url, timgf)
+                    tans = gm.get_imgf(gf, url, timgf)
                     ans.append(tans)
 
                 # invalid url
@@ -519,9 +508,9 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: dlpaints")
 
-    def scrapSearchTags(self, *args, **kwargs):
+    def scrap_searchtags(self, *args, **kwargs):
         """
         Scrap the elements (paints) search-tags using the ID column name
         in the index, the domain URL, HTML divisions <divs>, decorative
@@ -544,7 +533,6 @@ class Controller (object):
             ans (list): list of element search-tags in JSON format
         """
         try:
-
             # get the url list from the dataframe in the model
             ans = list()
             gm = self.gallery
@@ -554,16 +542,15 @@ class Controller (object):
             attrs = args[3]
             elem = args[4]
             clean = args[5]
-            urls = self.getData(coln)
 
-            for url in urls:
+            for url in self.getdata(coln):
                 # scraping elements each gallery page
-                tsoup = gm.scrapElement(url, div, attrs, **kwargs)
+                tsoup = gm.scrape(url, div, attrs, **kwargs)
                 # extracting the search tags from the soup
-                tans = gm.cleanSearchTags(rurl, tsoup, elem, clean)
+                tans = gm.clean_searchtags(rurl, tsoup, elem, clean)
 
                 # compose answer
-                tans = self.toJSON(tans)
+                tans = self.to_json(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
@@ -572,10 +559,10 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrap_searchtags")
 
-    def scrapObjsData(self, *args, **kwargs):
-        #     def scrapObjsData(self, coln, div, attrs, elem, **kwargs):
+    def scrap_objdata(self, *args, **kwargs):
+        #     def scrap_objdata(self, coln, div, attrs, elem, **kwargs):
         """
         Scrap the elements (paints) object-data using the ID column name
         in the index, HTML divisions <divs>, decorative attributes,
@@ -604,15 +591,14 @@ class Controller (object):
             div = args[1]
             attrs = args[2]
             elem = args[3]
-            urls = self.getData(coln)
 
-            for url in urls:
+            for url in self.getdata(coln):
 
-                tsoup = gm.scrapElement(url, div, attrs, **kwargs)
-                tans = gm.cleanObjData(tsoup, elem)
+                tsoup = gm.scrape(url, div, attrs, **kwargs)
+                tans = gm.clean_objdata(tsoup, elem)
 
                 # compose answer
-                tans = self.toJSON(tans)
+                tans = self.to_json(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
@@ -621,9 +607,9 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrap_objdata")
 
-    def scrapRelatedWork(self, *args, **kwargs):
+    def scrap_relwork(self, *args, **kwargs):
         """
         able to scrap the related work data from the webpage using the
         dataframe's column name, the HTML divs and other decorators in the url
@@ -654,24 +640,22 @@ class Controller (object):
             elem = args[4]
             clean = args[5]
 
-            urls = gm.getData(coln)
-
-            for url in urls:
+            for url in self.getdata(coln):
 
                 # scraping elements each gallery page
-                tsoup = gm.scrapElement(url, div, attrs, **kwargs)
+                tsoup = gm.scrape(url, div, attrs, **kwargs)
 
                 # # default empty dict to return
                 tans = dict()
-                # checking if there is any related work to process
 
+                # checking if there is any related work to process
                 if len(tsoup) > 0:
 
                     # extracting the search tags from the soup
-                    tans = gm.cleanRelatedWork(rurl, tsoup, elem, clean)
+                    tans = gm.clean_relwork(rurl, tsoup, elem, clean)
 
                 # compose answer
-                tans = self.toJSON(tans)
+                tans = self.to_json(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SLEEP_TIME)
 
@@ -680,9 +664,9 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: scrap_relwork")
 
-    def exportPaints(self, *args):
+    def export_paints(self, *args):
         """
         Export the images from a source folder into a target folder,
         the target images are in color and in grayscale
@@ -711,30 +695,23 @@ class Controller (object):
             sfext = args[1]
             tfext = args[2]
             tsufix = args[3]
-
-            # getting index data
-            indata = self.getData(coln)
             gm = self.gallery
-            gp = self.galleryPath
-            ip = self.imagesPath
 
             # iterating over the index data
-            for tid in indata:
+            for tid in self.getdata(coln):
                 # config source and target folders
-                srcf = os.path.join(gp, tid)
-                tgtf = os.path.join(ip, tid)
+                srcf = os.path.join(self.localg_path, tid)
+                tgtf = os.path.join(self.imgd_path, tid)
 
                 # recovering source images
-                srcfn = gm.getSourceImages(srcf, sfext)
-
+                srcfn = gm.get_srcimgs(srcf, sfext)
                 # setting target images
-                tgtfn = gm.setTargetImages(srcfn, tgtf, tfext, tsufix)
-
+                tgtfn = gm.set_tgtimgs(srcfn, tgtf, tfext, tsufix)
                 # exporting images
-                tans = gm.exportImages(srcfn, tgtfn, tsufix)
+                tans = gm.export_imgs(srcfn, tgtfn, tsufix)
 
                 # compose answer
-                tans = self.toJSON(tans)
+                tans = self.to_json(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
@@ -743,9 +720,9 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: export_paints")
 
-    def exportShapes(self, *args):
+    def export_shapes(self, *args):
         """
         Export the image shapes from the exported images in the target folder
 
@@ -772,24 +749,21 @@ class Controller (object):
             tfext = args[1]
             tsufix = args[2]
 
-            # getting index data
-            indata = self.getData(coln)
             gm = self.gallery
-            ip = self.imagesPath
+            ip = self.imgd_path
 
             # iterating over the index data
-            for tid in indata:
+            for tid in self.getdata(coln):
+
                 # config source and target folders
                 tgtf = os.path.join(ip, tid)
-
                 # recovering source images
-                tgtfn = gm.getSourceImages(tgtf, tfext)
-
+                tgtfn = gm.get_srcimgs(tgtf, tfext)
                 # exporting shapes
-                tans = gm.exportShapes(tgtfn, tsufix)
+                tans = gm.export_shapes(tgtfn, tsufix)
 
                 # compose answer
-                tans = self.toJSON(tans)
+                tans = self.to_json(tans)
                 ans.append(tans)
                 time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
@@ -798,9 +772,9 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: export_shapes")
 
-    def getData(self, coln, *args, **kwargs):
+    def getdata(self, coln, *args, **kwargs):
         """
         get the data based in the column name of the model's dataframe
 
@@ -817,20 +791,20 @@ class Controller (object):
             # getting the element url in the gallery
             ans = list()
             gm = self.gallery
-            ans = gm.getData(coln, *args, **kwargs)
+            ans = gm.getdata(coln, *args, **kwargs)
 
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: getdata")
 
     # =========================================
     # dataframe CRUD functions
     # =========================================
 
-    def newDataFrame(self, columns, data):
+    def newdf(self, columns, data):
         """
         creates a new model dataframe with
 
@@ -847,15 +821,15 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.createNewIndex(columns, data)
+            ans = gm.newidx(columns, data)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: newdf")
 
-    def updateData(self, column, data):
+    def updata(self, column, data):
         """
         update the data in one column of the gallery model (dataframe)
 
@@ -872,15 +846,15 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.updateData(column, data)
+            ans = gm.updata(column, data)
             # returning answer
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: updata")
 
-    def saveGallery(self, fname, folder):
+    def save_gallery(self, fname, folder):
         """
         write the gallery model (pandas) into a CSV file
 
@@ -893,14 +867,14 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.saveGallery(fname, folder)
+            ans = gm.save_gallery(fname, folder)
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: save_gallery")
 
-    def loadGallery(self, fname, folder):
+    def load_gallery(self, fname, folder):
         """
         read the gallery model (pandas) from a CSV file
 
@@ -913,14 +887,14 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            ans = gm.loadGallery(fname, folder)
+            ans = gm.load_gallery(fname, folder)
             return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: load_gallery")
 
-    def checkGallery(self):
+    def check_gallery(self):
         """
         checks the data stats of the gallery dataframe
 
@@ -932,28 +906,28 @@ class Controller (object):
         """
         try:
             gm = self.gallery
-            gm.checkGallery()
+            gm.check_gallery()
             # return ans
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: check_gallery")
 
     # =========================================
     # dataframe I/O functions
     # =========================================
 
-    def exportToJSON(self, gfolder, indexCol, expCol, fname):
+    def export_json(self, gfolder, incol, expcol, fname):
         """
         export the data from one column in the model's dataframe into JSON file
         in an specific local gallery folder
 
         Args:
             gfolder (str): name of the main gallery folder
-            indexCol (str): name of the column in the dataframe with the
+            incol (str): name of the column in the dataframe with the
             gallery index with unique IDs for each elements (same as the local
             folder's names)
-            expCol (str): name of the column with the data to export to JSON
+            expcol (str): name of the column with the data to export to JSON
             fname (str): name of the file to save
 
         Raises:
@@ -961,20 +935,20 @@ class Controller (object):
         """
         try:
             # working variables
-            idData = self.getData(indexCol)
-            expData = self.getData(expCol)
+            idd = self.getdata(incol)
+            expd = self.getdata(expcol)
 
-            for tindex, tdata in zip(idData, expData):
+            for tindex, tdata in zip(idd, expd):
 
                 tfile = fname + ".json"
-                self.writeJSON(tdata, tfile, gfolder, tindex)
+                self.write_json(tdata, tfile, gfolder, tindex)
                 time.sleep(DEFAULT_SHORT_SLEEP_TIME)
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: export_json")
 
-    def writeJSON(self, data, filename, *args):
+    def write_json(self, data, filename, *args):
         """
         Save a json into a local file according to the gallery folder
         and subfolders
@@ -1000,14 +974,14 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: write_json")
 
-    def toJSON(self, dictData, *args, **kwargs):
+    def to_json(self, data):
         """
         transform a python dictionary into a JSON
 
         Args:
-            dictData (dict): dictionary with the relevant data to transform
+            data (dict): dictionary with the relevant data to transform
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -1017,7 +991,7 @@ class Controller (object):
         """
         try:
             # transforming dictionary to JSON
-            td = copy.deepcopy(dictData)
+            td = copy.deepcopy(data)
             ans = json.dumps(td, ensure_ascii=False, indent=4)
 
             # returning answer
@@ -1025,4 +999,4 @@ class Controller (object):
 
         # exception handling
         except Exception as exp:
-            raise exp
+            Err.reraise(exp, "Controller: to_json")

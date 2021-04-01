@@ -41,35 +41,29 @@ assert Gallery
 assert Conf
 assert re
 
-"""
-The view is in charge of the interaction with the user
-selecting the options to scrap the web and load the data
-into the CSV files.
-"""
-
 # =======================================================
 #  Global data config
 # =======================================================
 
-cfgFolder = "Config"
-cfgApp = "app-config.ini"
-cfgSchema = "df-schema.ini"
-cfgWebTags = "html-tags.ini"
-dataApp = Conf.configGlobal(cfgFolder, cfgApp)
+CFG_FOLDER = "Config"
+CFG_APP = "app-config.ini"
+CFG_SCHEMA = "df-schema.ini"
+CFG_WEB_TAGS = "html-tags.ini"
+CFG_DATA_APP = Conf.configGlobal(CFG_FOLDER, CFG_APP)
 
 # url query for VVG gallery request
-# vvg_search = dataApp.get("Requests", "small")
-vvg_search = dataApp.get("Requests", "large")
-# vvg_search = dataApp.get("Requests", "extensive")
+# vvg_search = CFG_DATA_APP.get("Requests", "small")
+vvg_search = CFG_DATA_APP.get("Requests", "large")
+# vvg_search = CFG_DATA_APP.get("Requests", "extensive")
 
 print("=================== Config INI Gallery Search ===================")
 print(str(vvg_search) + "\n\n")
 
 # root URL of the gallery
-vvg_url = dataApp.get("Requests", "root")
+vvg_url = CFG_DATA_APP.get("Requests", "root")
 
 # local root dirpath where the data CHANGE IN .INI!!!!
-vvg_localpath = dataApp.get("Paths", "localPath")
+vvg_localpath = CFG_DATA_APP.get("Paths", "localPath")
 
 # real rootpath to work with
 galleryf = os.path.normpath(vvg_localpath)
@@ -78,31 +72,31 @@ print(galleryf)
 print(os.path.isdir(vvg_localpath))
 
 # subdirs in the local root path needed to process data
-paintf = dataApp.get("Paths", "paintsFolder")
-lettersf = dataApp.get("Paths", "lettersFolder")
+paintf = CFG_DATA_APP.get("Paths", "paintsFolder")
+lettersf = CFG_DATA_APP.get("Paths", "lettersFolder")
 
 # scrapped subfolder
-srcf = dataApp.get("Paths", "sourceFolder")
+srcf = CFG_DATA_APP.get("Paths", "sourceFolder")
 
 # app subfoder
-dataf = dataApp.get("Paths", "dataFolder")
-imgf = dataApp.get("Paths", "imageFolder")
+dataf = CFG_DATA_APP.get("Paths", "dataFolder")
+imgf = CFG_DATA_APP.get("Paths", "imageFolder")
 
 # cresting the export file for the data
-bfn = dataApp.get("ExportFiles", "basicfile")
-fext = dataApp.get("ExportFiles", "fext")
+bfn = CFG_DATA_APP.get("ExportFiles", "basicfile")
+fext = CFG_DATA_APP.get("ExportFiles", "fext")
 
 # change according to the request in the .INI!!!!
-# fsize = dataApp.get("ExportFiles", "small")
-fsize = dataApp.get("ExportFiles", "large")
-# fsize = dataApp.get("ExportFiles", "extensive")
+# fsize = CFG_DATA_APP.get("ExportFiles", "small")
+fsize = CFG_DATA_APP.get("ExportFiles", "large")
+# fsize = CFG_DATA_APP.get("ExportFiles", "extensive")
 
 expf = bfn + fsize + "." + fext
 print("================== Config INI Export File Name ==================")
 print(str(expf) + "\n\n")
 
 # loading config schema into the program
-dfschema = Conf.configGlobal(cfgFolder, cfgSchema)
+dfschema = Conf.configGlobal(CFG_FOLDER, CFG_SCHEMA)
 
 # setting schema for the element/paint gallery dataframe
 VVG_DF_COLS = eval(dfschema.get("DEFAULT", "columns"))
@@ -140,35 +134,38 @@ img_col = str(VVG_DF_COLS[VVG_DF_COLS.index("IMG_DATA")])
 shape_col = str(VVG_DF_COLS[VVG_DF_COLS.index("IMG_SHAPE")])
 
 
-class View(object):
+class View():
     """
-    the View is the console interface for the program, connect to the Model()
-    with the Controller()
+    the View is the console interface for the program, connect to the
+    Model() with the Controller()
+
+    The view is in charge of the interaction with the user selecting
+    the options to scrap the web and load the data into the CSV files.
     """
     # ====================================================
     # class variables
     # ====================================================
-    galleryControl = Controller()
-    galleryModel = Gallery()
-    galleryPath = str()
-    imagesPath = str()
-    webGallery = str()
+    gallery_controller = Controller()
+    gallery_model = Gallery()
+    localg_path = str()
+    imgd_path = str()
+    webg_path = str()
     schema = VVG_DF_COLS
 
     # config file for scraped html tags
-    scrapyCfg = None
+    scrapy_cfg = None
 
     # input variables
     inputs = -1
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         """
         Class View creator
 
         Args:
-            webGallery (str, optional): URL of the museum gallery
-            galleryPath (str, optional): the local directory to save the data
-            scrapyCfg (str, optional): costume INI file with HTML tags to scrap
+            webg_path (str): URL of the museum gallery
+            localg_path (str): the local directory to save the data
+            scrapy_cfg (str): costume INI file with HTML tags to scrap
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -176,13 +173,13 @@ class View(object):
         """
         try:
             # generic creation
-            self.galleryModel = Gallery()
-            self.galleryControl = Controller()
-            self.galleryPath = str()
-            self.imagesPath = str()
-            self.webGallery = str()
+            self.gallery_model = Gallery()
+            self.gallery_controller = Controller()
+            self.localg_path = str()
+            self.imgd_path = str()
+            self.webg_path = str()
             self.schema = copy.deepcopy(VVG_DF_COLS)
-            self.scrapyCfg = Conf.configGlobal(cfgFolder, cfgWebTags)
+            self.scrapy_cfg = Conf.configGlobal(CFG_FOLDER, CFG_WEB_TAGS)
             self.inputs = -1
 
             # if args parameters are input in the creator
@@ -190,26 +187,26 @@ class View(object):
 
                 for i in range(0, len(args)-1):
                     if i == 0:
-                        self.webGallery = args[i]
+                        self.webg_path = args[i]
 
                     if i == 1:
-                        self.galleryPath = args[i]
+                        self.localg_path = args[i]
 
                     if i == 2:
-                        self.imagesPath = args[i]
+                        self.imgd_path = args[i]
 
                     if i == 3:
-                        self.scrapyCfg = Conf.configGlobal(args[i])
+                        self.scrapy_cfg = Conf.configGlobal(args[i])
 
-                wg = self.webGallery
-                gp = self.galleryPath
-                ip = self.imagesPath
-                self.galleryModel = Gallery(wg, gp, ip)
-                mod = self.galleryModel
+                wg = self.webg_path
+                gp = self.localg_path
+                ip = self.imgd_path
+                mod = self.gallery_model
+                self.gallery_model = Gallery(wg, gp, ip)
                 sch = self.schema
-                self.galleryControl = Controller(wg, gp, ip,
-                                                 model=mod,
-                                                 schema=sch)
+                self.gallery_controller = Controller(wg, gp, ip,
+                                                     model=mod,
+                                                     schema=sch)
 
         # exception handling
         except Exception as exp:
@@ -234,15 +231,15 @@ class View(object):
             # load preavious scraped data into model
             print("4) Check gallery data (reading current *.CSV)")
             # recovers the basic data from the gallery query
-            print("5) Get Gallery's elements description (DESCRIPTION)")
+            print("5) Get Gallery elements description (DESCRIPTION)")
 
             # complement the basic data created from option 6) and 12)
-            print("6) Get Gallery's elements download URLs (DOWNLOAD_URL)")
-            print("7) Download Gallery's elements image files (HAS_PICTURE)")
-            print("8) Get Gallery's elements search-tags (SEARCH_TAGS)")
-            print("9) Get Gallery's elements collection-data (OBJ_DATA)")
-            print("10) Get Gallery's elements related work (RELATED_WORKS)")
-            print("11) Process Gallery's images (IMG_DATA, IMG_SHAPE)")
+            print("6) Get Gallery elements download URLs (DOWNLOAD_URL)")
+            print("7) Download Gallery elements image files (HAS_PICTURE)")
+            print("8) Get Gallery elements search-tags (SEARCH_TAGS)")
+            print("9) Get Gallery elements collection-data (OBJ_DATA)")
+            print("10) Get Gallery elements related work (RELATED_WORKS)")
+            print("11) Process Gallery images (IMG_DATA, IMG_SHAPE)")
             print("12) Export DataFrame to JSON Files (from CSV to Local dir)")
             print("99) Auto script for options (3, 5, 6, 7, 8, 9, 10, 11, 12)")
             print("0) EXIT (last option)")
@@ -261,7 +258,7 @@ class View(object):
         """
         try:
             # setting gallery base webpage
-            self.webGallery = vvg_search
+            self.webg_path = vvg_search
             gf = galleryf
             sf = srcf
             pf = paintf
@@ -270,41 +267,43 @@ class View(object):
             igf = imgf
 
             # setting up local dir for saving data
-            self.galleryPath = self.galleryControl.SetUpLocal(gf, sf, pf)
-            self.imagesPath = self.galleryControl.SetUpLocal(cf, df, igf)
+            self.localg_path = self.gallery_controller.setup_local(gf, sf, pf)
+            self.imgd_path = self.gallery_controller.setup_local(cf, df, igf)
             print("============== Creating the Gallery View ==============")
-            print("View gallery localpath: " + str(self.galleryPath))
-            print("View images localpath: " + str(self.imagesPath))
-            print("View gallery Web URL: " + str(self.webGallery))
+            print("View gallery localpath: " + str(self.localg_path))
+            print("View images localpath: " + str(self.imgd_path))
+            print("View gallery Web URL: " + str(self.webg_path))
             print("\n")
 
             # creating the gallery model
-            wg = self.webGallery
-            gp = self.galleryPath
-            ip = self.imagesPath
-            VDFC = VVG_DF_COLS
+            wg = self.webg_path
+            gp = self.localg_path
+            ip = self.imgd_path
+            vdfc = VVG_DF_COLS
 
-            self.galleryModel = Gallery(wg, gp, ip, schema=VDFC)
+            self.gallery_model = Gallery(wg, gp, ip, schema=vdfc)
             print("============== Creating Gallery Model ==============")
             print("Model gallery localpath: " +
-                  str(self.galleryModel.galleryPath))
+                  str(self.gallery_model.localg_path))
             print("Model images localpath: " +
-                  str(self.galleryModel.imagesPath))
+                  str(self.gallery_model.imgd_path))
             print("Model gallery Web URL: " +
-                  str(self.galleryModel.webGallery))
+                  str(self.gallery_model.webg_path))
             print("\n")
 
-            gm = self.galleryModel
+            gm = self.gallery_model
 
             # creating the gallery controller
-            self.galleryControl = Controller(wg, gp, ip, model=gm, schema=VDFC)
+            self.gallery_controller = Controller(wg, gp, ip,
+                                                 model=gm,
+                                                 schema=vdfc)
             print("============ Crating Gallery Controller ============")
             print("Controller gallery localpath: " +
-                  str(self.galleryControl.galleryPath))
+                  str(self.gallery_controller.localg_path))
             print("Controller images localpath: " +
-                  str(self.galleryControl.imagesPath))
+                  str(self.gallery_controller.imgd_path))
             print("Controller Web gallery URL: " +
-                  str(self.galleryControl.webGallery))
+                  str(self.gallery_controller.webg_path))
             print("\n")
 
         # exception handling
@@ -312,7 +311,7 @@ class View(object):
             print(exp)
             self.setup()
 
-    def getWebTags(self, column):
+    def get_wtags(self, column):
         """
         gets the HTML tags from a config file needed by beatifulsoup to
         create the dataframe column with the same name
@@ -333,7 +332,7 @@ class View(object):
         try:
             # default ans for the method
             ans = (None, None, None, None)
-            cfg = self.scrapyCfg
+            cfg = self.scrapy_cfg
 
             # checking config file
             if cfg.has_section(column):
@@ -364,16 +363,13 @@ class View(object):
                         temp = str(temp)
                     ans.append(temp)
 
-                return ans
-
-            else:
-                return ans
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def getImgTags(self, column):
+    def get_itags(self, column):
         """
         gets the image tags from a config file needed to process the files
         to Black & White (B&W) and in color (RGB)
@@ -393,7 +389,7 @@ class View(object):
         try:
             # default ans for the method
             ans = (None, None, None)
-            cfg = self.scrapyCfg
+            cfg = self.scrapy_cfg
 
             # checking config file
             if cfg.has_section(column):
@@ -420,16 +416,13 @@ class View(object):
                         temp = str(temp)
                     ans.append(temp)
 
-                return ans
-
-            else:
-                return ans
+            return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optOne(self, *args):
+    def one(self, *args):
         """
         Option 1, it creates a new dataframe with new IDs, Tittles and
         gallery URLs to further scrap data from
@@ -447,32 +440,33 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
+            print("Starting a new Gallery (ID, TITLE, COLLECTION_URL)")
+            print("...")
 
-            gc = self.galleryControl
-            wg = self.webGallery
-            gp = self.galleryPath
+            gc = self.gallery_controller
+            wg = self.webg_path
+            gp = self.localg_path
 
             # starting the gallery index (gain) from scratch
-            id_in = self.getWebTags(args[0])
-            gain = gc.scrapIndex(wg, 5.0, id_in[0], id_in[1])
-            id_data = gc.getIndexID(gain, id_in[2], id_in[3])
+            id_in = self.get_wtags(args[0])
+            gain = gc.scrapidx(wg, 5.0, id_in[0], id_in[1])
+            id_data = gc.get_idxid(gain, id_in[2], id_in[3])
             print("Gallery IDs were processed...")
 
-            ti_in = self.getWebTags(args[1])
-            gain = gc.scrapAgain(ti_in[0], ti_in[1])
-            title_data = gc.getIndexTitle(gain, ti_in[2])
+            ti_in = self.get_wtags(args[1])
+            gain = gc.scrapagn(ti_in[0], ti_in[1])
+            title_data = gc.get_idxtitle(gain, ti_in[2])
             print("Gallery Titles were processed...")
 
-            url_in = self.getWebTags(args[2])
-            gain = gc.scrapAgain(url_in[0], url_in[1])
-            url_data = gc.getIndexURL(gain, args[3], url_in[2])
+            url_in = self.get_wtags(args[2])
+            gain = gc.scrapagn(url_in[0], url_in[1])
+            url_data = gc.get_idxurl(gain, args[3], url_in[2])
             print("Gallery collection URLs were processed...")
 
-            index_data = (id_data, title_data, url_data)
-            index_cols = copy.deepcopy(args)
-            ans = gc.newDataFrame(index_cols, index_data)
+            data = (id_data, title_data, url_data)
+            ans = gc.newdf(args, data)
             print("New Gallery Model was created...")
-            gc.createLocalFolders(gp, args[0])
+            gc.create_localfolders(gp, args[0])
             print("Local Gallery folders were created...")
             return ans
 
@@ -480,14 +474,14 @@ class View(object):
         except Exception as exp:
             raise exp
 
-    def optTwo(self, *args):
+    def two(self, *args):
         """
         Option 2, saves the in-memory data into CSV and creates the
         local dirpath for the files if it doesnt exists
 
         Args:
-            expf (str, optional): export file name, Default CSV
-            dataf (str, optional): data folder name for the app
+            expf (str): export file name, Default CSV
+            dataf (str): data folder name for the app
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -496,23 +490,24 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            ans = gc.saveGallery(args[0], args[1])
+            print("Saving gallery Model into CSV file...")
+            gc = self.gallery_controller
+            ans = gc.save_gallery(args[0], args[1])
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optThree(self, *args):
+    def three(self, *args):
         """
         Option 3, loads the in memory of the CSV data and creates the
         local dirpath for the files if it doesnt exists
 
         Args:
-            id_col (str, optional): df-schema column name of the ID
-            expf (str, optional): export file name, Default CSV
-            dataf (str, optional): data folder name for the app
+            id_col (str): df-schema column name of the ID
+            expf (str): export file name, Default CSV
+            dataf (str): data folder name for the app
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -521,17 +516,19 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            gp = self.galleryPath
-            ans = gc.loadGallery(args[0], args[1])
-            gc.createLocalFolders(gp, args[2])
+            print("Loading Gallery CSV file into Model...")
+
+            gc = self.gallery_controller
+            gp = self.localg_path
+            ans = gc.load_gallery(args[0], args[1])
+            gc.create_localfolders(gp, args[2])
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optFour(self):
+    def four(self):
         """
         Option 4, checks the in memory dataframe
 
@@ -539,21 +536,23 @@ class View(object):
             exp: raise a generic exception if something goes wrong
         """
         try:
-            gc = self.galleryControl
-            gc.checkGallery()
+            print("Checking Gallery Model status (dataframe from CSV)")
+
+            gc = self.gallery_controller
+            gc.check_gallery()
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optFive(self, *args):
+    def five(self, *args):
         """
         Option 5, based on the results of option 1, it scrap the
         description of each URL gallery element
 
         Args:
-            desc_col (str, optional): df-schema column name of the DESCRIPTION
-            curl_col (str, optional): df-schema column name of the COLLECTION
+            desc_col (str): df-schema column name of the DESCRIPTION
+            curl_col (str): df-schema column name of the COLLECTION
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -562,9 +561,11 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            opt_in = self.getWebTags(args[0])
-            descrip_data = gc.scrapDescriptions(
+            print("Recovering elements description (DESCRIPTION)")
+
+            gc = self.gallery_controller
+            opt_in = self.get_wtags(args[0])
+            descrip_data = gc.scrap_descriptions(
                 args[1],
                 opt_in[0],
                 opt_in[1],
@@ -572,22 +573,22 @@ class View(object):
                 opt_in[3],
                 multiple=True)
 
-            ans = gc.updateData(args[0], descrip_data)
+            ans = gc.updata(args[0], descrip_data)
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optSix(self, *args):
+    def six(self, *args):
         """
         Option 6, based on the results of option 1, it scrap the
         image download URL each gallery element
 
         Args:
-            dl_col (str, optional): df-schema column name of the DOWNLOAD_URL
-            curl_col (str, optional): df-schema column name of the COLLECTION
-            vvg_url (str, optional): web gallery URL search for the collection
+            dl_col (str): df-schema column name of the DOWNLOAD_URL
+            curl_col (str): df-schema column name of the COLLECTION
+            vvg_url (str): web gallery URL search for the collection
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -596,9 +597,11 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            opt_in = self.getWebTags(args[0])
-            urlpic_data = gc.scrapPaintLinks(
+            print("Recovering pictures download urls (DOWNLOAD_URL)")
+
+            gc = self.gallery_controller
+            opt_in = self.get_wtags(args[0])
+            urlpic_data = gc.scrap_paintlinks(
                 args[1],
                 args[2],
                 opt_in[0],
@@ -606,21 +609,21 @@ class View(object):
                 opt_in[2],
                 multiple=False)
 
-            ans = gc.updateData(args[0], urlpic_data)
+            ans = gc.updata(args[0], urlpic_data)
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optSeven(self, *args):
+    def seven(self, *args):
         """
         Option 7, based on the results of option 1, it download the
         actual image from each gallery element
 
         Args:
-            dl_col (str, optional): df-schema column name of the DOWNLOAD_URL
-            haspic_col (str, optional): df-schema column name of the
+            dl_col (str): df-schema column name of the DOWNLOAD_URL
+            haspic_col (str): df-schema column name of the
             HAS_PICTURE
 
         Raises:
@@ -630,10 +633,12 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            gp = self.galleryPath
-            opt_in = self.getWebTags(args[1])
-            haspic_data = gc.downloadPaints(
+            print("Downloading Gallery picture (HAS_PICTURE)")
+
+            gc = self.gallery_controller
+            gp = self.localg_path
+            opt_in = self.get_wtags(args[1])
+            haspic_data = gc.dlpaints(
                                 args[0],
                                 gp,
                                 opt_in[0],
@@ -642,21 +647,21 @@ class View(object):
                                 opt_in[3],
                                 multiple=False)
 
-            ans = gc.updateData(args[1], haspic_data)
+            ans = gc.updata(args[1], haspic_data)
             return ans
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optEight(self, *args):
+    def eight(self, *args):
         """
         Option 8, based on the results of option 1, it scrap the search
         tags in each gallery element in the gallery
 
         Args:
-            search_col (str, optional): df-schema column name of SEARCH TAGS
-            curl_col (str, optional): df-schema column name of the COLLECTION
-            vvg_url (str, optional): web gallery root URL for the collection
+            search_col (str): df-schema column name of SEARCH TAGS
+            curl_col (str): df-schema column name of the COLLECTION
+            vvg_url (str): web gallery root URL for the collection
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -665,9 +670,11 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            opt_in = self.getWebTags(args[0])
-            search_data = gc.scrapSearchTags(
+            print("Recovering Gallery search tags (SEARCH_TAGS)")
+
+            gc = self.gallery_controller
+            opt_in = self.get_wtags(args[0])
+            search_data = gc.scrap_searchtags(
                                 args[1],
                                 args[2],
                                 opt_in[0],
@@ -676,21 +683,21 @@ class View(object):
                                 opt_in[3],
                                 multiple=True)
 
-            ans = gc.updateData(args[0], search_data)
+            ans = gc.updata(args[0], search_data)
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optNine(self, *args):
+    def nine(self, *args):
         """
         Option 9, based on the results of option 1, it scrap the
         object-data of each gallery element in the gallery
 
         Args:
-            obj_col (str, optional): df-schema column name of OBJ_DATA
-            curl_col (str, optional): df-schema column name of the COLLECTION
+            obj_col (str): df-schema column name of OBJ_DATA
+            curl_col (str): df-schema column name of the COLLECTION
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -699,31 +706,33 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            opt_in = self.getWebTags(args[0])
-            object_data = gc.scrapObjsData(
+            print("Recovering Gallery object-data (OBJ_DATA)")
+
+            gc = self.gallery_controller
+            opt_in = self.get_wtags(args[0])
+            object_data = gc.scrap_objdata(
                                 args[1],
                                 opt_in[0],
                                 opt_in[1],
                                 opt_in[2],
                                 multiple=False)
 
-            ans = gc.updateData(args[0], object_data)
+            ans = gc.updata(args[0], object_data)
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optTen(self, *args):
+    def ten(self, *args):
         """
         Option 10, based on the results of option 1, it scrap the
         related work of each gallery element in the gallery
 
         Args:
-            rwork_col (str, optional): df-schema column name for RELATED_WORKS
-            curl_col (str, optional): df-schema column name of the COLLECTION
-            vvg_url (str, optional): web gallery URL search for the collection
+            rwork_col (str): df-schema column name for RELATED_WORKS
+            curl_col (str): df-schema column name of the COLLECTION
+            vvg_url (str): web gallery URL search for the collection
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -732,9 +741,11 @@ class View(object):
             ans (bool): boolean to confirm success of the task
         """
         try:
-            gc = self.galleryControl
-            opt_in = self.getWebTags(args[0])
-            rwork_data = gc.scrapRelatedWork(
+            print("Recovering Gallery related work (RELATED_WORKS)")
+
+            gc = self.gallery_controller
+            opt_in = self.get_wtags(args[0])
+            rwork_data = gc.scrap_relwork(
                                 args[1],
                                 args[2],
                                 opt_in[0],
@@ -743,66 +754,62 @@ class View(object):
                                 opt_in[3],
                                 multiple=True)
 
-            ans = gc.updateData(args[0], rwork_data)
+            ans = gc.updata(args[0], rwork_data)
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optEleven(self, *args):
+    def eleven(self, *args):
         """
         Option 11, based on the results of option 1, it scrap the
         object-data of each gallery element in the gallery
 
-            img_col,
-            shape_col,
-            id_col)
+        Args:
+            id_col (str): df-schema column name of the ID
+            img_col (str): df-schema column name of the IMG_DATA
+            shape_col (str): df-schema column name of the IMG_SHAPE
 
         Raises:
             exp: raise a generic exception if something goes wrong
         """
         try:
-            ans = False
-            gc = self.galleryControl
-            ip = self.imagesPath
+            print("Exporting local images into RGB, B&W + shape")
 
-            # opt_in = self.getWebTags(args[0])
-            id_col = args[0]
-            opt_img = self.getImgTags(args[1])
-            opt_shape = self.getImgTags(args[2])
+            ans = False
+            gc = self.gallery_controller
+            ip = self.imgd_path
+
+            opt_img = self.get_itags(args[1])
+            opt_shape = self.get_itags(args[2])
 
             # create the local data/img folders
             print("Configuring local data image folders...")
-            gc.createLocalFolders(ip, id_col)
+            gc.create_localfolders(ip, args[0])
 
             # export the images in RGB and B&W
             print("Exporting RGB and B&W images...")
-            src_imgf = opt_img[0]
-            tgt_imgf = opt_img[1]
-            tgt_sufix = opt_img[2]
-            img_data = gc.exportPaints(id_col,
-                                       src_imgf,
-                                       tgt_imgf,
-                                       tgt_sufix)
+            img_data = gc.export_paints(args[0],
+                                        opt_img[0],
+                                        opt_img[1],
+                                        opt_img[2])
 
             print("Getting RGB and B&W shapes...")
-            shape_imgf = opt_shape[0]
-            shape_size = opt_shape[1]
-            shape_data = gc.exportShapes(id_col,
-                                         shape_imgf,
-                                         shape_size)
+            shape_data = gc.export_shapes(args[0],
+                                          opt_shape[0],
+                                          opt_shape[1])
 
             # update the CSV columns with the data
-            ans = gc.updateData(args[1], img_data)
-            ans = gc.updateData(args[2], shape_data)
+            ans = gc.updata(args[1], img_data)
+            ans = gc.updata(args[2], shape_data)
             return ans
 
         # exception handling
         except Exception as exp:
             raise exp
 
-    def optTwelve(self, *args):
+    def twelve(self, *args):
         """
         Option 12, export all scraped columns into JSON file in the
         designated local folders
@@ -811,8 +818,10 @@ class View(object):
             exp: raise a generic exception if something goes wrong
         """
         try:
-            gc = self.galleryControl
-            gp = self.galleryPath
+            print("Exporting pandas-df to JSON in local gallery")
+
+            gc = self.gallery_controller
+            gp = self.localg_path
 
             # JSON export for the following columns:
             # - desccription
@@ -820,7 +829,7 @@ class View(object):
             # - object date
             # - related work
             for temp_cname in args[1]:
-                gc.exportToJSON(
+                gc.export_json(
                     gp,
                     args[0],
                     temp_cname,
@@ -830,7 +839,7 @@ class View(object):
         except Exception as exp:
             raise exp
 
-    def printReport(self, report):
+    def printre(self, report):
         """
         prints the report tittle in the console
 
@@ -857,121 +866,100 @@ class View(object):
             while True:
                 self.menu()
                 inp = self.inputs
+                ans = False
 
                 # known if the is auto or manual input
                 if inp < 0:
-                    inp = input('Select an option to continue\n')
+                    inp = input("Select an option to continue\n")
 
-                # starting gallery object to scrap data
+                # starting a new gallery
                 if int(inp) == 1:
-                    print("Starting a new Gallery (ID, TITLE, COLLECTION_URL)")
-                    print("...")
-                    ans = self.optOne(id_col, title_col, curl_col, vvg_url)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.one(id_col, title_col, curl_col, vvg_url)
 
+                # saving gallery in file
                 elif int(inp) == 2:
-                    print("Saving gallery Model into CSV file...")
-                    ans = self.optTwo(expf, dataf)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.two(expf, dataf)
 
+                # loading gallery in memory
                 elif int(inp) == 3:
-                    print("Loading Gallery's CSV file into Model...")
-                    ans = self.optThree(expf, dataf, id_col)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.three(expf, dataf, id_col)
 
+                # checking gallery in memory
                 elif int(inp) == 4:
-                    print("Checking Gallery Model status (dataframe from CSV)")
-                    self.printReport(True)
-                    self.optFour()
+                    self.four()
+                    ans = True
 
+                # recovering painting descriptions
                 elif int(inp) == 5:
-                    print("Recovering elements description (DESCRIPTION)")
-                    ans = self.optFive(desc_col, curl_col)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.five(desc_col, curl_col)
 
+                # recovering painting download URL
                 elif int(inp) == 6:
-                    print("Recovering pictures download urls (DOWNLOAD_URL)")
-                    ans = self.optSix(dl_col, curl_col, vvg_url)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.six(dl_col, curl_col, vvg_url)
 
+                # downloading painting file
                 elif int(inp) == 7:
-                    print("Downloading Gallery's picture (HAS_PICTURE)")
-                    ans = self.optSeven(dl_col, haspic_col)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.seven(dl_col, haspic_col)
 
+                # recovering painting search-tags
                 elif int(inp) == 8:
-                    print("Recovering Gallery's search tags (SEARCH_TAGS)")
-                    ans = self.optEight(search_col, curl_col, vvg_url)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.eight(search_col, curl_col, vvg_url)
 
+                # recovering painting object-data
                 elif int(inp) == 9:
-                    print("Recovering Gallery's object-data (OBJ_DATA)")
-                    ans = self.optNine(obj_col, curl_col)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.nine(obj_col, curl_col)
 
+                # recovering painting related-work
                 elif int(inp) == 10:
-                    print("Recovering Gallery's related work (RELATED_WORKS)")
-                    ans = self.optTen(rwork_col, curl_col, vvg_url)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.ten(rwork_col, curl_col, vvg_url)
 
+                # exporting and formating painting files
                 elif int(inp) == 11:
-                    print("Exporting local images into RGB, B&W + shape")
-                    ans = self.optEleven(id_col, img_col, shape_col)
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.eleven(id_col, img_col, shape_col)
 
+                # exporting CSV columns into JSON foles
                 elif int(inp) == 12:
-                    print("Exporting pandas-df to JSON in local gallery")
-                    self.optTwelve(id_col, json_index_cols)
-                    self.printReport(True)
-                    self.optFour()
+                    self.twelve(id_col, json_index_cols)
+                    ans = True
 
                 elif int(inp) == 99:
-                    # list with steps for dataframe automatic generation
+                    # list of automatic steps
                     # (3, 4, 5, 6, 7, 2, 8, 2, 9, 2, 10, 2, 11, 2, 12)
                     print("Auto executing options 5 to 10!!!...")
-                    ans = self.optFive(desc_col, curl_col)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 5 completed...")
-                    ans = self.optSix(dl_col, curl_col, vvg_url)
-                    ans = self.optSeven(dl_col, haspic_col)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 6 completed...")
-                    print("step 7 completed...")
-                    ans = self.optEight(search_col, vvg_url)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 8 completed...")
-                    ans = self.optNine(obj_col, curl_col)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 9 completed...")
-                    ans = self.optTen(rwork_col, curl_col, vvg_url)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 10 completed...")
-                    ans = self.optEleven(id_col, img_col, shape_col)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 11 completed...")
-                    self.optTwelve(id_col, json_index_cols)
-                    ans = self.optTwo(expf, dataf)
-                    print("step 12 completed...")
+                    ans = self.five(desc_col, curl_col)
+                    ans = self.two(expf, dataf)
 
-                    self.printReport(ans)
-                    self.optFour()
+                    ans = self.six(dl_col, curl_col, vvg_url)
+                    ans = self.seven(dl_col, haspic_col)
+                    ans = self.two(expf, dataf)
+
+                    ans = self.eight(search_col, curl_col, vvg_url)
+                    ans = self.two(expf, dataf)
+
+                    ans = self.nine(obj_col, curl_col)
+                    ans = self.two(expf, dataf)
+
+                    ans = self.ten(rwork_col, curl_col, vvg_url)
+                    ans = self.two(expf, dataf)
+
+                    ans = self.eleven(id_col, img_col, shape_col)
+                    ans = self.two(expf, dataf)
+
+                    self.twelve(id_col, json_index_cols)
+                    ans = self.two(expf, dataf)
+
                     self.inputs = -1
 
+                # exit program
                 elif int(inp) == 0:
                     sys.exit(0)
 
+                # other option selected
                 else:
                     print("Invalid option, please try again...")
+
+                # printing report after finishing task
+                self.printre(ans)
 
         # exception handling
         except Exception as exp:
@@ -979,10 +967,9 @@ class View(object):
             self.run()
 
 
+# main of the program
 if __name__ == "__main__":
-    """
-    creating the View() object and running it
-    """
+    # creating the View() object and running it
     scrapy = View()
     scrapy.setup()
     scrapy.run()
