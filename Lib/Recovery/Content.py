@@ -21,6 +21,7 @@
 # Standard library imports
 # =========================================
 import time
+import re
 
 # =========================================
 # Third party imports
@@ -58,7 +59,6 @@ class Page():
     shead = None
     content = None
     dialect = DEFAULT_HTML_PARSER
-
     def __init__(self, *args, **kwargs):
         """
         class creator for page()
@@ -80,7 +80,6 @@ class Page():
             self.sbody = None
             self.shead = None
             self.content = None
-
             # when arguments are pass as parameters
             if len(args) > 0:
 
@@ -105,11 +104,123 @@ class Page():
         except Exception as exp:
             Err.reraise(exp, "Page: __init__")
 
+#============================================================================================================
+
+    def getImage(self, url):
+        response = requests.get(url)
+        return response.content 
+
+    def load_body(self, return_data = False):
+        try: 
+            response = requests.get(self.url)
+            self.sbody = BeautifulSoup(response.text,"html.parser")
+            if return_data:
+                return self.sbody
+            else:
+                return 
+
+        except Exception as exp:
+            Err.reraise(exp, "Page: load_body")  
+
+
+    def get_elements(self, tag ="a", pattern=""): ########MIRAR EN EL MODEL
+        elements = self.sbody.find_all(tag)
+        ans = []
+        if pattern:
+            for element in elements:
+                if re.match(pattern,element.text):
+                    url = str(element).split("\"")[1]
+                    route = url.split("/")[3]
+                    ans.append(route)
+            return ans
+        return elements
+
+
+    def scrapMetadata(self, route, tag ="div",attrs={}):
+        path = self.url.replace(".html","/"+route+"/print.html")
+        response = requests.get(path)
+        body = BeautifulSoup(response.text,"html.parser")
+        elements = body.find_all(tag,attrs=attrs)
+        heading = elements[1].text.split("\n")
+        title = heading[0]
+        author = heading[1].split(": ")[1]
+        to = heading[2].split(": ")[1]
+
+        dateAndLocation = heading[3].split(": ")[1]
+        location = dateAndLocation.split(", ")[0]
+        date = dateAndLocation.split(", ")[1:]
+        date = ', '.join(date)
+        
+        ans = {"TITLE":title,"AUTHOR":author,"ADDRESSEE":to,"DATE":date,"LOCATION":location}
+        return ans
+
+    def scrapAtPosition(self, tag ="div",attrs={}, position=0, route=""):
+        path = self.url.replace(".html","/"+route+"/print.html")
+        response = requests.get(path)
+        body = BeautifulSoup(response.text,"html.parser")
+        elements = body.find_all(tag,attrs=attrs) 
+        text = ""
+        if position < len(elements):
+            text = elements[position].text.replace("\n"," ")
+        return text
+
+    def scrapArtworks(self, route):
+        links = []
+        titles = []
+        Fs = []
+        JHs = []
+        ids = []
+
+        path = self.url.replace(".html","/"+route+"/letter.html")
+        
+        driver = webdriver.Firefox()
+        driver.maximize_window()
+        driver.get(path)
+        driver.refresh()
+        driver.find_element_by_link_text("works of art").click()
+        x = driver.find_elements_by_class_name("image")
+        for i in x:
+            a = i.find_element_by_tag_name("a")
+            img = a.find_element_by_tag_name("img")
+            image_link = img.get_attribute("src").replace("t.jpg",".jpg")
+            title = img.get_attribute('title')
+            F = re.findall(r'F\s\d+',title)
+            JH = re.findall(r'JH\s\d+',title)
+            if len(F)>0:
+                F = F[0]
+            else:
+                F = ""
+            if len(JH)>0:
+                JH = JH[0]
+            else:
+                JH = ""
+            
+            # parsing the URL to choose the local folder to save the file
+            imgf = image_link.split("/")[-1].replace(".jpg","")
+            ids.append(imgf)
+            links.append(image_link)
+            Fs.append(F)
+            JHs.append(JH)
+            titles.append(title)
+
+        driver.close()
+        return {"ARTWORKSTITLE":titles,"ARTWORKSF":Fs,"ARTWORKSJH":JHs,"ARTWORKSLINK":links,"ARTWORKSID":ids}
+    
+
+#============================================================================================================
+
+
+
+
+
+
+
+
+
     def get_collection(self, gurl, stime):
         """
         Gets an URL and a wait time to update the BeautifulSoup
-        object in the class attribute. only works with a page with an infinite
-        scroll option
+        object in the class attribute. 
 
         Args:
             gurl (str): url of the main gallery to parse.
@@ -123,9 +234,6 @@ class Page():
             self.request = webdriver.Firefox()
             self.request.implicitly_wait(30)
             self.request.get(gurl)
-
-            # scrolling in the infinite gallery
-            self.scroll_collection(self.request, stime)
 
             # HTML from `<html>`
             rbody = self.request.execute_script(

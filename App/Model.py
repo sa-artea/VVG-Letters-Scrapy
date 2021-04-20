@@ -27,6 +27,7 @@ import csv
 import re
 import unicodedata
 import urllib
+import time
 
 # ===============================
 # extension python libraries
@@ -141,6 +142,90 @@ class Gallery():
         except Exception as exp:
             Err.reraise(exp, "Gallery: __init__")
 
+
+
+
+#============================================================================================================
+    def load_body(self, url):
+        self.wpage = Page(url)
+        self.wpage.load_body()
+
+    def scrap_routes(self):
+        pattern = r"^[RM]{2}[0-9]+|^[0-9]{3}"
+        return self.wpage.get_elements(tag="a",pattern=pattern)
+
+    def scrap_index(self, routes):
+        return self.wpage.scrapIndex(routes)
+    
+    def scrapMetadata(self,route,tag="div",attrs={"class":"content"}):
+        data = self.wpage.scrapMetadata(route,tag=tag,attrs=attrs)
+        for key in data:
+            data[key] = self.clrtext(data[key])
+        return data
+    
+    def scrapOriginalText(self,route, tag="div",attrs ={"class":"content"}):
+        original_txt = self.wpage.scrapAtPosition(tag=tag,attrs=attrs, position=3, route=route)
+        original_txt = self.clrtext(original_txt) 
+        return original_txt
+
+    def scrapTranslationText(self, route, tag="div",attrs ={"class":"content"}):
+        translation_txt = self.wpage.scrapAtPosition(tag=tag,attrs=attrs, position=5, route=route)
+        translation_txt = self.clrtext(translation_txt) 
+        return translation_txt
+    
+    def scrapNotesText(self, route, tag="div",attrs ={"class":"content"}):
+        notes_txt = self.wpage.scrapAtPosition(tag=tag,attrs=attrs, position=7, route=route)
+        notes_txt = self.clrtext(notes_txt) 
+        return notes_txt
+
+    def scrapAllData(self,route):
+        #TODO cambiar ScrapAtPosition por ScrapElements y hacer consultas sobre los elementos.
+        data = self.scrapMetadata(route,tag="div",attrs={"class":"content"})
+        time.sleep(2)
+
+        data['ORIGINAL'] = self.scrapOriginalText(tag ="div",attrs={"class":"content"}, route=route)
+        time.sleep(2)
+
+        data['TRANSLATION'] =  self.scrapTranslationText(tag ="div",attrs={"class":"content"}, route=route)
+        time.sleep(2)
+
+        data['NOTES'] = self.scrapNotesText(tag ="div",attrs={"class":"content"}, route=route)
+        time.sleep(2)
+
+        artworks = self.wpage.scrapArtworks(route)
+
+        for key in artworks:
+            if key != "ARTWORKSLINK":
+                for i in range(len(artworks[key])):
+                    artworks[key][i] = self.clrtext(artworks[key][i]) 
+            data[key] = ", ".join(artworks[key])
+
+        for title, link, imgf in zip(artworks["ARTWORKSTITLE"], artworks["ARTWORKSLINK"], artworks["ARTWORKSID"]):
+            if len(link) and len(title) and len(imgf):
+                print("Title:",title,"Link:",link,"ID:",imgf)
+                self.getArtworksImages(route,link,title, imgf)
+
+        return data
+
+    def getArtworksImages(self,route,url,name, imgf):
+        gfolder="Artworks/"+route
+        if not os.path.exists(gfolder):
+            os.mkdir(gfolder)
+        self.get_imgf(gfolder,url,name, imgf)
+
+    def save(self,data):
+        self.data_frame = self.data_frame.append(data,ignore_index=True)
+
+    def write_pc(self):
+        self.data_frame.to_csv("SALACHO3.csv")
+    
+
+
+#============================================================================================================
+
+
+
+
     # =========================================
     # Index functions
     # =========================================
@@ -177,6 +262,19 @@ class Gallery():
         # exception handling
         except Exception as exp:
             Err.reraise(exp, "Gallery: scrapidx")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def scrapagn(self, div, attrs):
         """
@@ -452,8 +550,9 @@ class Gallery():
         except Exception as exp:
             Err.reraise(exp, "Gallery: clean_imgfn")
 
-    def get_imgf(self, gfolder, dlurl, pfn):
+    def get_imgf(self, gfolder, dlurl, pfn, imgf):
         # TODO: remove after implement the Topic() class
+        # TODO: aniadir doc imgf
         """
         save the paint file from the asset URL in the local folder path
 
@@ -474,16 +573,14 @@ class Gallery():
             # default answer
             ans = False
 
-            # parsing the URL to choose the local folder to save the file
-            imgf = urllib.parse.urlparse(dlurl)
-            imgf = imgf.path.split("/")[len(imgf.path.split("/"))-1]
-            fp = os.path.join(gfolder, imgf, pfn)
+            
+            fp = gfolder+"/"+ imgf+".jpg"
 
             # if the file doesnt exists
             if not os.path.exists(fp):
 
                 # saving file from content requests in bit form
-                data = self.wpage.content
+                data = self.wpage.getImage(dlurl)
                 with open(fp, "wb") as file:
 
                     file.write(data)
@@ -1227,15 +1324,26 @@ class Gallery():
             ans = re.sub(r" \s+", " ", ans)
             # removing newlines
             ans = re.sub(r"\n", ". ", ans)
+            ans = re.sub(r"\r",". ", ans)
+
             # remove pesky single quote
             ans = re.sub(r"'", "", ans)
+            ans = re.sub(r"’", "", ans)
+
             # HTML weird leftovers
             ans = re.sub(r"None{1,3}", " ", ans)
+
+            # Remove some punctuations 
+            ans = re.sub(r";", "", ans)
+            ans = re.sub(r",", "", ans)
+
 
             # final cast and rechecking
             ans = str(ans)
             # ans = re.sub(r"\W", " ", ans)
             ans = re.sub(r" \s+", " ", ans)
+
+
 
             # return answer
             return ans
