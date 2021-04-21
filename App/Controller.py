@@ -51,6 +51,7 @@ DATA_SCHEMA = Conf.configGlobal(CFG_FOLDER, CFG_SCHEMA)
 # default template for the element/paint dict in gallery
 DEFAULT_FRAME_SCHEMA = eval(DATA_SCHEMA.get("DEFAULT", "columns"))
 
+
 # defaul waiting time for scrapping data, this helps not to get blocked
 DEFAULT_SLEEP_TIME = 3.0
 
@@ -215,6 +216,73 @@ class Controller ():
         # exception handling
         except Exception as exp:
             Err.reraise(exp, "Controller: create_localfolders")
+
+
+
+
+
+#======================================================================
+    def doAll(self, gurl):
+        gm = self.gallery
+        gm.load_body(gurl)
+        routes = gm.scrapRoutes()
+        for route in routes:
+            print("#"*10,route,"#"*10)
+            data = gm.scrapAllData(route)
+            data['ID'] = route
+            gm.save(data)
+            
+        gm.write_pc()
+
+    def scrapRoutes(self, gurl):
+        gm = self.gallery
+        gm.load_body(gurl)
+        routes = gm.scrapRoutes()
+        return routes
+    
+    def scrapMetadata(self, gurl, route):
+        gm = self.gallery
+        gm.load_body(gurl)
+        data = gm.scrapMetadata(route)
+        data['ID'] = route
+        return data
+
+    def scrapOriginalText(self,gurl,route):
+        gm = self.gallery
+        gm.load_body(gurl)
+        originalText = gm.scrapOriginalText(route)
+        return originalText 
+
+
+    def scrapTranslationText(self,gurl,route):
+        gm = self.gallery
+        gm.load_body(gurl)
+        translationText = gm.scrapTranslationText(route)
+        return translationText 
+
+    def scrapNotesText(self,gurl,route):
+        gm = self.gallery
+        gm.load_body(gurl)
+        notesText = gm.scrapNotesText(route)
+        return notesText 
+
+    def scrapAllData(self,gurl,route):
+        gm = self.gallery
+        gm.load_body(gurl)
+        data = gm.scrapAllData(route)
+        return data 
+
+    def getArtworksImages(self,gurl,route,url,name,imgf):
+        gm = self.gallery
+        gm.load_body(gurl)
+        return gm.getArtworksImages(route,url,name,imgf)
+    
+    def scrapArtworks(self, gurl, route):
+        gm = self.gallery
+        gm.load_body(gurl)
+        return gm.scrapArtworks(route)
+
+#======================================================================
 
     # =========================================
     # Index functions

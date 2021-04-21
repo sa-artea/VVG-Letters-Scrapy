@@ -150,12 +150,9 @@ class Gallery():
         self.wpage = Page(url)
         self.wpage.load_body()
 
-    def scrap_routes(self):
+    def scrapRoutes(self):
         pattern = r"^[RM]{2}[0-9]+|^[0-9]{3}"
         return self.wpage.get_elements(tag="a",pattern=pattern)
-
-    def scrap_index(self, routes):
-        return self.wpage.scrapIndex(routes)
     
     def scrapMetadata(self,route,tag="div",attrs={"class":"content"}):
         data = self.wpage.scrapMetadata(route,tag=tag,attrs=attrs)
@@ -192,7 +189,7 @@ class Gallery():
         data['NOTES'] = self.scrapNotesText(tag ="div",attrs={"class":"content"}, route=route)
         time.sleep(2)
 
-        artworks = self.wpage.scrapArtworks(route)
+        artworks = self.scrapArtworks(route)
 
         for key in artworks:
             if key != "ARTWORKSLINK":
@@ -207,11 +204,14 @@ class Gallery():
 
         return data
 
+    def scrapArtworks(self,route):
+        return self.wpage.scrapArtworks(route)
+
     def getArtworksImages(self,route,url,name, imgf):
         gfolder="Artworks/"+route
         if not os.path.exists(gfolder):
             os.mkdir(gfolder)
-        self.get_imgf(gfolder,url,name, imgf)
+        return self.get_imgf(gfolder,url,name, imgf)
 
     def save(self,data):
         self.data_frame = self.data_frame.append(data,ignore_index=True)
