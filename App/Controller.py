@@ -174,7 +174,6 @@ class Controller ():
 
             # if the path doesnt exists you create it
             if not os.path.exists(wpath):
-
                 os.makedirs(wpath)
 
             return wpath
@@ -218,71 +217,282 @@ class Controller ():
             Err.reraise(exp, "Controller: create_localfolders")
 
 
+# ======================================================================
 
+    def build_links(self, routes):
+        """
+        Build the links to all the letters to scrap
 
+        Args:
+            routes (list): List of routes
 
-#======================================================================
-    def doAll(self, gurl):
-        gm = self.gallery
-        gm.load_body(gurl)
-        routes = gm.scrapRoutes()
-        for route in routes:
-            print("#"*10,route,"#"*10)
-            data = gm.scrapAllData(route)
-            data['ID'] = route
-            gm.save(data)
-            
-        gm.write_pc()
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
-    def scrapRoutes(self, gurl):
-        gm = self.gallery
-        gm.load_body(gurl)
-        routes = gm.scrapRoutes()
-        return routes
-    
-    def scrapMetadata(self, gurl, route):
-        gm = self.gallery
-        gm.load_body(gurl)
-        data = gm.scrapMetadata(route)
-        data['ID'] = route
-        return data
+        Returns:
+            ans (list): A list with the links of all the letters
+        """
+        try:
+            gm = self.gallery
+            ans = gm.build_links(routes)
+            return ans
 
-    def scrapOriginalText(self,gurl,route):
-        gm = self.gallery
-        gm.load_body(gurl)
-        originalText = gm.scrapOriginalText(route)
-        return originalText 
+        except Exception as exp:
+            Err.reraise(exp, "Controller: build_links")
 
+    def do_all(self, gurl):
+        """
+        Scrap the whole letters repository and saves it in a csv file
 
-    def scrapTranslationText(self,gurl,route):
-        gm = self.gallery
-        gm.load_body(gurl)
-        translationText = gm.scrapTranslationText(route)
-        return translationText 
+        Args:
+            gurl (str): URL for the repository to scrap data
 
-    def scrapNotesText(self,gurl,route):
-        gm = self.gallery
-        gm.load_body(gurl)
-        notesText = gm.scrapNotesText(route)
-        return notesText 
+        Raises:
+            exp: raise a generic exception if something goes wrong
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.scrap_routes()
+            for route in routes:
+                data = gm.scrap_all_data(route)
+                data['ID'] = route
+                gm.save(data)
 
-    def scrapAllData(self,gurl,route):
-        gm = self.gallery
-        gm.load_body(gurl)
-        data = gm.scrapAllData(route)
-        return data 
+            gm.write_pc()
+        except Exception as exp:
+            Err.reraise(exp, "Controller: do_all")
 
-    def getArtworksImages(self,gurl,route,url,name,imgf):
-        gm = self.gallery
-        gm.load_body(gurl)
-        return gm.getArtworksImages(route,url,name,imgf)
-    
-    def scrapArtworks(self, gurl, route):
-        gm = self.gallery
-        gm.load_body(gurl)
-        return gm.scrapArtworks(route)
+    def scrap_routes(self, gurl):
+        """
+        Scrap the routes of the letters repository
+        Args:
+            gurl (str): URL for the repository to scrap data
 
-#======================================================================
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            routes (list): list with all the routes of the letters in the repository
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.scrap_routes()
+            return routes
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_routes")
+
+    def scrap_metadata(self, gurl, id_col, metadata_cols):
+        """
+        Scrap the metadata of the specified letters
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            id_col (str): column that contains the ids in the dataframe.
+            metadata_cols (list): list with the metadata columns
+        Raises:
+            exp: raise a generic exception if something goes wrong
+        Returns:
+            data (dict): dict with the metadata of the specified letters
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.getdata(id_col)
+            data = {col: [] for col in metadata_cols}
+            for route in routes:
+                metadata = gm.scrap_metadata(route)
+                for col, value in metadata.items():
+                    data[col].append(value)
+            return data
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_metadata")
+
+    def scrap_original_texts(self, gurl, id_col):
+        """
+        Scrap the original text of the specified letters
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            id_col (str): column that contains the ids in the dataframe.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            originalTexts (list): original text of the letters
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.getdata(id_col)
+            originalTexts = []
+            for route in routes:
+                originalTexts.append(gm.scrap_original_text(route))
+            return originalTexts
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_original_text")
+
+    def scrap_translation_texts(self, gurl, id_col):
+        """
+        Scrap the translation text of the specified letters
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            id_col (str): column that contains the ids in the dataframe.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            translationTexts (list): text with the translation of the letters
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.getdata(id_col)
+            translationTexts = []
+            for route in routes:
+                translationTexts.append(gm.scrap_translation_text(route))
+            return translationTexts
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_translation_text")
+
+    def scrap_notes_texts(self, gurl, id_col):
+        """
+        Scrap the text of the notes of the specified letters
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            id_col (str): column that contains the ids in the dataframe.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            notesTexts (list): text of the notes of the letters
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.getdata(id_col)
+            notesTexts = []
+            for route in routes:
+                notesTexts.append(gm.scrap_notes_text(route))
+            return notesTexts
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_notes_text")
+
+    def scrap_all_data(self, gurl, route):
+        """
+        Scrap all the data of a specific letter
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            route (str): route (id) of the letter to scrap
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            data (dict): dict with all the data of the letter
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            data = gm.scrap_all_data(route)
+            return data
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_all_data")
+
+    def from_str_to_list(self, str_list):
+        """
+        Converts a list in str format to a list
+
+        Args:
+            str_list (str): List in str format to convert
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): list as a list
+        """
+        try:
+            str_list = str_list.replace("[","")
+            str_list = str_list.replace("]","")
+            str_list = str_list.split(",")
+            ans = []
+            for element in str_list:
+                if element:
+                    ans.append(element.replace("'","").strip())
+            return ans
+        except Exception as exp:
+            Err.reraise(exp, "Controller: from_str_to_list")
+
+    def get_artworks_images(self, gurl, id_col, artworks_url_col, artworks_id_col, path):
+        """
+        Scrap images of the artworks
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            id_col (str): column that contains the ids in the dataframe.
+            artworks_url_col (str): column that contains the url of the artworks in the dataframe.
+            artworks_id_col (str): column that contains the id of the artworks in the dataframe.
+            path (str): path to save the files.
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bool): True if the files were downloaded in the local filepath, false if not
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.getdata(id_col)
+            artworks_urls = gm.getdata(artworks_url_col)
+            artworks_ids = gm.getdata(artworks_id_col)
+            ans = True
+            for route, urls, ids in zip(routes, artworks_urls, artworks_ids):
+                urls = self.from_str_to_list(urls)
+                ids = self.from_str_to_list(ids)
+                if urls and ids:
+                    for url, id in zip(urls, ids):
+                        ans = ans and gm.get_artworks_images(route, url, id, path)
+            return ans
+        except Exception as exp:
+            Err.reraise(exp, "Controller: get_artworks_images")
+
+    def scrap_artworks(self, gurl, id_col, artworks_cols):
+        """
+        Scrap all the artworks of a the specified letters
+
+        Args:
+            gurl (str): URL for the repository to scrap data
+            id_col (str): column that contains the ids in the dataframe.
+            artworks_cols (list): list with the artworks columns
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): dict with all the data of all the artworks for all the letters
+        """
+        try:
+            gm = self.gallery
+            gm.load_body(gurl)
+            routes = gm.getdata(id_col)
+            ans = {col: [] for col in artworks_cols}
+            for route in routes:
+                artworks_data = gm.scrap_artworks(route)
+                for col, value in artworks_data.items():
+                    ans[col].append(value)
+            return ans
+        except Exception as exp:
+            Err.reraise(exp, "Controller: scrap_artworks")
+# ======================================================================
 
     # =========================================
     # Index functions

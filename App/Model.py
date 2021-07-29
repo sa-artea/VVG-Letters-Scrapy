@@ -143,92 +143,290 @@ class Gallery():
             Err.reraise(exp, "Gallery: __init__")
 
 
+# ============================================================================================================
+    def build_links(self, routes):
+        """
+        Build the links to all the letters to scrap
 
+        Args:
+            routes (list): List of routes
 
-#============================================================================================================
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): A list with the links of all the letters
+        """
+        try:
+            ans = []
+            for route in routes:
+                new_route = self.wpage.url.replace(".html", "/"+route+"/print.html")
+                ans.append(new_route)
+            return ans 
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: build_links")
+
     def load_body(self, url):
-        self.wpage = Page(url)
-        self.wpage.load_body()
+        """
+        Load the body of the website in the Page object
 
-    def scrapRoutes(self):
-        pattern = r"^[RM]{2}[0-9]+|^[0-9]{3}"
-        return self.wpage.get_elements(tag="a",pattern=pattern)
-    
-    def scrapMetadata(self,route,tag="div",attrs={"class":"content"}):
-        data = self.wpage.scrapMetadata(route,tag=tag,attrs=attrs)
-        for key in data:
-            data[key] = self.clrtext(data[key])
-        return data
-    
-    def scrapOriginalText(self,route, tag="div",attrs ={"class":"content"}):
-        original_txt = self.wpage.scrapAtPosition(tag=tag,attrs=attrs, position=3, route=route)
-        original_txt = self.clrtext(original_txt) 
-        return original_txt
+        Args:
+            url (str): gallery URL to scrap data
 
-    def scrapTranslationText(self, route, tag="div",attrs ={"class":"content"}):
-        translation_txt = self.wpage.scrapAtPosition(tag=tag,attrs=attrs, position=5, route=route)
-        translation_txt = self.clrtext(translation_txt) 
-        return translation_txt
-    
-    def scrapNotesText(self, route, tag="div",attrs ={"class":"content"}):
-        notes_txt = self.wpage.scrapAtPosition(tag=tag,attrs=attrs, position=7, route=route)
-        notes_txt = self.clrtext(notes_txt) 
-        return notes_txt
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
-    def scrapAllData(self,route):
-        #TODO cambiar ScrapAtPosition por ScrapElements y hacer consultas sobre los elementos.
-        data = self.scrapMetadata(route,tag="div",attrs={"class":"content"})
-        time.sleep(2)
+        """
+        try:
+            self.wpage = Page(url)
+            self.wpage.load_body()
 
-        data['ORIGINAL'] = self.scrapOriginalText(tag ="div",attrs={"class":"content"}, route=route)
-        time.sleep(2)
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: load_body")
 
-        data['TRANSLATION'] =  self.scrapTranslationText(tag ="div",attrs={"class":"content"}, route=route)
-        time.sleep(2)
+    def scrap_routes(self):
+        """
+        Scrap the gallery index and recover all the elements in it
 
-        data['NOTES'] = self.scrapNotesText(tag ="div",attrs={"class":"content"}, route=route)
-        time.sleep(2)
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
-        artworks = self.scrapArtworks(route)
+        Returns:
+            ans (list): A list with the IDs of all the letters
+        """
+        try:
+            pattern = r"^[RM]{2}[0-9]+|^[0-9]{3}"
+            ans = self.wpage.get_elements(tag="a", pattern=pattern)
+            return ans
 
-        for key in artworks:
-            if key != "ARTWORKSLINK":
-                for i in range(len(artworks[key])):
-                    artworks[key][i] = self.clrtext(artworks[key][i]) 
-            data[key] = ", ".join(artworks[key])
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_routes")
 
-        for title, link, imgf in zip(artworks["ARTWORKSTITLE"], artworks["ARTWORKSLINK"], artworks["ARTWORKSID"]):
-            if len(link) and len(title) and len(imgf):
-                print("Title:",title,"Link:",link,"ID:",imgf)
-                self.getArtworksImages(route,link,title, imgf)
+    def scrap_metadata(self, route, tag="div", attrs={"class": "content"}):
+        """
+        Scrap the metadata of a specific letter
 
-        return data
+        Args:
+            route (str): Letter ID to scrap data
+            tag (str): HTML <tag> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            the search and scrap
 
-    def scrapArtworks(self,route):
-        return self.wpage.scrapArtworks(route)
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
-    def getArtworksImages(self,route,url,name, imgf):
-        gfolder="Artworks/"+route
-        if not os.path.exists(gfolder):
-            os.mkdir(gfolder)
-        return self.get_imgf(gfolder,url,name, imgf)
+        Returns:
+            data (dict): dict with the different metadata attributes
+        """
+        try:
+            data = self.wpage.scrap_metadata(route, tag=tag, attrs=attrs)
+            for key in data:
+                data[key] = self.clrtext(data[key])
+            return data
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_metadata")
 
-    def save(self,data):
-        self.data_frame = self.data_frame.append(data,ignore_index=True)
+    def scrap_original_text(self, route, tag="div", attrs={"class": "content"}):
+        """
+        Scrap the original text of a specific letter
 
-    def write_pc(self):
-        self.data_frame.to_csv("SALACHO3.csv")
-    
+        Args:
+            route (str): Letter ID to scrap data
+            tag (str): HTML <tag> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            the search and scrap
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            original_txt (str): Original text of the specified letter
+        """
+        try:
+            original_txt = self.wpage.scrap_at_position(
+                tag=tag, attrs=attrs, position=3, route=route)
+            original_txt = self.clrtext(original_txt)
+            return original_txt
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_original_text")
+
+    def scrap_translation_text(self, route, tag="div", attrs={"class": "content"}):
+        """
+        Scrap the translation text of a specific letter
+
+        Args:
+            route (str): Letter ID to scrap data
+            tag (str): HTML <tag> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            the search and scrap
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            translation_txt (str): Translated text of the specified letter
+        """
+        try:
+            translation_txt = self.wpage.scrap_at_position(
+                tag=tag, attrs=attrs, position=5, route=route)
+            translation_txt = self.clrtext(translation_txt)
+            return translation_txt
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_translation_text")
+
+    def scrap_notes_text(self, route, tag="div", attrs={"class": "content"}):
+        """
+        Scrap the text of the notes of a specific letter
+
+        Args:
+            route (str): Letter ID to scrap data
+            tag (str): HTML <tag> keyword to search and scrap
+            attrs (dict): decorative attributes in the <div> keyword to refine
+            the search and scrap
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            notes_txt (str): Text of the notes of the specified letter
+        """
+        try:
+            notes_txt = self.wpage.scrap_at_position(
+                tag=tag, attrs=attrs, position=7, route=route)
+            notes_txt = self.clrtext(notes_txt)
+            return notes_txt
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_notes_text")
+
+    def scrap_all_data(self, route):
+        """
+        Scrap all the data of a specific letter
+
+        Args:
+            route (str): Letter ID to scrap data
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            data (dict): dict with all the data of the specified letter
+        """
+        try:
+            data = self.scrap_metadata(
+                route, tag="div", attrs={"class": "content"})
+            time.sleep(2)
+
+            data['ORIGINAL'] = self.scrap_original_text(
+                tag="div", attrs={"class": "content"}, route=route)
+            time.sleep(2)
+
+            data['TRANSLATION'] = self.scrap_translation_text(
+                tag="div", attrs={"class": "content"}, route=route)
+            time.sleep(2)
+
+            data['NOTES'] = self.scrap_notes_text(
+                tag="div", attrs={"class": "content"}, route=route)
+            time.sleep(2)
+
+            artworks = self.scrap_artworks(route)
+
+            for key in artworks:
+                if key != "ARTWORKSLINK":
+                    for i in range(len(artworks[key])):
+                        artworks[key][i] = self.clrtext(artworks[key][i])
+                data[key] = ", ".join(artworks[key])
+
+            for link, imgf in zip(artworks["ARTWORKSLINK"], artworks["ARTWORKSID"]):
+                if len(link) and len(imgf):
+                    self.get_artworks_images(route, link, imgf)
+
+            return data
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_all_data")
+
+    def scrap_artworks(self, route):
+        """
+        Scrap the artworks of a specific letter
+
+        Args:
+            route (str): Letter ID to scrap data
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): dict with the different artworks with their respective links
+        """
+        try:
+            ans = self.wpage.scrap_artworks(route)
+            return ans
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: scrap_artworks")
+
+    def get_artworks_images(self, route, url, imgf, path="Artworks/"):
+        """
+        Scrap images of the artworks
+
+        Args:
+            route (str): Letter ID to scrap data
+            url (str): url of the artwork
+            imgf (str): filename of the artworks picture
+            path (str): path to store artwork. Optional, default is Artworks/
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            imgf_artwork (bool): True if the file was downloaded in the local filepath, false if not
+        """
+        try:
+            gfolder = os.path.join(path,route) 
+            if not os.path.exists(gfolder):
+                os.mkdir(gfolder)
+            imgf_artwork = self.get_imgf(gfolder, url, imgf)
+            return imgf_artwork
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: get_artworks_images")
+
+    def save(self, data):
+        """
+        Inserts the data from one letter in the dataframe with all the letters data
+
+        Args:
+            data (dict): Dict with the data of a letter
+        Raises:
+            exp: raise a generic exception if something goes wrong
+        """
+        try:
+            self.data_frame = self.data_frame.append(data, ignore_index=True)
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: save")
+
+    def write_pc(self, name="letters"):
+        """
+        Exports the dataframe as csv file
+
+        Args:
+            name (str): Name of the csv file where dataframe will be exported
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): dict with the different metadata attributes
+        """
+        try:
+            self.data_frame.to_csv(name+".csv")
+        except Exception as exp:
+            Err.reraise(exp, "Gallery: write_pc")
 
 
-#============================================================================================================
-
-
-
+# ============================================================================================================
 
     # =========================================
     # Index functions
     # =========================================
+
 
     def scrapidx(self, gurl, stime, div, attrs):
         """
@@ -262,19 +460,6 @@ class Gallery():
         # exception handling
         except Exception as exp:
             Err.reraise(exp, "Gallery: scrapidx")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def scrapagn(self, div, attrs):
         """
@@ -550,7 +735,7 @@ class Gallery():
         except Exception as exp:
             Err.reraise(exp, "Gallery: clean_imgfn")
 
-    def get_imgf(self, gfolder, dlurl, pfn, imgf):
+    def get_imgf(self, gfolder, dlurl, imgf):
         # TODO: remove after implement the Topic() class
         # TODO: aniadir doc imgf
         """
@@ -560,7 +745,6 @@ class Gallery():
             gfolder (str): root local dirpath where the file is going to be
             save
             dlurl (str): url address with the downlodable image file
-            pfn (str): filename to save the image
 
         Raises:
             exp: raise a generic exception if something goes wrong
@@ -572,28 +756,20 @@ class Gallery():
         try:
             # default answer
             ans = False
-
-            
-            fp = gfolder+"/"+ imgf+".jpg"
-
+            fp = os.path.join(gfolder, imgf+".jpg") #gfolder+"\\" + imgf+".jpg"
             # if the file doesnt exists
             if not os.path.exists(fp):
-
                 # saving file from content requests in bit form
-                data = self.wpage.getImage(dlurl)
+                data = self.wpage.get_image(dlurl)
                 with open(fp, "wb") as file:
-
                     file.write(data)
                     file.close()
                     ans = True
                     return ans
-
             # if the file already exists
             elif os.path.exists(fp):
-
                 ans = True
                 return ans
-
             # returning answer
             return ans
 
@@ -721,13 +897,13 @@ class Gallery():
             ans = False
             gfp = os.path.join(os.getcwd(), dfolder, fn)
             tdata = self.data_frame.to_csv(
-                            gfp,
-                            sep=",",
-                            index=False,
-                            encoding="utf-8",
-                            mode="w",
-                            quoting=csv.QUOTE_ALL
-                            )
+                gfp,
+                sep=",",
+                index=False,
+                encoding="utf-8",
+                mode="w",
+                quoting=csv.QUOTE_ALL
+            )
             if tdata is None:
                 ans = True
             return ans
@@ -753,12 +929,12 @@ class Gallery():
             ans = False
             gfp = os.path.join(os.getcwd(), dfolder, fn)
             self.data_frame = pd.read_csv(
-                                gfp,
-                                sep=",",
-                                encoding="utf-8",
-                                engine="python",
-                                quoting=csv.QUOTE_ALL
-                                )
+                gfp,
+                sep=",",
+                encoding="utf-8",
+                engine="python",
+                quoting=csv.QUOTE_ALL
+            )
             if self.data_frame is not None:
                 ans = True
             return ans
@@ -1324,7 +1500,7 @@ class Gallery():
             ans = re.sub(r" \s+", " ", ans)
             # removing newlines
             ans = re.sub(r"\n", ". ", ans)
-            ans = re.sub(r"\r",". ", ans)
+            ans = re.sub(r"\r", ". ", ans)
 
             # remove pesky single quote
             ans = re.sub(r"'", "", ans)
@@ -1333,17 +1509,14 @@ class Gallery():
             # HTML weird leftovers
             ans = re.sub(r"None{1,3}", " ", ans)
 
-            # Remove some punctuations 
+            # Remove some punctuations
             ans = re.sub(r";", "", ans)
             ans = re.sub(r",", "", ans)
-
 
             # final cast and rechecking
             ans = str(ans)
             # ans = re.sub(r"\W", " ", ans)
             ans = re.sub(r" \s+", " ", ans)
-
-
 
             # return answer
             return ans

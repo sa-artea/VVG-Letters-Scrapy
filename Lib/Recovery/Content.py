@@ -59,6 +59,7 @@ class Page():
     shead = None
     content = None
     dialect = DEFAULT_HTML_PARSER
+
     def __init__(self, *args, **kwargs):
         """
         class creator for page()
@@ -104,118 +105,208 @@ class Page():
         except Exception as exp:
             Err.reraise(exp, "Page: __init__")
 
-#============================================================================================================
+# ============================================================================================================
 
-    def getImage(self, url):
-        response = requests.get(url)
-        return response.content 
+    def get_image(self, url):
+        """
+        Get the image from an artwork.
 
-    def load_body(self, return_data = False):
-        try: 
+        Args:
+            url (str): Image URL
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (bytes): image
+        """
+        try:
+            response = requests.get(url)
+            ans = response.content
+            return ans
+        except Exception as exp:
+            Err.reraise(exp, "Page: get_image")
+
+    def load_body(self, return_data=False):
+        """
+        Load the body of the url. 
+
+        Args:
+            return_data (bool): Defines if return data or not. Default to False
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (BeautifulSoup): if return_data is True else returns None
+        """
+        try:
+            ans = None
             response = requests.get(self.url)
-            self.sbody = BeautifulSoup(response.text,"html.parser")
+            self.sbody = BeautifulSoup(response.text, "html.parser")
             if return_data:
-                return self.sbody
+                ans = self.sbody
+                return ans
             else:
-                return 
+                return ans
 
         except Exception as exp:
-            Err.reraise(exp, "Page: load_body")  
+            Err.reraise(exp, "Page: load_body")
 
+    def get_elements(self, tag="a", pattern=""):
+        """
+        Get the elements of a given tag that their text matches an specific pattern. 
 
-    def get_elements(self, tag ="a", pattern=""): ########MIRAR EN EL MODEL
-        elements = self.sbody.find_all(tag)
-        ans = []
-        if pattern:
-            for element in elements:
-                if re.match(pattern,element.text):
-                    url = str(element).split("\"")[1]
-                    route = url.split("/")[3]
-                    ans.append(route)
+        Args:
+            tag (str, optional): tag to filter elements. Default to a
+            pattern (str, optional): pattern to match element's content. Default to ""
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (list): List with all the elements
+        """
+        try:
+            elements = self.sbody.find_all(tag)
+            ans = []
+            if pattern:
+                for element in elements:
+                    if re.match(pattern, element.text):
+                        url = str(element).split("\"")[1]
+                        route = url.split("/")[3]
+                        ans.append(route)
+                return ans
+            return elements
+        except Exception as exp:
+            Err.reraise(exp, "Page: get_elements")
+
+    def scrap_metadata(self, route, tag="div", attrs={}):
+        """
+        Get the metadata of a given letter (route).
+
+        Args:
+            route (str): letter ID
+            tag (str, optional): tag that contains all the data. Default is div
+            attrs (dict, optional): attributes that must have the tag. Default is empty
+
+        Raises:
+            exp: raise a generic exception if something goes wrong
+
+        Returns:
+            ans (dict): Dictionary with the metadata
+        """
+        try:
+            path = self.url.replace(".html", "/"+route+"/print.html")
+            response = requests.get(path)
+            body = BeautifulSoup(response.text, "html.parser")
+            elements = body.find_all(tag, attrs=attrs)
+            heading = elements[1].text.split("\n")
+            title = heading[0]
+            author = heading[1].split(": ")[1]
+            to = heading[2].split(": ")[1]
+
+            dateAndLocation = heading[3].split(": ")[1]
+            location = dateAndLocation.split(", ")[0]
+            date = dateAndLocation.split(", ")[1:]
+            date = ', '.join(date)
+
+            ans = {"TITLE": title, "AUTHOR": author,
+                   "ADDRESSEE": to, "DATE": date,
+                   "LOCATION": location}
             return ans
-        return elements
+        except Exception as exp:
+            Err.reraise(exp, "Page: scrap_metadata")
 
+    def scrap_at_position(self, tag="div", attrs={}, position=0, route=""):
+        """
+        Get the data at a specific position.
 
-    def scrapMetadata(self, route, tag ="div",attrs={}):
-        path = self.url.replace(".html","/"+route+"/print.html")
-        response = requests.get(path)
-        body = BeautifulSoup(response.text,"html.parser")
-        elements = body.find_all(tag,attrs=attrs)
-        heading = elements[1].text.split("\n")
-        title = heading[0]
-        author = heading[1].split(": ")[1]
-        to = heading[2].split(": ")[1]
+        Args:
+            tag (str, optional): tag that elements must have. Default is div
+            attrs (dict, optional): attributes that must have the tag. Default is empty
+            position (int, optional): position of all the elemnts of the given tag to scrap. Default is 0
+            route (str, optional): letter id to scrap. Default is ""
 
-        dateAndLocation = heading[3].split(": ")[1]
-        location = dateAndLocation.split(", ")[0]
-        date = dateAndLocation.split(", ")[1:]
-        date = ', '.join(date)
-        
-        ans = {"TITLE":title,"AUTHOR":author,"ADDRESSEE":to,"DATE":date,"LOCATION":location}
-        return ans
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
-    def scrapAtPosition(self, tag ="div",attrs={}, position=0, route=""):
-        path = self.url.replace(".html","/"+route+"/print.html")
-        response = requests.get(path)
-        body = BeautifulSoup(response.text,"html.parser")
-        elements = body.find_all(tag,attrs=attrs) 
-        text = ""
-        if position < len(elements):
-            text = elements[position].text.replace("\n"," ")
-        return text
+        Returns:
+            ans (str): Text of the element of the given tag at the specific position
+        """
+        try:
+            path = self.url.replace(".html", "/"+route+"/print.html")
+            response = requests.get(path)
+            body = BeautifulSoup(response.text, "html.parser")
+            elements = body.find_all(tag, attrs=attrs)
+            ans = ""
+            if position < len(elements):
+                ans = elements[position].text.replace("\n", " ")
+            return ans
+        except Exception as exp:
+            Err.reraise(exp, "Page: scrap_at_position")
 
-    def scrapArtworks(self, route):
-        links = []
-        titles = []
-        Fs = []
-        JHs = []
-        ids = []
+    def scrap_artworks(self, route):
+        """
+        Scrap all the artowrks of a given letter.
 
-        path = self.url.replace(".html","/"+route+"/letter.html")
-        
-        driver = webdriver.Firefox()
-        driver.maximize_window()
-        driver.get(path)
-        driver.refresh()
-        driver.find_element_by_link_text("works of art").click()
-        x = driver.find_elements_by_class_name("image")
-        for i in x:
-            a = i.find_element_by_tag_name("a")
-            img = a.find_element_by_tag_name("img")
-            image_link = img.get_attribute("src").replace("t.jpg",".jpg")
-            title = img.get_attribute('title')
-            F = re.findall(r'F\s\d+',title)
-            JH = re.findall(r'JH\s\d+',title)
-            if len(F)>0:
-                F = F[0]
-            else:
-                F = ""
-            if len(JH)>0:
-                JH = JH[0]
-            else:
-                JH = ""
-            
-            # parsing the URL to choose the local folder to save the file
-            imgf = image_link.split("/")[-1].replace(".jpg","")
-            ids.append(imgf)
-            links.append(image_link)
-            Fs.append(F)
-            JHs.append(JH)
-            titles.append(title)
+        Args:
+            route (str): letter id to scrap artworks.
 
-        driver.close()
-        return {"ARTWORKSTITLE":titles,"ARTWORKSF":Fs,"ARTWORKSJH":JHs,"ARTWORKSLINK":links,"ARTWORKSID":ids}
-    
+        Raises:
+            exp: raise a generic exception if something goes wrong
 
-#============================================================================================================
+        Returns:
+            ans (dict): dict with all the data of the artworks of the given letter
+        """
+        try:
+            links = []
+            titles = []
+            Fs = []
+            JHs = []
+            ids = []
 
+            path = self.url.replace(".html", "/"+route+"/letter.html")
 
+            driver = webdriver.Firefox()
+            driver.maximize_window()
+            driver.get(path)
+            driver.refresh()
+            driver.find_element_by_link_text("works of art").click()
+            x = driver.find_elements_by_class_name("image")
+            for i in x:
+                a = i.find_element_by_tag_name("a")
+                img = a.find_element_by_tag_name("img")
+                image_link = img.get_attribute("src").replace("t.jpg", ".jpg")
+                title = img.get_attribute('title')
+                F = re.findall(r'F\s\d+', title)
+                JH = re.findall(r'JH\s\d+', title)
+                if len(F) > 0:
+                    F = F[0]
+                else:
+                    F = ""
+                if len(JH) > 0:
+                    JH = JH[0]
+                else:
+                    JH = ""
 
+                # parsing the URL to choose the local folder to save the file
+                imgf = image_link.split("/")[-1].replace(".jpg", "")
+                ids.append(imgf)
+                links.append(image_link)
+                Fs.append(F)
+                JHs.append(JH)
+                titles.append(title)
 
+            driver.close()
+            ans = {"ARTWORKSTITLE": titles, "ARTWORKSF": Fs,
+                   "ARTWORKSJH": JHs, "ARTWORKSLINK": links, "ARTWORKSID": ids}
+            return ans
 
+        except Exception as exp:
+            Err.reraise(exp, "Page: scrap_artworks")
 
-
-
+# ============================================================================================================
 
     def get_collection(self, gurl, stime):
         """
